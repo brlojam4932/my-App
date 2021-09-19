@@ -11,20 +11,22 @@ export default class Coin extends Component {
     this.state = {
       price: this.props.price
     }
-    this.handleClick = this.handleClick(this); // this binding gives us access to handleClick, this.setState...
+    this.handleClick = this.handleClick.bind(this); // this binding gives us access to handleClick, this.setState...
   }
+
   
- handleClick(e) {
+ handleClick() {
    // prevent form from reloading
-    e.preventDefault();
    const randomPercentage = 0.995 + Math.random() * 0.01;
-   this.setState(function(oldState){
+   this.setState(function(prevState)  {  
     return {
-      price: oldState.price * randomPercentage
+      price: prevState.price * randomPercentage
     };
   });
 
  }
+
+
   render() {
     return (
       <tr className="coin-row">
@@ -32,8 +34,8 @@ export default class Coin extends Component {
         <td>{this.props.ticker}</td>
         <td>${this.state.price}</td>
         <td>
-          <form action="#" method="POST"> 
-          <button onClick={this.handleClick}>Refresh</button>
+          <form onSubmit={this.handleSubmit}> 
+          <button onClick={(e) => this.handleClick}>Refresh</button>
           </form>
         </td>
       </tr>
