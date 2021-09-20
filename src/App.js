@@ -31,6 +31,7 @@ function App() {
           <Coin name="Ripple" ticker="XRP" price={0.2} />
         </tbody>
       </table>
+
     </div>
   );
   
