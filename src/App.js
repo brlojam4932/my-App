@@ -4,6 +4,7 @@ import './App.css';
 import logo from './logo.svg';
 // imp tab
 import Coin from './components/Coin/Coin';
+import AccountBalance from './components/AccountBalance/AccountBalance';
 
 //cntl shift F to align/reformat code
 function App() {
@@ -14,8 +15,8 @@ function App() {
         <h1 className="App-title">
           Coin Exchange
         </h1>
-
       </header>
+      <AccountBalance amount={10000} />
       <table className="coin-table">
         <thead>
           <tr>

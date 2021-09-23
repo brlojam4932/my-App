@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
-import "./Coin.css";
+import styled from 'styled-components'
 // imp tab
 import PropTypes from 'prop-types';
 
+const Td = styled.td`
+  border: 1px solid #ccc;
+  width: 29vh;
+`;
 
-//rcc tab
+
+
+//rcc tab for class-based component
 export default class Coin extends Component {
   constructor(props) {
     super(props);
@@ -32,15 +38,15 @@ export default class Coin extends Component {
 
   render() {
     return (
-      <tr className="coin-row">
-        <td>{this.props.name}</td>
-        <td>{this.props.ticker}</td>
-        <td>${this.state.price}</td>
-        <td>
+      <tr>
+        <Td>{this.props.name}</Td>
+        <Td>{this.props.ticker}</Td>
+        <Td>${this.state.price}</Td>
+        <Td>
           <form action="#" method="POST">
             <button onClick={this.handleClick}>Refresh</button>
           </form>
-        </td>
+        </Td>
       </tr>
     );
   }
@@ -52,4 +58,3 @@ Coin.propTypes = {
   ticker: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired
 }
-
