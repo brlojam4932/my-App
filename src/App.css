@@ -1,19 +1,6 @@
-.App {
-  text-align: center;
-  background-color: #000000;
-  color: #ccc;
-}
 
-.coin-table {
-  margin: 50px auto 50px auto;
-  display: inline-block;
-  font-size: 1.4rem;
-}
 
-.App-logo {
-  height: 8rem;
-  pointer-events: none;
-}
+
 
 
 /*
@@ -24,16 +11,7 @@
 }
 */
 
-.App-header {
-  background-color: #282c34;
-  min-height: 20vh;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  font-size: 48px;
-  color: white;
-}
+
 
 .App-title {
   font-size: 4rem;

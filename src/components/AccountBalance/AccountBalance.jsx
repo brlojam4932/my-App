@@ -1,6 +1,5 @@
 //rcc tab for class-based component
 import React, { Component } from 'react';
-
 import styled from 'styled-components'
 //rccp
 import PropTypes from 'prop-types'
