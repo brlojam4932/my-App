@@ -61,21 +61,47 @@ class App extends React.Component {
 
       ]
     };
+    this.handleRefresh = this.handleRefresh.bind(this);
+  }
+
+  // STATE UPDATE IMMUTABILITY
+  // passing down event handlers as props; passing back to parent
+  handleRefresh(valueChangeTicker) {
+    // let isMyArray=[1,2,3,4,5].find( x => x > 4);
+    // the state is a pointer to an array, but here it can lead to cloning
+    // https://pythontutor.com/
+
+    //const coin = this.state.coinData.find(({ticker}) => ticker === valueChangeTicker);
+    const newCoinData = this.state.coinData.map(({ ticker, name, price }) => {
+      let newPrice = price; // let is used when the data changes
+      if (valueChangeTicker === ticker) {
+        //manipulate price here
+        const randomPercentage = 0.995 + Math.random() * 0.01;
+        newPrice = newPrice * randomPercentage;
+      } return {
+        ticker, // when key and value names are the same, we can just write "ticker", etc.
+        name, 
+        price: newPrice // newPrice has a new key "price"
+      }
+    });
+
+    // this.setState(prevState => {}) one way to write the new state
+    this.setState({coinData: newCoinData }) // here we get the object 'coinData'
   }
 
 
-  // abstract header into a component
+    // abstract header into a component
 
-  render() {
-    return (
-      <Div className="App">
-        <ExchangeHeader />
-        <AccountBalance amount={this.state.balance} />
-        <CoinList coinData={this.state.coinData} />
-      </Div>
-    );
+    render() {
+      return (
+        <Div className="App">
+          <ExchangeHeader />
+          <AccountBalance amount={this.state.balance} />
+          <CoinList coinData={this.state.coinData} handleRefresh={this.handleRefresh} />
+        </Div>
+      );
+    }
   }
-}
 
 
 // above, a Coin component was created
