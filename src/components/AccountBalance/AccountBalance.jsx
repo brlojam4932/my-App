@@ -14,15 +14,10 @@ const Section = styled.section`
 export default class AccountBalance extends Component {
 
   render() {
-    //prop drilling, lifting state up and conditional rendering is needed to make toggle work
-   
-    // if showBalance is true, hide; else - show balance
-    //const [show, setShow] = this.props(true);
-    const buttonText = this.props.showBalance ? "Hide Balance" : "Show Balance";
+    const buttonText = this.props.showBalance ? "Hide Balance" : "Show Balance"; // this action 
     let contents = null;
     if (this.props.showBalance) {
-      // show contents in React fragments <></>
-      contents = <> Account Balance: ${this.props.amount};</>
+      contents = <> Balance: ${this.props.amount};</>
     }
 
     return (
