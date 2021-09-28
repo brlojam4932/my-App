@@ -8,7 +8,7 @@ const Td = styled.td`
   width: 29vh;
 `;
 
-// LIFINT THE STATE UP
+// LIFT THE STATE UP
 
 //rcc tab for class-based component
 export default class Coin extends Component {
@@ -48,6 +48,7 @@ export default class Coin extends Component {
         <Td>{this.props.name}</Td>
         <Td>{this.props.ticker}</Td>
         <Td>${this.props.price}</Td> 
+        <Td>${this.props.balance}</Td>
         <Td>
           <form action="#" method="POST">
             <button onClick={this.handleClick}>Refresh</button>

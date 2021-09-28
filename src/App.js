@@ -5,8 +5,6 @@ import AccountBalance from './components/AccountBalance/AccountBalance';
 import ExchangeHeader from './components/ExchangeHeader/ExchangeHeader';
 import styled from 'styled-components';
 
-
-
 const Div = styled.div`
 text-align: center;
 background-color: #000000;
@@ -25,6 +23,8 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+     
+      showBalance: true,
 
       balance: 1000,
       coinData: [
@@ -32,37 +32,55 @@ class App extends React.Component {
         {
           name: 'Bitcoin',
           ticker: 'BTC',
+          balance: 10000,
           price: 44790.99
         },
 
         {
           name: "Ethereum",
           ticker: 'ETH',
+          balance: 6500,
           price: 3280.25
         },
 
         {
           name: 'Litecoin',
           ticker: 'LTC',
+          balance: 200,
           price: 60.30
         },
 
         {
           name: 'Ripple',
           ticker: 'XRT',
+          balance: 0,
           price: 0.2
         },
 
         {
           name: 'Compound',
           ticker: 'CMP',
+          balance: 1500,
           price: 458.23
         },
 
       ]
     };
     this.handleRefresh = this.handleRefresh.bind(this);
+    this.handleToggleChange = this.handleToggleChange.bind(this);
+  
   }
+  
+
+  handleToggleChange() {
+    this.setState(prevState => ({
+        //...prevState,
+        showBalance: !prevState.showBalance
+      
+    }));
+  
+  }
+
 
   // STATE UPDATE IMMUTABILITY
   // passing down event handlers as props; passing back to parent
@@ -86,8 +104,10 @@ class App extends React.Component {
     });
 
     // this.setState(prevState => {}) one way to write the new state
-    this.setState({coinData: newCoinData }) // here we get the object 'coinData'
+    this.setState({coinData: newCoinData}) // here we get the object 'coinData'
+  
   }
+
 
 
     // abstract header into a component
@@ -96,12 +116,16 @@ class App extends React.Component {
       return (
         <Div className="App">
           <ExchangeHeader />
-          <AccountBalance amount={this.state.balance} />
+          <AccountBalance amount={this.state.balance} 
+          showBalance={this.state.showBalance}  
+          handleToggleChange={this.handleToggleChange} />
           <CoinList coinData={this.state.coinData} handleRefresh={this.handleRefresh} />
         </Div>
       );
     }
   }
+
+ 
 
 
 // above, a Coin component was created
