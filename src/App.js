@@ -4,19 +4,25 @@ import CoinList from "./components/CoinList/CoinList";
 import AccountBalance from './components/AccountBalance/AccountBalance';
 import ExchangeHeader from './components/ExchangeHeader/ExchangeHeader';
 import styled from 'styled-components';
+import axios from 'axios';
 
 const Div = styled.div`
 text-align: center;
 background-color: #000000;
 color: #ccc;`;
 
+const COIN_COUNT = 10;
 
 class App extends React.Component {
   //classProperty = "value" // not sure how this works. instructor cut, copied the this.state variables into the classProperty and deleted "this"
+
+  // since we are now using axios, we will not use the hard-coded data
+
   state = {
     showBalance: true,
     balance: 1000,
     coinData: [
+        /*
 
       {
         name: 'Bitcoin',
@@ -52,9 +58,43 @@ class App extends React.Component {
         balance: 1500,
         price: 458.23
       },
+      */
 
     ]
   };
+
+
+  // https://api.coinpaprika.com/v1/coins
+  // Life Cycle methods
+  // fetch('https://api.coinpaprika.com/v1/coins') 
+  // returns a Promise
+
+  componentDidMount = () => {
+    //console.log("MOUNT");
+    axios.get('https://api.coinpaprika.com/v1/coins')
+    .then( response => {
+      debugger;
+      let coinData = response.data.slice(0, COIN_COUNT).map(function(coin) {
+        return {
+          key: coin.id,
+          name: coin.name,
+          ticker: coin.symbol,
+          balance: 0,
+          price: 0,
+        }
+      });
+      console.log('Setting the state...')
+      this.setState({ coinData});
+      console.log("Done settling the state");
+    });
+    console.log("CompoundDidMount is DONE");
+    debugger;
+  }
+
+  // with Axios, we don't need this
+  //componentDidUpdate = () => {
+  //  console.log("UPDATE");
+  //}
 
  
   handleToggleChange = () => {
