@@ -83,7 +83,7 @@ class App extends React.Component {
     const coinPriceData = coinData.map(function(response) {
     const coin = response.data;
       return {
-        key: coin.id,
+        key: coin.id, // here we have our key
         name: coin.name,
         ticker: coin.symbol,
         balance: 0,
