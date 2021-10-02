@@ -1,5 +1,5 @@
 //rcc tab for class-based component
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components'
 //rccp
 import PropTypes from 'prop-types'
@@ -10,26 +10,29 @@ const Section = styled.section`
   padding: 1.5rem 0 1.5rem 5rem;
   `;
 
+  
 
-export default class AccountBalance extends Component {
+// rewrite account balance class component into a functional component
+export default function AccountBalance(props) {
+  
 
-  render() {
-    const buttonText = this.props.showBalance ? "Hide Balance" : "Show Balance"; // this action 
+
+    const buttonText = props.showBalance ? "Hide Balance" : "Show Balance"; // this action 
     let contents = null;
-    if (this.props.showBalance) {
-      contents = <> Balance: ${this.props.amount};</>
+    if (props.showBalance) {
+      contents = <> Balance: ${props.amount};</>
     }
 
     return (
       <Section>
         {contents}
-        <button onClick={this.props.handleToggleChange}>{buttonText}</button>
+        <button onClick={props.handleToggleChange}>{buttonText}</button>
       </Section>
-    );
-  }
+    )
+
 }
 
 
 AccountBalance.propTypes = {
-  amount: PropTypes.number.isRequired,
+  amount: PropTypes.number.isRequired
 }

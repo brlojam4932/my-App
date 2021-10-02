@@ -96,6 +96,7 @@ class App extends React.Component {
     // retrieve prices
     // we set the state
     this.setState({ coinData: coinPriceData });
+    //console.log(response);
 
   }
 
@@ -105,15 +106,12 @@ class App extends React.Component {
   //}
   // we get access to other properties
   //https://api.coinpaprika.com/v1/tickers/btc-bitcoin
-
-
   handleToggleChange = () => {
     this.setState(prevState => ({
       ...prevState, // cloning - enumerating the old state 
       showBalance: !prevState.showBalance
     }));
   }
-
 
   // STATE UPDATE IMMUTABILITY
   // passing down event handlers as props; passing back to parent
