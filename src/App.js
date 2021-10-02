@@ -11,7 +11,10 @@ text-align: center;
 background-color: #000000;
 color: #ccc;`;
 
+// UTILITY FUNCTIONS
 const COIN_COUNT = 10;
+const formatPrice = price => parseFloat(Number(price).toFixed(4));
+
 
 class App extends React.Component {
   //classProperty = "value" // not sure how this works. instructor cut, copied the this.state variables into the classProperty and deleted "this"
@@ -87,7 +90,7 @@ class App extends React.Component {
         name: coin.name,
         ticker: coin.symbol,
         balance: 0,
-        price: parseFloat((coin.quotes["USD"].price).toFixed(3))
+        price: formatPrice(coin.quotes["USD"].price)
       };
     })
     // retrieve prices
@@ -114,21 +117,23 @@ class App extends React.Component {
 
   // STATE UPDATE IMMUTABILITY
   // passing down event handlers as props; passing back to parent
-  handleRefresh = (valueChangeTicker) => {
 
+  // make an api call with an asyncrounous function to refresh tickers and shorten the decimals to 3 or 4 numbers
+  // the key can be used to fire ticketUrl ticker address upon clicking Refresh button for each coin
+  handleRefresh = async (valueChangeId) => {
+    const ticketUrl = `https://api.coinpaprika.com/v1/tickers/${valueChangeId}`;
+    const response = await axios.get(ticketUrl);
+    //debugger;
+    const newPrice = formatPrice(response.data.quotes["USD"].price);
     const newCoinData = this.state.coinData.map((values) => {
       let newValues = { ...values }; // shallow cloning / deep copy
-      if (valueChangeTicker === values.ticker) {
+      if (valueChangeId === values.key) {
         //manipulate price here
-        const randomPercentage = 0.995 + Math.random() * 0.01;
-        newValues.price *= randomPercentage;
+        newValues.price = newPrice;
       } return newValues;
-
     });
-
     // this.setState(prevState => {}) one way to write the new state
     this.setState({ coinData: newCoinData }) // here we get the object 'coinData'
-
   }
 
   // abstract header into a component

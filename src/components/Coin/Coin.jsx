@@ -16,7 +16,7 @@ export default class Coin extends Component {
   handleClick = (event) => {
     // prevent form from reloading
     event.preventDefault();
-    this.props.handleRefresh(this.props.ticker);
+    this.props.handleRefresh(this.props.tickerId);
   }
 
 
