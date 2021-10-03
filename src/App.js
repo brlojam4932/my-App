@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 // imp tab
 import CoinList from "./components/CoinList/CoinList";
 import AccountBalance from './components/AccountBalance/AccountBalance';
@@ -16,63 +16,14 @@ const COIN_COUNT = 10;
 const formatPrice = price => parseFloat(Number(price).toFixed(4));
 
 
-class App extends React.Component {
-  //classProperty = "value" // not sure how this works. instructor cut, copied the this.state variables into the classProperty and deleted "this"
+function App(props) {
+  // React: from State to Hooks
+  const [balance] = useState(10000);
+  //const [balance, setBalance] = useState(10000); // instructor did not use setBalance
+  const [showBalance, setShowBalance] = useState(true);
+  const [coinData, setCoinData] = useState([]);
 
-  // since we are now using axios, we will not use the hard-coded data
-
-  state = {
-    showBalance: true,
-    balance: 1000,
-    coinData: [
-      /*
-
-    {
-      name: 'Bitcoin',
-      ticker: 'BTC',
-      balance: 10000,
-      price: 44790.99
-    },
-
-    {
-      name: "Ethereum",
-      ticker: 'ETH',
-      balance: 6500,
-      price: 3280.25
-    },
-
-    {
-      name: 'Litecoin',
-      ticker: 'LTC',
-      balance: 200,
-      price: 60.30
-    },
-
-    {
-      name: 'Ripple',
-      ticker: 'XRT',
-      balance: 0,
-      price: 0.2
-    },
-
-    {
-      name: 'Compound',
-      ticker: 'CMP',
-      balance: 1500,
-      price: 458.23
-    },
-    */
-
-    ]
-  };
-
-
-  // https://api.coinpaprika.com/v1/coins
-  // Life Cycle methods
-  // fetch('https://api.coinpaprika.com/v1/coins') 
-  // returns a Promise
-
-  componentDidMount = async () => {
+  const componentDidMount = async () => {
     //console.log("MOUNT");
     const response = await axios.get('https://api.coinpaprika.com/v1/coins');
     // we are now receiving strings as data so we don't need an object anymore
@@ -83,8 +34,8 @@ class App extends React.Component {
     const promises = coinIds.map(id => axios.get(ticketUrl + id));
     // we use the await operator to wait for our promise
     const coinData = await Promise.all(promises);
-    const coinPriceData = coinData.map(function(response) {
-    const coin = response.data;
+    const coinPriceData = coinData.map(function (response) {
+      const coin = response.data;
       return {
         key: coin.id, // here we have our key
         name: coin.name,
@@ -92,38 +43,35 @@ class App extends React.Component {
         balance: 0,
         price: formatPrice(coin.quotes["USD"].price)
       };
-    })
-    // retrieve prices
-    // we set the state
-    this.setState({ coinData: coinPriceData });
-    //console.log(response);
+    });
+
+    // Retrieve the prices
+    setCoinData(coinPriceData);
+    //console.log(response); 
+  }
+
+  // we don't want to call the same function over and over again. we only want to load it if we need it
+  // a synchronous function
+  useEffect(() => {
+    if (coinData.length === 0) {
+      // component did mount
+      componentDidMount();
+    };
+  })
+
+
+  // there are no longer global variables, instead they are now local constants
+  const handleToggleChange = () => {
+    setShowBalance(prevValue => !prevValue);
 
   }
 
-  // with Axios, we don't need this
-  //componentDidUpdate = () => {
-  //  console.log("UPDATE");
-  //}
-  // we get access to other properties
-  //https://api.coinpaprika.com/v1/tickers/btc-bitcoin
-  handleToggleChange = () => {
-    this.setState(prevState => ({
-      ...prevState, // cloning - enumerating the old state 
-      showBalance: !prevState.showBalance
-    }));
-  }
-
-  // STATE UPDATE IMMUTABILITY
-  // passing down event handlers as props; passing back to parent
-
-  // make an api call with an asyncrounous function to refresh tickers and shorten the decimals to 3 or 4 numbers
-  // the key can be used to fire ticketUrl ticker address upon clicking Refresh button for each coin
-  handleRefresh = async (valueChangeId) => {
+  const handleRefresh = async (valueChangeId) => {
     const ticketUrl = `https://api.coinpaprika.com/v1/tickers/${valueChangeId}`;
     const response = await axios.get(ticketUrl);
     //debugger;
     const newPrice = formatPrice(response.data.quotes["USD"].price);
-    const newCoinData = this.state.coinData.map((values) => {
+    const newCoinData = coinData.map((values) => {
       let newValues = { ...values }; // shallow cloning / deep copy
       if (valueChangeId === values.key) {
         //manipulate price here
@@ -131,27 +79,23 @@ class App extends React.Component {
       } return newValues;
     });
     // this.setState(prevState => {}) one way to write the new state
-    this.setState({ coinData: newCoinData }) // here we get the object 'coinData'
+    setCoinData(newCoinData);
   }
 
-  // abstract header into a component
-
-  render() {
-    return (
-      <Div className="App">
-        <ExchangeHeader />
-        <AccountBalance
-          amount={this.state.balance}
-          showBalance={this.state.showBalance}
-          handleToggleChange={this.handleToggleChange} />
-        <CoinList
-          coinData={this.state.coinData}
-          showBalance={this.state.showBalance}
-          handleRefresh={this.handleRefresh}
-        />
-      </Div>
-    );
-  }
+  return (
+    <Div className="App">
+      <ExchangeHeader />
+      <AccountBalance
+        amount={balance}
+        showBalance={showBalance}
+        handleToggleChange={handleToggleChange} />
+      <CoinList
+        coinData={coinData}
+        showBalance={showBalance}
+        handleRefresh={handleRefresh}
+      />
+    </Div>
+  );
 }
 
 //console.log(Response);

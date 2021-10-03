@@ -14,8 +14,6 @@ const Section = styled.section`
 
 // rewrite account balance class component into a functional component
 export default function AccountBalance(props) {
-  
-
 
     const buttonText = props.showBalance ? "Hide Balance" : "Show Balance"; // this action 
     let contents = null;
