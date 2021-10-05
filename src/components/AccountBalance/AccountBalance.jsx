@@ -6,27 +6,61 @@ import PropTypes from 'prop-types'
 
 const Section = styled.section`
   font-size: 2rem;
-  text-align left;
+  text-align: left;
   padding: 1.5rem 0 1.5rem 5rem;
   `;
 
-  
+const Balance = styled.div`
+  min width: 250px;
+  margin: 0.5rem 0 0 2.5rem;
+  font-size: 1.5rem;
+  verticle align: middle;
+  `;
 
+const Button = styled.button`
+  margin: 0 8px;
+  `;
+
+  // inheritance with style components and used as a function
+const BalanceToggleButton = styled(Button)`
+  with: 150px;
+  `;
+
+
+var formatter = Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD"
+});
+
+//<button type="button" class="btn btn-info">Info</button>
+//<button type="button" class="btn btn-warning">Warning</button>
 // rewrite account balance class component into a functional component
 export default function AccountBalance(props) {
 
-    const buttonText = props.showBalance ? "Hide Balance" : "Show Balance"; // this action 
-    let contents = null;
-    if (props.showBalance) {
-      contents = <> Balance: ${props.amount};</>
-    }
-
-    return (
-      <Section>
-        {contents}
-        <button onClick={props.handleToggleChange}>{buttonText}</button>
-      </Section>
-    )
+  const buttonText = props.showBalance ? "Hide Balance" : "Show Balance";
+  let content = "\u00A0"; // place holder so page does not "jump"
+  if (props.showBalance) {
+    content = <>{formatter.format(props.amount)}</>
+  }
+  const buttonClass = "btn" + (props.showBalance ? "btn-warning" : "btn-info");
+ 
+  return (
+    // all is wrapped into component fragments in order to render two seperate components in the same level
+    <>
+    <Balance>{content}</Balance>
+    <Section>
+      <BalanceToggleButton
+        onClick={props.handleToggleChange}
+        className={buttonClass}>
+        {buttonText}
+      </BalanceToggleButton>
+      <Button className="btn btn-success">
+        <i className="fas fa-helicopter"></i>
+      </Button>
+    </Section>
+    </>
+    
+  );
 
 }
 

@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from 'react';
 // imp tab
+import "bootswatch/dist/flatly/bootstrap.min.css"
 import CoinList from "./components/CoinList/CoinList";
 import AccountBalance from './components/AccountBalance/AccountBalance';
 import ExchangeHeader from './components/ExchangeHeader/ExchangeHeader';
 import styled from 'styled-components';
 import axios from 'axios';
 
+//import "bootstrap/dist/css/bootstrap.min.css";
+
+
+import "fontawesome-free/js/all.js";
+
 const Div = styled.div`
 text-align: center;
-background-color: #000000;
+background-color: rgb(20, 56, 97);
 color: #ccc;`;
 
 // UTILITY FUNCTIONS
@@ -20,7 +26,7 @@ function App(props) {
   // React: from State to Hooks
   const [balance] = useState(10000);
   //const [balance, setBalance] = useState(10000); // instructor did not use setBalance
-  const [showBalance, setShowBalance] = useState(true);
+  const [showBalance, setShowBalance] = useState(false);
   const [coinData, setCoinData] = useState([]);
 
   const componentDidMount = async () => {
@@ -59,6 +65,13 @@ function App(props) {
     };
   })
 
+//npm start
+//npm i gh-pages --save-dev
+//npm run deploy
+//npm i bootstrap --save
+//npm i bootswatch --save
+//npm i fontawesome-free
+//https://brlojam4932.github.io/my-App/
 
   // there are no longer global variables, instead they are now local constants
   const handleToggleChange = () => {
