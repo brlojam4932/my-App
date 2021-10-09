@@ -5,8 +5,19 @@ import PropTypes from 'prop-types';
 
 const Td = styled.td`
   border: 1px solid #ccc;
-  width: 29vh;
+  width: 16vw;
 `;
+
+const TdControls = styled(Td)`
+  width: 36vw;
+`;
+
+const Button = styled.button`
+  font-size: 11px;
+  with: 64px;
+  margin: 3px 5px 0;
+`;
+
 
 // LIFT THE STATE UP
 
@@ -14,10 +25,20 @@ const Td = styled.td`
 // here we rewrite a component into a functional component
 export default function Coin(props) {
 
-  const handleClick = (event) => {
-    // prevent form from reloading
+  const handleRefresh = (event) => {
+    // prevent form from being submitted
     event.preventDefault();
     props.handleRefresh(props.tickerId);
+  }
+
+  const handleBuy = (event) => {
+    event.preventDefault();
+    props.handleBuy(true, props.tickerId);
+  }
+
+  const handleSell = (event) => {
+    event.preventDefault();
+    props.handleSell(false, props.tickerId);
   }
 
   return (
@@ -26,11 +47,13 @@ export default function Coin(props) {
       <Td>{props.ticker}</Td>
       <Td>${props.price}</Td>
       {props.showBalance ? <Td>${props.balance}</Td> : null}
-      <Td>
+      <TdControls>
         <form action="#" method="POST">
-          <button onClick={handleClick}>Refresh</button>
+          <Button className="btn btn info" onClick={handleRefresh}>Refresh</Button>
+          <Button className="btn btn info" onClick={handleBuy}>Buy</Button>
+          <Button className="btn btn info" onClick={handleSell}>Sell</Button>
         </form>
-      </Td>
+      </TdControls>
     </tr>
   );
 

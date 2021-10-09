@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 // imp tab
-import "bootswatch/dist/flatly/bootstrap.min.css"
+import "bootswatch/dist/flatly/bootstrap.min.css";
 import CoinList from "./components/CoinList/CoinList";
 import AccountBalance from './components/AccountBalance/AccountBalance';
 import ExchangeHeader from './components/ExchangeHeader/ExchangeHeader';
@@ -24,8 +24,7 @@ const formatPrice = price => parseFloat(Number(price).toFixed(4));
 
 function App(props) {
   // React: from State to Hooks
-  const [balance] = useState(10000);
-  //const [balance, setBalance] = useState(10000); // instructor did not use setBalance
+  const [balance, setBalance] = useState(10000);
   const [showBalance, setShowBalance] = useState(false);
   const [coinData, setCoinData] = useState([]);
 
@@ -62,8 +61,12 @@ function App(props) {
     if (coinData.length === 0) {
       // component did mount
       componentDidMount();
-    };
-  })
+    }
+  });
+
+  const handleBrrr = () => {
+    setBalance(prevBalance => prevBalance + 1200);
+  }
 
 //npm start
 //npm i gh-pages --save-dev
@@ -101,7 +104,8 @@ function App(props) {
       <AccountBalance
         amount={balance}
         showBalance={showBalance}
-        handleToggleChange={handleToggleChange} />
+        handleToggleChange={handleToggleChange}
+        handleBrrr = {handleBrrr} />
       <CoinList
         coinData={coinData}
         showBalance={showBalance}

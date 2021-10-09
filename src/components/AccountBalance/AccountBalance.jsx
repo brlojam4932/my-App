@@ -6,8 +6,10 @@ import PropTypes from 'prop-types'
 
 const Section = styled.section`
   font-size: 2rem;
-  text-align: left;
-  padding: 1.5rem 0 1.5rem 5rem;
+  text-align: center;
+  margin-botton: 2rem;
+  line-height: 3rem;
+  display: inline black;
   `;
 
 const Balance = styled.div`
@@ -15,6 +17,7 @@ const Balance = styled.div`
   margin: 0.5rem 0 0 2.5rem;
   font-size: 1.5rem;
   verticle align: middle;
+  text align: left;
   `;
 
 const Button = styled.button`
@@ -42,7 +45,7 @@ export default function AccountBalance(props) {
   if (props.showBalance) {
     content = <>{formatter.format(props.amount)}</>
   }
-  const buttonClass = "btn" + (props.showBalance ? "btn-warning" : "btn-info");
+  const buttonClass = "btn" + (props.showBalance ? "btn btn-warning" : "btn btn-info");
  
   return (
     // all is wrapped into component fragments in order to render two seperate components in the same level
@@ -54,7 +57,9 @@ export default function AccountBalance(props) {
         className={buttonClass}>
         {buttonText}
       </BalanceToggleButton>
-      <Button className="btn btn-success">
+      <Button className="btn btn-success"
+      //we print a callback function
+        onClick={props.handleBrrr}> 
         <i className="fas fa-helicopter"></i>
       </Button>
     </Section>
