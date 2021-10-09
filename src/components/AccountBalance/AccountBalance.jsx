@@ -4,6 +4,7 @@ import styled from 'styled-components'
 //rccp
 import PropTypes from 'prop-types'
 
+// show balance
 const Section = styled.section`
   font-size: 2rem;
   text-align: center;
@@ -12,6 +13,7 @@ const Section = styled.section`
   display: inline black;
   `;
 
+  // spacing for show balance div
 const Balance = styled.div`
   min width: 250px;
   margin: 0.5rem 0 0 2.5rem;
@@ -20,6 +22,7 @@ const Balance = styled.div`
   text align: left;
   `;
 
+  // helicopter button
 const Button = styled.button`
   margin: 0 8px;
   `;

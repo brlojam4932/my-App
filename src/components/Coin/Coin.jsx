@@ -3,15 +3,23 @@ import styled from 'styled-components';
 // imp tab
 import PropTypes from 'prop-types';
 
+// table
 const Td = styled.td`
   border: 1px solid #ccc;
-  width: 16vw;
+  width: 14vw;
 `;
 
+// actions
 const TdControls = styled(Td)`
-  width: 36vw;
+  width: 34vw;
 `;
 
+// space for coin names
+const TdName = styled(Td)`
+  with: 24vw;
+`;
+
+// buy sell refresh button size
 const Button = styled.button`
   font-size: 11px;
   with: 64px;
@@ -43,15 +51,15 @@ export default function Coin(props) {
 
   return (
     <tr>
-      <Td>{props.name}</Td>
+      <TdName>{props.name}</TdName>
       <Td>{props.ticker}</Td>
       <Td>${props.price}</Td>
-      {props.showBalance ? <Td>${props.balance}</Td> : null}
+      <Td>{props.showBalance ? props.balance : "-"}</Td>
       <TdControls>
         <form action="#" method="POST">
-          <Button className="btn btn info" onClick={handleRefresh}>Refresh</Button>
-          <Button className="btn btn info" onClick={handleBuy}>Buy</Button>
-          <Button className="btn btn info" onClick={handleSell}>Sell</Button>
+          <Button className="btn btn-info" onClick={handleRefresh}>Refresh</Button>
+          <Button className="btn btn-success" onClick={handleBuy}>Buy</Button>
+          <Button className="btn btn-warning" onClick={handleSell}>Sell</Button>
         </form>
       </TdControls>
     </tr>

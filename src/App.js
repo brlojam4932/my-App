@@ -12,6 +12,7 @@ import axios from 'axios';
 
 import "fontawesome-free/js/all.js";
 
+// bkg area for table
 const Div = styled.div`
 text-align: center;
 background-color: rgb(20, 56, 97);
