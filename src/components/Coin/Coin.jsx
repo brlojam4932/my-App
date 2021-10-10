@@ -41,12 +41,12 @@ export default function Coin(props) {
 
   const handleBuy = (event) => {
     event.preventDefault();
-    props.handleBuy(true, props.tickerId);
+    props.handleTransaction(true, props.tickerId);
   }
 
   const handleSell = (event) => {
     event.preventDefault();
-    props.handleSell(false, props.tickerId);
+    props.handleTransaction(false, props.tickerId)
   }
 
   return (

@@ -10,7 +10,8 @@ const Img = styled.img`
 // we create a const variable and import the values from the CSS sytling file
 const Header = styled.header`
   background-color: #282c34;
-  min-height: 20vh;
+  min-height: 10vh;
+  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -19,7 +20,10 @@ const Header = styled.header`
   color: white;
 `;
 const H1 = styled.h1`
-  font-size: 4rem;
+  font-size: 3rem;
+  line-height: 8rem;
+  fold-weight: bold;
+  min-width: 300px;
 `;
 
 // rcc

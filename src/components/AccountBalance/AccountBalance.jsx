@@ -4,32 +4,30 @@ import styled from 'styled-components'
 //rccp
 import PropTypes from 'prop-types'
 
-// show balance
+// show balance button and type
 const Section = styled.section`
   font-size: 2rem;
   text-align: center;
-  margin-botton: 2rem;
   line-height: 3rem;
-  display: inline black;
   `;
 
-  // spacing for show balance div
+// spacing for show balance when it appears
 const Balance = styled.div`
   min width: 250px;
-  margin: 0.5rem 0 0 2.5rem;
+  margin: .5rem 0 0 2.5rem;
   font-size: 1.5rem;
   verticle align: middle;
-  text align: left;
   `;
 
   // helicopter button
 const Button = styled.button`
-  margin: 0 8px;
+  margin: 30px 9px;
   `;
 
   // inheritance with style components and used as a function
+  // show balance button witdth
 const BalanceToggleButton = styled(Button)`
-  with: 150px;
+  width: 255px;
   `;
 
 

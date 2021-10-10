@@ -15,7 +15,7 @@ import "fontawesome-free/js/all.js";
 // bkg area for table
 const Div = styled.div`
 text-align: center;
-background-color: rgb(20, 56, 97);
+background-color: #3E434F;
 color: #ccc;`;
 
 // UTILITY FUNCTIONS
@@ -80,7 +80,21 @@ function App(props) {
   // there are no longer global variables, instead they are now local constants
   const handleToggleChange = () => {
     setShowBalance(prevValue => !prevValue);
+  }
 
+  const handleTransaction = (isBuy, valueChangeId) => {
+    var balanceChange = isBuy ? 1 : -1;
+    //we copy the new values to map and the spread functions
+    const newCoinData = coinData.map( function(values) {
+      let newValues = {...values};
+      if ( valueChangeId === values.key) {
+        newValues.balance += balanceChange;
+        setBalance( prevBalance => prevBalance - balanceChange * newValues.price);
+      }
+      return newValues;
+      
+    });
+    setCoinData(newCoinData);
   }
 
   const handleRefresh = async (valueChangeId) => {
@@ -105,11 +119,14 @@ function App(props) {
       <AccountBalance
         amount={balance}
         showBalance={showBalance}
+        handleBrrr={handleBrrr}
         handleToggleChange={handleToggleChange}
-        handleBrrr = {handleBrrr} />
+        />
+       
       <CoinList
         coinData={coinData}
         showBalance={showBalance}
+        handleTransaction={handleTransaction}
         handleRefresh={handleRefresh}
       />
     </Div>
