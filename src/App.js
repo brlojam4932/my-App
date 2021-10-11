@@ -7,8 +7,8 @@ import ExchangeHeader from './components/ExchangeHeader/ExchangeHeader';
 import styled from 'styled-components';
 import axios from 'axios';
 
-//import "bootstrap/dist/css/bootstrap.min.css";
 
+//instructor: zsolt-nagy
 
 import "fontawesome-free/js/all.js";
 
@@ -76,6 +76,7 @@ function App(props) {
   }
 
   const handleTransaction = (isBuy, valueChangeId) => {
+  
     var balanceChange = isBuy ? 1 : -1;
     //we copy the new values to map and the spread functions
     const newCoinData = coinData.map( function(values) {
