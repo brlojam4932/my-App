@@ -4,7 +4,7 @@ import styled from 'styled-components'
 //rccp
 import PropTypes from 'prop-types'
 
-// show balance button and type
+// show balance button and font
 const Section = styled.section`
   font-size: 2rem;
   text-align: center;
@@ -13,10 +13,12 @@ const Section = styled.section`
 
 // spacing for show balance when it appears
 const Balance = styled.div`
-  min width: 250px;
+position: relative;
+  left: -320px;
+  min width: 20px;
   margin: .5rem 0 0 2.5rem;
   font-size: 1.5rem;
-  verticle align: middle;
+  
   `;
 
   // helicopter button
@@ -25,7 +27,7 @@ const Button = styled.button`
   `;
 
   // inheritance with style components and used as a function
-  // show balance button witdth
+  // show balance button width
 const BalanceToggleButton = styled(Button)`
   width: 255px;
   `;

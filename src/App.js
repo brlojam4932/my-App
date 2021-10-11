@@ -69,13 +69,6 @@ function App(props) {
     setBalance(prevBalance => prevBalance + 1200);
   }
 
-//npm start
-//npm i gh-pages --save-dev
-//npm run deploy
-//npm i bootstrap --save
-//npm i bootswatch --save
-//npm i fontawesome-free
-//https://brlojam4932.github.io/my-App/
 
   // there are no longer global variables, instead they are now local constants
   const handleToggleChange = () => {
