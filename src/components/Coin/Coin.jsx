@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 // imp tab
 import PropTypes from 'prop-types';
@@ -33,6 +33,8 @@ const BUTTON_WRAPPER_STYLES = {
 };
 
 
+
+
 // LIFT THE STATE UP
 
 //rcc tab for class-based component
@@ -40,6 +42,7 @@ const BUTTON_WRAPPER_STYLES = {
 export default function Coin(props) {
 
   const [isOpen, setIsOpen] = useState(false);
+  //const [coinAmmount, setCoinAmountInput] = useState(1);
 
   const handleRefresh = (event) => {
     // prevent form from being submitted
@@ -62,22 +65,20 @@ export default function Coin(props) {
   return (
     <tr>
       <TdName>{props.name}</TdName>
-      <Td>{props.ticker}</Td>
-      <Td>${props.price}</Td>
-      <Td>{props.showBalance ? props.balance : "-"}</Td>
+            <Td>{props.ticker}</Td>
+            <Td>${props.price}</Td>
+            <Td>{props.showBalance ? props.balance : "-"}</Td>
       <TdControls>
         <form action="#" method="POST">
           <div style={BUTTON_WRAPPER_STYLES}>
-          <Button className="btn btn-info" onClick={handleRefresh}>Refresh</Button>
-          <Button className="btn btn-success" onClick={handleBuy}>Buy</Button>  
-          <Button className="btn btn-warning" onClick={handleSell}>Sell</Button>
-
-          <Modal open={isOpen} onClose={() => setIsOpen(false)}></Modal>
-
+            <Button className="btn btn-info" onClick={handleRefresh}>Refresh</Button>
+            <Button className="btn btn-success" onClick={handleBuy}>Buy</Button>
+            <Button className="btn btn-warning" onClick={handleSell}>Sell</Button>
+            <Modal open={isOpen} onClose={() => setIsOpen(false)}></Modal>
           </div>
-          
         </form>
       </TdControls>
+     
     </tr>
   );
 
