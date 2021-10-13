@@ -34,6 +34,7 @@ export default function CoinList(props) {
               balance={balance}
               price={price}
               tickerId={key}
+
               />
             )
         }

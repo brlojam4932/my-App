@@ -52,7 +52,7 @@ export default function Coin(props) {
     props.handleTransaction(true, props.tickerId);
     setIsOpen(true);
   }
-////setIsOpen(true);
+
   const handleSell = (event) => {
     event.preventDefault();
     props.handleTransaction(false, props.tickerId)

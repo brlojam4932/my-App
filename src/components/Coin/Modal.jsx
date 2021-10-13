@@ -26,7 +26,7 @@ const OVERLAY_STYLES = {
 }
 
 export default function Modal({ open, children, onClose }) {
-  const [coinAmmount, setCoinAmount] = useState(1);
+  const [coinAmmount, setCoinAmountInput] = useState(1);
 
   /*
   const handleSubmit = (e) => {
@@ -43,9 +43,10 @@ export default function Modal({ open, children, onClose }) {
       <div style={MODAL_STYLES} >
         <h4>How many tokens</h4>
         <input 
-        type="text"
+        type="number"
+        required
         value={coinAmmount}
-        onChange={(e) => setCoinAmount(e.target.value)}
+        onChange={(e) => setCoinAmountInput(e.target.value)}
         />
         <button onClick={onClose}>Close</button>
         {children}

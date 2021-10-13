@@ -12,6 +12,7 @@ import axios from 'axios';
 
 import "fontawesome-free/js/all.js";
 
+
 // bkg area for table
 const Div = styled.div`
 text-align: center;
@@ -84,6 +85,7 @@ function App(props) {
     const newCoinData = coinData.map(function(values) {
       let newValues = {...values};
       if ( valueChangeId === values.key) {
+        // check the coin exists
         newValues.balance += balanceChange;
         setBalance(prevBalance => prevBalance - balanceChange * newValues.price );
       }
@@ -152,6 +154,7 @@ function App(props) {
         handleTransaction={handleTransaction}
         handleRefresh={handleRefresh}
       />
+   
     </Div>
   );
 }
