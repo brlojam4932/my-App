@@ -52,10 +52,11 @@ export default function Coin(props) {
     props.handleTransaction(true, props.tickerId);
     setIsOpen(true);
   }
-
+////setIsOpen(true);
   const handleSell = (event) => {
     event.preventDefault();
     props.handleTransaction(false, props.tickerId)
+    setIsOpen(true);
   }
 
   return (
@@ -68,8 +69,7 @@ export default function Coin(props) {
         <form action="#" method="POST">
           <div style={BUTTON_WRAPPER_STYLES}>
           <Button className="btn btn-info" onClick={handleRefresh}>Refresh</Button>
-          <Button className="btn btn-success" onClick={handleBuy}>Buy</Button>
-          
+          <Button className="btn btn-success" onClick={handleBuy}>Buy</Button>  
           <Button className="btn btn-warning" onClick={handleSell}>Sell</Button>
 
           <Modal open={isOpen} onClose={() => setIsOpen(false)}></Modal>

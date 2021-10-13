@@ -28,6 +28,8 @@ function App(props) {
   const [balance, setBalance] = useState(10000);
   const [showBalance, setShowBalance] = useState(false);
   const [coinData, setCoinData] = useState([]);
+ 
+ 
 
   const componentDidMount = async () => {
     //console.log("MOUNT");
@@ -75,21 +77,47 @@ function App(props) {
     setShowBalance(prevValue => !prevValue);
   }
 
+  // create isBuy and valueChangId args
   const handleTransaction = (isBuy, valueChangeId) => {
-  
     var balanceChange = isBuy ? 1 : -1;
-    //we copy the new values to map and the spread functions
-    const newCoinData = coinData.map( function(values) {
+    
+    const newCoinData = coinData.map(function(values) {
       let newValues = {...values};
       if ( valueChangeId === values.key) {
         newValues.balance += balanceChange;
-        setBalance( prevBalance => prevBalance - balanceChange * newValues.price);
+        setBalance(prevBalance => prevBalance - balanceChange * newValues.price );
       }
       return newValues;
-      
+    });
+    setCoinData(newCoinData);
+  } 
+  
+  /*
+  const handleBuy = async (valueChangeId, amountValue) => {
+    const ticketUrl = `https://api.coinpaprika.com/v1/tickers/${valueChangeId}`;
+    const response = await axios.get(ticketUrl);
+    const newPrice = formatPrice(response.data.quotes["USD"].price);
+    const newCoinData = coinData.map( function(values) {
+      let newValues = {...values};
+
+      if (valueChangeId === values.key) {
+        let amountOfCoin = parseFloat(amountValue);
+        let newBalance = AccountBalance - (newPrice * amountOfCoin);
+
+        if (newAccountBalance > 0) {
+          setBalance(newBalance);
+          newValues.balance += amountOfCoin;
+          setInsuffientUsdBalanceMessage(false);
+        } else {
+          setInsuffientUsdBalanceMessage(true);
+        }
+
+      };
+      return newValues;
     });
     setCoinData(newCoinData);
   }
+  */
 
   const handleRefresh = async (valueChangeId) => {
     const ticketUrl = `https://api.coinpaprika.com/v1/tickers/${valueChangeId}`;
@@ -101,7 +129,8 @@ function App(props) {
       if (valueChangeId === values.key) {
         //manipulate price here
         newValues.price = newPrice;
-      } return newValues;
+      } 
+      return newValues;
     });
     // this.setState(prevState => {}) one way to write the new state
     setCoinData(newCoinData);
@@ -115,8 +144,8 @@ function App(props) {
         showBalance={showBalance}
         handleBrrr={handleBrrr}
         handleToggleChange={handleToggleChange}
-        />
-       
+      />
+
       <CoinList
         coinData={coinData}
         showBalance={showBalance}
