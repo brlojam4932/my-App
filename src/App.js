@@ -30,13 +30,12 @@ function App(props) {
   const [showBalance, setShowBalance] = useState(false);
   const [coinData, setCoinData] = useState([]);
  
- 
 
   const componentDidMount = async () => {
     //console.log("MOUNT");
     const response = await axios.get('https://api.coinpaprika.com/v1/coins');
     // we are now receiving strings as data so we don't need an object anymore
-    // we also use cont instead of let as we are not changing the data
+    // we also use const instead of let as we are not changing the data
     const coinIds = response.data.slice(0, COIN_COUNT).map(coin => coin.id);
     const ticketUrl = 'https://api.coinpaprika.com/v1/tickers/';
     // we get a promise that our data will be sent to us sometime in the future
@@ -50,7 +49,9 @@ function App(props) {
         name: coin.name,
         ticker: coin.symbol,
         balance: 0,
-        price: formatPrice(coin.quotes["USD"].price)
+        price: formatPrice(coin.quotes["USD"].price),
+        rank: coin.rank,
+        circulating_supply: coin.circulating_supply
       };
     });
 
@@ -121,6 +122,7 @@ function App(props) {
   }
   */
 
+    //https://api.coinpaprika.com/v1/tickers/{coin_id}/historical
   const handleRefresh = async (valueChangeId) => {
     const ticketUrl = `https://api.coinpaprika.com/v1/tickers/${valueChangeId}`;
     const response = await axios.get(ticketUrl);

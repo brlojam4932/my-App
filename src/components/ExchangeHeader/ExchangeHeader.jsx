@@ -26,6 +26,8 @@ const H1 = styled.h1`
   min-width: 300px;
 `;
 
+
+
 // rcc
 
 export default class ExchangeHeader extends Component {
@@ -36,6 +38,8 @@ export default class ExchangeHeader extends Component {
           <H1>
             Coin Exchange
           </H1>
+          
+          
         </Header>  
     )
   }

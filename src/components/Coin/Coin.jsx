@@ -27,6 +27,12 @@ const Button = styled.button`
   margin: 3px 5px 0;
 `;
 
+const CoinInfo = styled.div`
+  font-size: 8px;
+  with: 70px;
+  margin: 2px 4px 0;
+`;
+
 const BUTTON_WRAPPER_STYLES = {
   position: "relative",
   zIndex: 1
@@ -62,7 +68,31 @@ export default function Coin(props) {
     setIsOpen(true);
   }
 
+  const handleInfo = (event) => {
+    // prevent form from being submitted
+    event.preventDefault();
+    props.handleRefresh(props.tickerId);
+    // if btc is picked by tickerId
+    // display text info about that token
+    alert( props.tickerId 
+      + "Rank:" + props.rank 
+      + "circulating_supply" 
+      + props.circulating_supply);    
+  }
+
+  // btc info: btc was founded in 1969 by a gropp of archealogists
+  // Eth info: Eth was founded in 2058 by a gropp of firemen...
+  // hex: is a really nice coin, trust me
+
+
+  //<button type="button" class="btn btn-outline-info">Info</button>
+
   return (
+    <>
+     <CoinInfo>
+      {props.rank}
+    </CoinInfo>
+   
     <tr>
       <TdName>{props.name}</TdName>
             <Td>{props.ticker}</Td>
@@ -74,12 +104,15 @@ export default function Coin(props) {
             <Button className="btn btn-info" onClick={handleRefresh}>Refresh</Button>
             <Button className="btn btn-success" onClick={handleBuy}>Buy</Button>
             <Button className="btn btn-warning" onClick={handleSell}>Sell</Button>
+            <Button className='btn btn-outline-info' onClick={handleInfo}>Info</Button>
             <Modal open={isOpen} onClose={() => setIsOpen(false)}></Modal>
           </div>
         </form>
       </TdControls>
      
     </tr>
+    </>
+    
   );
 
 }
@@ -88,5 +121,6 @@ export default function Coin(props) {
 Coin.propTypes = {
   name: PropTypes.string.isRequired,
   ticker: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired
+  price: PropTypes.number.isRequired,
+  rank: PropTypes.string.isRequired
 }

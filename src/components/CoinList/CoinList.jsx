@@ -14,11 +14,22 @@ const OTHER_CONTENT_STYLES = {
   padding: "10px"
 };
 
+const Div = styled.div`
+  position: relative;
+  top: 0px;
+  right: -100px;
+`
+
 // rewrite coinlist component into functional component
 
 export default function CoinList(props) {
     return (
+     
       <div style={OTHER_CONTENT_STYLES}>
+         <Div>
+          <h4>Some detail here</h4>
+          </Div>
+
           <Table className="table table-primary table border">
       <thead>
         <tr>
@@ -32,7 +43,7 @@ export default function CoinList(props) {
       <tbody>
       {
           //distructured version - recommended; more explicit
-          props.coinData.map(({key, name, ticker, price, balance}) =>
+          props.coinData.map(({key, name, ticker, price, balance, rank, circulating_supply}) =>
               <Coin key={key} 
               handleRefresh={props.handleRefresh}
               handleTransaction={props.handleTransaction}
@@ -42,8 +53,10 @@ export default function CoinList(props) {
               balance={balance}
               price={price}
               tickerId={key}
-
+              rank={rank}
+              circulating_supply={circulating_supply}
               />
+              
             )
         }
       </tbody>

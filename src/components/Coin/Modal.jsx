@@ -28,12 +28,11 @@ const OVERLAY_STYLES = {
 export default function Modal({ open, children, onClose }) {
   const [coinAmmount, setCoinAmountInput] = useState(1);
 
-  /*
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    alert("submitted");
+  const handleSubmit = () => {
+ 
+    setCoinAmountInput();
   }
-  */
+ 
 
   if (!open) return null;
 
@@ -46,7 +45,7 @@ export default function Modal({ open, children, onClose }) {
         type="number"
         required
         value={coinAmmount}
-        onChange={(e) => setCoinAmountInput(e.target.value)}
+        onChange={(e) => handleSubmit(e.target.value)}
         />
         <button onClick={onClose}>Close</button>
         {children}
