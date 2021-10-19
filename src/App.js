@@ -38,6 +38,7 @@ const formatPrice = price => parseFloat(Number(price).toFixed(4));
 
 function App(props) {
   // React: from State to Hooks
+  
   const [balance, setBalance] = useState(10000);
   const [showBalance, setShowBalance] = useState(false);
   const [coinData, setCoinData] = useState([]);
@@ -96,9 +97,10 @@ function App(props) {
   // create isBuy and valueChangId args
   const handleTransaction = (isBuy, valueChangeId) => {
     setIsOpen(true);
-    //var balanceChange = isBuy ? { setCoinAmountInput } : { setCoinAmountInput };
-    var balanceChange = isBuy ?  setCoinAmountInput :  setCoinAmountInput;
-
+    let amountInputToFloat = parseFloat(setCoinAmountInput);
+    var balanceChange = isBuy ?  amountInputToFloat : amountInputToFloat;
+    console.log('transaction: clicked submit')
+    
     const newCoinData = coinData.map(function (values) {
       let newValues = { ...values };
       if (valueChangeId === values.key) {
@@ -107,6 +109,7 @@ function App(props) {
         setBalance(prevBalance => prevBalance - balanceChange * newValues.price);
       }
       return newValues;
+      
     });
     setCoinData(newCoinData);
   }
@@ -160,7 +163,9 @@ function App(props) {
     <>
       <div style={BUTTON_WRAPPER_STYLES}>
 
-        <Modal coinAmount={coinAmount}
+        <Modal 
+           handleTransaction={handleTransaction}
+          coinAmount={coinAmount}
           setCoinAmountInput={setCoinAmountInput}
           open={isOpen}
           onClose={() => setIsOpen(false)}>
@@ -173,7 +178,8 @@ function App(props) {
                 value={coinAmount}
                 onChange={(e) => setCoinAmountInput(e.target.value)}
               />
-              <button onSubmit={(e) => setCoinAmountInput(e.target.value)} >Submit</button>
+              <button onSubmit={(e) => handleTransaction(e.target.value)} >Submit</button>
+              <p > {coinAmount} </p>
             </>
           }
         </Modal>
