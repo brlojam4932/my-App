@@ -48,6 +48,7 @@ export default function Coin(props) {
   const handleBuy = (event) => {
     event.preventDefault();
     props.handleTransaction(true, props.tickerId);
+    console.log('Buy Clicked');
   }
 
   const handleSell = (event) => {

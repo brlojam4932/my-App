@@ -32,7 +32,7 @@ const OTHER_CONTENT_STYLES = {
 
 
 // UTILITY FUNCTIONS
-const COIN_COUNT = 10;
+const COIN_COUNT = 3;
 const formatPrice = price => parseFloat(Number(price).toFixed(4));
 
 
@@ -43,7 +43,7 @@ function App(props) {
   const [showBalance, setShowBalance] = useState(false);
   const [coinData, setCoinData] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-  const [coinAmount, setCoinAmountInput] = useState(1);
+  const [coinAmount, setCoinAmountInput] = useState(0);
 
 
   const componentDidMount = async () => {
@@ -97,22 +97,23 @@ function App(props) {
   // create isBuy and valueChangId args
   const handleTransaction = (isBuy, valueChangeId) => {
     setIsOpen(true);
-    let amountInputToFloat = parseFloat(setCoinAmountInput);
-    var balanceChange = isBuy ?  amountInputToFloat : amountInputToFloat;
-    console.log('transaction: clicked submit')
-    
+    //let amountInputToFloat = parseFloat(setCoinAmountInput).value;
+    var balanceChange = isBuy ? coinAmount : coinAmount;
+  
     const newCoinData = coinData.map(function (values) {
       let newValues = { ...values };
       if (valueChangeId === values.key) {
         // check the coin exists
         newValues.balance += balanceChange;
         setBalance(prevBalance => prevBalance - balanceChange * newValues.price);
+        
       }
       return newValues;
       
     });
     setCoinData(newCoinData);
   }
+
 
   /*
   const handleBuy = async (valueChangeId, amountValue) => {
@@ -169,17 +170,18 @@ function App(props) {
           setCoinAmountInput={setCoinAmountInput}
           open={isOpen}
           onClose={() => setIsOpen(false)}>
-          {/*fancy modal; children go here */
+          {/* children go here */
             <>
-              <h4>How many tokens</h4>
+             <h4>How many tokens</h4>
               <input
                 type="number"
                 required
+                placeholder='Enter Amount'
                 value={coinAmount}
-                onChange={(e) => setCoinAmountInput(e.target.value)}
+                onChange={(e) => setCoinAmountInput(+e.target.value)}
               />
-              <button onSubmit={(e) => handleTransaction(e.target.value)} >Submit</button>
-              <p > {coinAmount} </p>
+              <button onSubmit={handleTransaction} >Submit</button>
+              <p > Amount of tokens: {coinAmount} </p>          
             </>
           }
         </Modal>
