@@ -6,18 +6,30 @@ import AccountBalance from './components/AccountBalance/AccountBalance';
 import ExchangeHeader from './components/ExchangeHeader/ExchangeHeader';
 import styled from 'styled-components';
 import axios from 'axios';
-
+import Modal from './components/Coin/Modal';
 
 //instructor: zsolt-nagy
 
 import "fontawesome-free/js/all.js";
-
 
 // bkg area for table
 const Div = styled.div`
 text-align: center;
 background-color: #3E434F;
 color: #ccc;`;
+
+const BUTTON_WRAPPER_STYLES = {
+  position: "relative",
+  zIndex: 1
+};
+
+const OTHER_CONTENT_STYLES = {
+  position: "relative",
+  zIndex: 2,
+  padding: "10px"
+};
+
+
 
 // UTILITY FUNCTIONS
 const COIN_COUNT = 10;
@@ -29,7 +41,9 @@ function App(props) {
   const [balance, setBalance] = useState(10000);
   const [showBalance, setShowBalance] = useState(false);
   const [coinData, setCoinData] = useState([]);
- 
+  const [isOpen, setIsOpen] = useState(false);
+  const [coinAmount, setCoinAmountInput] = useState(1);
+
 
   const componentDidMount = async () => {
     //console.log("MOUNT");
@@ -81,20 +95,22 @@ function App(props) {
 
   // create isBuy and valueChangId args
   const handleTransaction = (isBuy, valueChangeId) => {
-    var balanceChange = isBuy ? 1 : -1;
-    
-    const newCoinData = coinData.map(function(values) {
-      let newValues = {...values};
-      if ( valueChangeId === values.key) {
+    setIsOpen(true);
+    //var balanceChange = isBuy ? { setCoinAmountInput } : { setCoinAmountInput };
+    var balanceChange = isBuy ?  setCoinAmountInput :  setCoinAmountInput;
+
+    const newCoinData = coinData.map(function (values) {
+      let newValues = { ...values };
+      if (valueChangeId === values.key) {
         // check the coin exists
         newValues.balance += balanceChange;
-        setBalance(prevBalance => prevBalance - balanceChange * newValues.price );
+        setBalance(prevBalance => prevBalance - balanceChange * newValues.price);
       }
       return newValues;
     });
     setCoinData(newCoinData);
-  } 
-  
+  }
+
   /*
   const handleBuy = async (valueChangeId, amountValue) => {
     const ticketUrl = `https://api.coinpaprika.com/v1/tickers/${valueChangeId}`;
@@ -122,7 +138,7 @@ function App(props) {
   }
   */
 
-    //https://api.coinpaprika.com/v1/tickers/{coin_id}/historical
+  //https://api.coinpaprika.com/v1/tickers/{coin_id}/historical
   const handleRefresh = async (valueChangeId) => {
     const ticketUrl = `https://api.coinpaprika.com/v1/tickers/${valueChangeId}`;
     const response = await axios.get(ticketUrl);
@@ -133,7 +149,7 @@ function App(props) {
       if (valueChangeId === values.key) {
         //manipulate price here
         newValues.price = newPrice;
-      } 
+      }
       return newValues;
     });
     // this.setState(prevState => {}) one way to write the new state
@@ -141,23 +157,51 @@ function App(props) {
   }
 
   return (
-    <Div className="App">
-      <ExchangeHeader />
-      <AccountBalance
-        amount={balance}
-        showBalance={showBalance}
-        handleBrrr={handleBrrr}
-        handleToggleChange={handleToggleChange}
-      />
+    <>
+      <div style={BUTTON_WRAPPER_STYLES}>
 
-      <CoinList
-        coinData={coinData}
-        showBalance={showBalance}
-        handleTransaction={handleTransaction}
-        handleRefresh={handleRefresh}
-      />
-   
-    </Div>
+        <Modal coinAmount={coinAmount}
+          setCoinAmountInput={setCoinAmountInput}
+          open={isOpen}
+          onClose={() => setIsOpen(false)}>
+          {/*fancy modal; children go here */
+            <>
+              <h4>How many tokens</h4>
+              <input
+                type="number"
+                required
+                value={coinAmount}
+                onChange={(e) => setCoinAmountInput(e.target.value)}
+              />
+              <button onSubmit={(e) => setCoinAmountInput(e.target.value)} >Submit</button>
+            </>
+          }
+        </Modal>
+
+
+
+      </div>
+      <div style={OTHER_CONTENT_STYLES}>
+        <Div className="App">
+          <ExchangeHeader />
+          <AccountBalance
+            amount={balance}
+            showBalance={showBalance}
+            handleBrrr={handleBrrr}
+            handleToggleChange={handleToggleChange}
+          />
+
+          <CoinList
+            coinData={coinData}
+            showBalance={showBalance}
+            handleTransaction={handleTransaction}
+            handleRefresh={handleRefresh}
+          />
+        </Div>
+
+      </div>
+    </>
+
   );
 }
 

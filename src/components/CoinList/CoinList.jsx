@@ -7,28 +7,11 @@ const Table = styled.table`
 font-size: 1rem;
 `;
 
-const OTHER_CONTENT_STYLES = {
-  position: "relative",
-  zIndex: 2,
-
-  padding: "10px"
-};
-
-const Div = styled.div`
-  position: relative;
-  top: 0px;
-  right: -100px;
-`
 
 // rewrite coinlist component into functional component
 
 export default function CoinList(props) {
     return (
-     
-      <div style={OTHER_CONTENT_STYLES}>
-         <Div>
-          <h4>Some detail here</h4>
-          </Div>
 
           <Table className="table table-primary table border">
       <thead>
@@ -61,8 +44,6 @@ export default function CoinList(props) {
         }
       </tbody>
     </Table>
-
-      </div>
     
     )
   

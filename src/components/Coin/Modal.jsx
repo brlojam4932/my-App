@@ -1,6 +1,9 @@
 import React from "react";
-import reactDom from "react-dom";
-import {useState} from "react";
+import ReactDom from "react-dom";
+//import {useState} from "react";
+
+//https://youtu.be/7_67nxgw5W4
+// npm install prop-types
 
 const MODAL_STYLES = {
   position: 'fixed',
@@ -14,7 +17,6 @@ const MODAL_STYLES = {
 }
 
 
-
 const OVERLAY_STYLES = {
   position: 'fixed',
   top: 0,
@@ -25,35 +27,31 @@ const OVERLAY_STYLES = {
   zIndex: 1000
 }
 
-export default function Modal({ open, children, onClose }) {
-  const [coinAmmount, setCoinAmountInput] = useState(1);
-
+ function Modal({ open, children, onClose }) {
+  /*
   const handleSubmit = () => {
  
     setCoinAmountInput();
   }
+  */
  
-
+  // if not open, render nothing
   if (!open) return null;
 
-  return reactDom.createPortal(
+  return ReactDom.createPortal(
     <>
-      <div style={OVERLAY_STYLES} />
+      <div style={OVERLAY_STYLES} /> {/* black overlay */}
       <div style={MODAL_STYLES} >
-        <h4>How many tokens</h4>
-        <input 
-        type="number"
-        required
-        value={coinAmmount}
-        onChange={(e) => handleSubmit(e.target.value)}
-        />
+        {/*Define onClose in App */}
         <button onClick={onClose}>Close</button>
         {children}
-        <p>Amount of tokens to buy: { coinAmmount } </p>
       </div>
-
     </>,
     document.getElementById('portal')
   )
+ 
 }
+
+
+export default Modal;
 
