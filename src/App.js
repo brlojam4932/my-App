@@ -94,12 +94,21 @@ function App(props) {
     setShowBalance(prevValue => !prevValue);
   }
 
+  /*
+  const handleSubmit = (e) => {
+    //alert("submit clicked", e)
+    setCoinAmountInput(coinAmount);
+    setIsOpen(false);
+  }
+  */
+
   // create isBuy and valueChangId args
-  const handleTransaction = (isBuy, valueChangeId) => {
+  const handleTransaction = (isBuy, valueChangeId, e) => {
+    alert("handleTransaction clicked", e)
     setIsOpen(true);
     //let amountInputToFloat = parseFloat(setCoinAmountInput).value;
     var balanceChange = isBuy ? coinAmount : coinAmount;
-  
+   
     const newCoinData = coinData.map(function (values) {
       let newValues = { ...values };
       if (valueChangeId === values.key) {
@@ -180,7 +189,7 @@ function App(props) {
                 value={coinAmount}
                 onChange={(e) => setCoinAmountInput(+e.target.value)}
               />
-              <button onSubmit={handleTransaction} >Submit</button>
+              <button onClick={(e) => handleTransaction(e)} >Submit</button>
               <p > Amount of tokens: {coinAmount} </p>          
             </>
           }
