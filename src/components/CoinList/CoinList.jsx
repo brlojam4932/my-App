@@ -10,7 +10,7 @@ font-size: 1rem;
 
 // rewrite coinlist component into functional component
 
-export default function CoinList(props) {
+function CoinList(props) {
     return (
 
           <Table className="table table-primary table border">
@@ -19,7 +19,7 @@ export default function CoinList(props) {
           <th>Name</th>
           <th>Ticker</th>
           <th>Price</th>
-          <th>Balance</th>
+          {props.showBalance ? <th>Balance</th> : null }
           <th>Actions</th>
         </tr>
       </thead>
@@ -29,7 +29,12 @@ export default function CoinList(props) {
           props.coinData.map(({key, name, ticker, price, balance, rank, circulating_supply}) =>
               <Coin key={key} 
               handleRefresh={props.handleRefresh}
-              handleTransaction={props.handleTransaction}
+              handleBuy={props.handleBuy}
+              handleSell={props.handleSell}
+              buyInputValue={props.buyInputValue}
+              setBuyInputValue={props.setBuyInputValue}
+              coinBalance={props.coinBalance}
+              setCoinBalance={props.setCoinBalance}
               name={name} 
               ticker={ticker}
               showBalance={props.showBalance}
@@ -38,8 +43,13 @@ export default function CoinList(props) {
               tickerId={key}
               rank={rank}
               circulating_supply={circulating_supply}
-              />
+              insufficientUsdBalMessage={props.insufficientUsdBalMessage}
+              setInsufficientUsdBalMessage={props.setInsufficientUsdBalMessage}
+              insufficientTokenBalMessage={props.insufficientTokenBalMessage}
+              setInsufficientTokenBalMessage={props.setInsufficientTokenBalMessage}
               
+              />
+        
             )
         }
       </tbody>
@@ -48,3 +58,5 @@ export default function CoinList(props) {
     )
   
 }
+
+export default CoinList;

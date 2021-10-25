@@ -6,7 +6,8 @@ import AccountBalance from './components/AccountBalance/AccountBalance';
 import ExchangeHeader from './components/ExchangeHeader/ExchangeHeader';
 import styled from 'styled-components';
 import axios from 'axios';
-import Modal from './components/Coin/Modal';
+//import Modal from './components/Coin/Modal';
+
 
 //instructor: zsolt-nagy
 
@@ -18,6 +19,7 @@ text-align: center;
 background-color: #3E434F;
 color: #ccc;`;
 
+/*
 const BUTTON_WRAPPER_STYLES = {
   position: "relative",
   zIndex: 1
@@ -28,6 +30,7 @@ const OTHER_CONTENT_STYLES = {
   zIndex: 2,
   padding: "10px"
 };
+*/
 
 
 
@@ -36,15 +39,7 @@ const COIN_COUNT = 3;
 const formatPrice = price => parseFloat(Number(price).toFixed(4));
 
 
-function App(props) {
-  // React: from State to Hooks
-  
-  const [balance, setBalance] = useState(10000);
-  const [showBalance, setShowBalance] = useState(false);
-  const [coinData, setCoinData] = useState([]);
-  const [isOpen, setIsOpen] = useState(false);
-  const [coinAmount, setCoinAmountInput] = useState(0);
-
+function App() {
 
   const componentDidMount = async () => {
     //console.log("MOUNT");
@@ -84,8 +79,17 @@ function App(props) {
     }
   });
 
+  const [coinBalance, setCoinBalance] = useState(0)
+  const [accountBalance, setAccountBalance] = useState(10000);
+  const [showBalance, setShowBalance] = useState(false);
+  const [coinData, setCoinData] = useState([]);
+  const [buyInputValue, setBuyInputValue] = useState('');
+  const [insufficientUsdBalMessage, setInsufficientUsdBalMessage] = useState(false);
+  const [insufficientTokenBalMessage, setInsufficientTokenBalMessage] = useState(false);
+
+
   const handleBrrr = () => {
-    setBalance(prevBalance => prevBalance + 1200);
+    setAccountBalance(prevBalance => prevBalance + 1200);
   }
 
 
@@ -94,62 +98,62 @@ function App(props) {
     setShowBalance(prevValue => !prevValue);
   }
 
-  /*
-  const handleSubmit = (e) => {
-    //alert("submit clicked", e)
-    setCoinAmountInput(coinAmount);
-    setIsOpen(false);
-  }
-  */
 
   // create isBuy and valueChangId args
-  const handleTransaction = (isBuy, valueChangeId, e) => {
-    alert("handleTransaction clicked", e)
-    setIsOpen(true);
-    //let amountInputToFloat = parseFloat(setCoinAmountInput).value;
-    var balanceChange = isBuy ? coinAmount : coinAmount;
-   
-    const newCoinData = coinData.map(function (values) {
-      let newValues = { ...values };
-      if (valueChangeId === values.key) {
-        // check the coin exists
-        newValues.balance += balanceChange;
-        setBalance(prevBalance => prevBalance - balanceChange * newValues.price);
-        
-      }
-      return newValues;
-      
-    });
-    setCoinData(newCoinData);
-  }
-
-
-  /*
   const handleBuy = async (valueChangeId, amountValue) => {
     const ticketUrl = `https://api.coinpaprika.com/v1/tickers/${valueChangeId}`;
     const response = await axios.get(ticketUrl);
     const newPrice = formatPrice(response.data.quotes["USD"].price);
-    const newCoinData = coinData.map( function(values) {
-      let newValues = {...values};
+    const newCoinData = coinData.map(function (values) {
+      let newValues = { ...values };
 
       if (valueChangeId === values.key) {
         let amountOfCoin = parseFloat(amountValue);
-        let newBalance = AccountBalance - (newPrice * amountOfCoin);
+        let newAccountBalance = accountBalance - (newPrice * amountOfCoin);
 
         if (newAccountBalance > 0) {
-          setBalance(newBalance);
+          setAccountBalance(newAccountBalance)
           newValues.balance += amountOfCoin;
-          setInsuffientUsdBalanceMessage(false);
-        } else {
-          setInsuffientUsdBalanceMessage(true);
+          setInsufficientUsdBalMessage(false)
+        }
+        else {
+          setInsufficientUsdBalMessage(true)
         }
 
       };
       return newValues;
+
     });
     setCoinData(newCoinData);
   }
-  */
+
+  
+  const handleSell = async (valueChangeId, amountValue) => {
+    const ticketUrl = `https://api.coinpaprika.com/v1/tickers/${valueChangeId}`;
+    const response = await axios.get(ticketUrl);
+    const newPrice = formatPrice(response.data.quotes["USD"].price);
+    const newCoinData = coinData.map(function (values) {
+      let newValues = { ...values };
+
+      if (valueChangeId === values.key) {
+        let amountOfCoin = parseFloat(amountValue);
+        let newAccountBalance = accountBalance + (newPrice * amountOfCoin);
+
+        if (amountOfCoin <= newValues.balance) {
+          setAccountBalance(newAccountBalance);
+          newValues.balance -= amountOfCoin;
+          setInsufficientTokenBalMessage(false);
+        }
+        else {
+          setInsufficientTokenBalMessage(true)
+        }
+
+      };
+      return newValues;
+
+    });
+    setCoinData(newCoinData);
+  }
 
   //https://api.coinpaprika.com/v1/tickers/{coin_id}/historical
   const handleRefresh = async (valueChangeId) => {
@@ -171,52 +175,36 @@ function App(props) {
 
   return (
     <>
-      <div style={BUTTON_WRAPPER_STYLES}>
-
-        <Modal 
-           handleTransaction={handleTransaction}
-          coinAmount={coinAmount}
-          setCoinAmountInput={setCoinAmountInput}
-          open={isOpen}
-          onClose={() => setIsOpen(false)}>
-          {/* children go here */
-            <>
-             <h4>How many tokens</h4>
-              <input
-                type="number"
-                required
-                placeholder='Enter Amount'
-                value={coinAmount}
-                onChange={(e) => setCoinAmountInput(+e.target.value)}
-              />
-              <button onClick={(e) => handleTransaction(e)} >Submit</button>
-              <p > Amount of tokens: {coinAmount} </p>          
-            </>
-          }
-        </Modal>
-
-
-
-      </div>
-      <div style={OTHER_CONTENT_STYLES}>
+     
+      
         <Div className="App">
           <ExchangeHeader />
           <AccountBalance
-            amount={balance}
+            amount={accountBalance}
             showBalance={showBalance}
             handleBrrr={handleBrrr}
             handleToggleChange={handleToggleChange}
           />
 
           <CoinList
+            coinBalance={coinBalance}
+            setCoinBalance={setCoinBalance}
             coinData={coinData}
             showBalance={showBalance}
-            handleTransaction={handleTransaction}
-            handleRefresh={handleRefresh}
+            handleBuy={handleBuy}
+            handleSell={handleSell}
+            handleRefresh={handleRefresh}  
+            buyInputValue={buyInputValue}
+            setBuyInputValue={setBuyInputValue}  
+            insufficientUsdBalMessage={insufficientUsdBalMessage}
+            setInsufficientUsdBalMessage={setInsufficientUsdBalMessage}
+            insufficientTokenBalMessage={insufficientTokenBalMessage}
+            setInsufficientTokenBalMessage={setInsufficientTokenBalMessage}
           />
+
         </Div>
 
-      </div>
+  
     </>
 
   );

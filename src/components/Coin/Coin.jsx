@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 // imp tab
 import PropTypes from 'prop-types';
+import Modal from 'react-modal';
 
 // table
 const Td = styled.td`
@@ -33,11 +34,28 @@ const Button = styled.button`
 `};
 */
 
+const TradeInput = styled.input`
+width: 34%;
+`
+
 // LIFT THE STATE UP
 
 //rcc tab for class-based component
 // here we rewrite a component into a functional component
-export default function Coin(props) {
+function Coin(props) {
+
+  const MODAL_STYLES = {
+    position: 'fixed',
+    top: '50%',
+    left: '50%',
+    transform: 'transate( -50%, -50% )',
+    backgroundColor: "#3E434F",
+    color: "white",
+    padding: '100px',
+    zIndex: 1000,
+  }
+
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const handleRefresh = (event) => {
     // prevent form from being submitted
@@ -45,16 +63,18 @@ export default function Coin(props) {
     props.handleRefresh(props.tickerId);
   }
 
-  const handleBuy = (event) => {
+
+  const handleBuyClick = (event) => {
     event.preventDefault();
-    props.handleTransaction(true, props.tickerId);
-    console.log('Buy Clicked');
+    props.handleBuy(props.tickerId, props.buyInputValue);
+    //console.log('Buy Clicked');
   }
 
-  const handleSell = (event) => {
+  const handleSellClick = (event) => {
     event.preventDefault();
-    props.handleTransaction(false, props.tickerId)
+    props.handleSell(props.tickerId, props.buyInputValue);
   }
+
 
   const handleInfo = (event) => {
     // prevent form from being submitted
@@ -62,42 +82,72 @@ export default function Coin(props) {
     props.handleRefresh(props.tickerId);
     // if btc is picked by tickerId
     // display text info about that token
-    alert( props.tickerId 
-      + "Rank:" + props.rank 
-      + "circulating_supply" 
-      + props.circulating_supply);    
+    alert(props.tickerId
+      + "Rank:" + props.rank
+      + "circulating_supply"
+      + props.circulating_supply);
   }
 
-  // btc info: btc was founded in 1969 by a gropp of archealogists
-  // Eth info: Eth was founded in 2058 by a gropp of firemen...
-  // hex: is a really nice coin, trust me
+  const handleClose = () => {
+    setModalIsOpen(false);
+    props.setInsufficientUsdBalMessage(false);
+    props.setInsufficientTokenBalMessage(false)
+  }
 
   return (
     <>
-    {/* 
+      {/* 
      <CoinInfo>
       {props.rank}
     </CoinInfo>*/}
-    
-    <tr>
-      <TdName>{props.name}</TdName>
-            <Td>{props.ticker}</Td>
-            <Td>${props.price}</Td>
-            <Td>{props.showBalance ? props.balance : "-"}</Td>
-      <TdControls>
-        <form action="#" method="POST">
-         
+
+      <tr>
+        <TdName>{props.name}</TdName>
+        <Td>{props.ticker}</Td>
+        <Td>${props.price}</Td>
+        <Td>{props.showBalance ? props.balance : "-"}</Td>
+
+        <TdControls>
+          <form action="#">
+
+            <Button className="btn btn-success" onClick={() => setModalIsOpen(true)} >Trade</Button>
+
             <Button className="btn btn-info" onClick={handleRefresh}>Refresh</Button>
-            <Button className="btn btn-success" onClick={handleBuy}>Buy</Button>
-            <Button className="btn btn-warning" onClick={handleSell}>Sell</Button>
+
             <Button className='btn btn-outline-info' onClick={handleInfo}>Info</Button>
-        
-        </form>
-      </TdControls>
-     
-    </tr>
+
+          </form>
+        </TdControls>
+
+      </tr>
+
+      <Modal
+
+        isOpen={modalIsOpen}
+        ariaHideApp={false}
+        onRequestClose={handleClose}
+        style={MODAL_STYLES}
+      >
+        <h1> Trade {props.tickerId.toUpperCase()} </h1>
+
+        <label> Amount of Coins to Buy/Sell</label>
+        {props.insufficientUsdBalMessage && <p>Insufficient Balance USD</p>}
+        {props.insufficientTokenBalMessage && <p>Insufficient Token Balance</p>}
+
+        <TradeInput id="buyInput"
+          type="number"
+          required
+          onChange={(e) => props.setBuyInputValue(e.target.value)} >
+        </TradeInput>
+
+        <Button className="btn btn-success" onClick={handleBuyClick}>Buy</Button>
+        <Button className="btn btn-warning" onClick={handleSellClick}>Sell</Button>
+        <Button className="btn btn-primary" onClick={handleClose}>Close</Button>
+
+
+      </Modal>
     </>
-    
+
   );
 
 }
@@ -107,6 +157,8 @@ Coin.propTypes = {
   name: PropTypes.string.isRequired,
   ticker: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
-  rank: PropTypes.string.isRequired,
+  rank: PropTypes.number.isRequired,
   circulating_supply: PropTypes.number.isRequired
 }
+
+export default Coin;

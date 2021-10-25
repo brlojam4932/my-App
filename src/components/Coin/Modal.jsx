@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDom from "react-dom";
-//import {useState} from "react";
 
 //https://youtu.be/7_67nxgw5W4
 // npm install prop-types
@@ -28,15 +27,11 @@ const OVERLAY_STYLES = {
 }
 
  function Modal({ open, children, onClose }) {
-  /*
-  const handleSubmit = () => {
- 
-    setCoinAmountInput();
-  }
-  */
  
   // if not open, render nothing
-  if (!open) return null;
+  if (!open) {
+    return null;
+  } 
 
   return ReactDom.createPortal(
     <>
