@@ -41,6 +41,16 @@ const formatPrice = price => parseFloat(Number(price).toFixed(4));
 
 function App() {
 
+  const [coinBalance, setCoinBalance] = useState(0)
+  const [accountBalance, setAccountBalance] = useState(10000);
+  const [showBalance, setShowBalance] = useState(false);
+  const [coinData, setCoinData] = useState([]);
+  const [buyInputValue, setBuyInputValue] = useState('');
+  const [insufficientUsdBalMessage, setInsufficientUsdBalMessage] = useState(false);
+  const [insufficientTokenBalMessage, setInsufficientTokenBalMessage] = useState(false);
+  const [isBuy, setIsBuy] = useState(false);
+  const [isSold, setIsSold] = useState(false);
+
   const componentDidMount = async () => {
     //console.log("MOUNT");
     const response = await axios.get('https://api.coinpaprika.com/v1/coins');
@@ -79,13 +89,6 @@ function App() {
     }
   });
 
-  const [coinBalance, setCoinBalance] = useState(0)
-  const [accountBalance, setAccountBalance] = useState(10000);
-  const [showBalance, setShowBalance] = useState(false);
-  const [coinData, setCoinData] = useState([]);
-  const [buyInputValue, setBuyInputValue] = useState('');
-  const [insufficientUsdBalMessage, setInsufficientUsdBalMessage] = useState(false);
-  const [insufficientTokenBalMessage, setInsufficientTokenBalMessage] = useState(false);
 
 
   const handleBrrr = () => {
@@ -114,10 +117,12 @@ function App() {
         if (newAccountBalance > 0) {
           setAccountBalance(newAccountBalance)
           newValues.balance += amountOfCoin;
-          setInsufficientUsdBalMessage(false)
+          setInsufficientUsdBalMessage(false);
+          setIsBuy(true);
         }
         else {
           setInsufficientUsdBalMessage(true)
+          setIsBuy(false);
         }
 
       };
@@ -127,7 +132,7 @@ function App() {
     setCoinData(newCoinData);
   }
 
-  
+
   const handleSell = async (valueChangeId, amountValue) => {
     const ticketUrl = `https://api.coinpaprika.com/v1/tickers/${valueChangeId}`;
     const response = await axios.get(ticketUrl);
@@ -143,9 +148,11 @@ function App() {
           setAccountBalance(newAccountBalance);
           newValues.balance -= amountOfCoin;
           setInsufficientTokenBalMessage(false);
+          setIsSold(true)
         }
         else {
-          setInsufficientTokenBalMessage(true)
+          setInsufficientTokenBalMessage(true);
+          setIsSold(false);
         }
 
       };
@@ -175,36 +182,40 @@ function App() {
 
   return (
     <>
-     
-      
-        <Div className="App">
-          <ExchangeHeader />
-          <AccountBalance
-            amount={accountBalance}
-            showBalance={showBalance}
-            handleBrrr={handleBrrr}
-            handleToggleChange={handleToggleChange}
-          />
 
-          <CoinList
-            coinBalance={coinBalance}
-            setCoinBalance={setCoinBalance}
-            coinData={coinData}
-            showBalance={showBalance}
-            handleBuy={handleBuy}
-            handleSell={handleSell}
-            handleRefresh={handleRefresh}  
-            buyInputValue={buyInputValue}
-            setBuyInputValue={setBuyInputValue}  
-            insufficientUsdBalMessage={insufficientUsdBalMessage}
-            setInsufficientUsdBalMessage={setInsufficientUsdBalMessage}
-            insufficientTokenBalMessage={insufficientTokenBalMessage}
-            setInsufficientTokenBalMessage={setInsufficientTokenBalMessage}
-          />
 
-        </Div>
+      <Div className="App">
+        <ExchangeHeader />
+        <AccountBalance
+          amount={accountBalance}
+          showBalance={showBalance}
+          handleBrrr={handleBrrr}
+          handleToggleChange={handleToggleChange}
+        />
 
-  
+        <CoinList
+          coinBalance={coinBalance}
+          setCoinBalance={setCoinBalance}
+          coinData={coinData}
+          showBalance={showBalance}
+          handleBuy={handleBuy}
+          handleSell={handleSell}
+          handleRefresh={handleRefresh}
+          buyInputValue={buyInputValue}
+          setBuyInputValue={setBuyInputValue}
+          insufficientUsdBalMessage={insufficientUsdBalMessage}
+          setInsufficientUsdBalMessage={setInsufficientUsdBalMessage}
+          insufficientTokenBalMessage={insufficientTokenBalMessage}
+          setInsufficientTokenBalMessage={setInsufficientTokenBalMessage}
+          isBuy={isBuy}
+          setIsBuy={setIsBuy}
+          isSold={isSold}
+          setIsSold={setIsSold}
+        />
+
+      </Div>
+
+
     </>
 
   );

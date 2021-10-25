@@ -47,6 +47,10 @@ function CoinList(props) {
               setInsufficientUsdBalMessage={props.setInsufficientUsdBalMessage}
               insufficientTokenBalMessage={props.insufficientTokenBalMessage}
               setInsufficientTokenBalMessage={props.setInsufficientTokenBalMessage}
+              isBuy={props.isBuy}
+              setIsBuy={props.setIsBuy}
+              isSold={props.isSold}
+              setIsSold={props.setIsSold}
               
               />
         
