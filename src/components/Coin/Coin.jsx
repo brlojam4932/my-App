@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 // imp tab
 import PropTypes from 'prop-types';
-import Modal from 'react-modal';
+//import Modal from 'react-modal';
+import ReactModal from 'react-modal';
+
 
 // table
 const Td = styled.td`
@@ -38,22 +40,15 @@ const TradeInput = styled.input`
 width: 34%;
 `
 
+
+
 // LIFT THE STATE UP
 
 //rcc tab for class-based component
 // here we rewrite a component into a functional component
+
 function Coin(props) {
 
-  const MODAL_STYLES = {
-    position: 'fixed',
-    top: '50%',
-    left: '50%',
-    transform: 'transate( -50%, -50% )',
-    backgroundColor: "#3E434F",
-    color: "white",
-    padding: '100px',
-    zIndex: 1000,
-  }
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
@@ -98,10 +93,14 @@ function Coin(props) {
 
   return (
     <>
-      {/* 
-     <CoinInfo>
-      {props.rank}
-    </CoinInfo>*/}
+    <div className='container'>
+    <h6>{props.tickerId
+      + "Rank:" + props.rank
+      + "circulating_supply"
+      + props.circulating_supply}</h6>
+
+    </div>
+    
 
       <tr>
         <TdName>{props.name}</TdName>
@@ -123,11 +122,14 @@ function Coin(props) {
 
       </tr>
 
-      <Modal
+
+      <ReactModal
+
         isOpen={modalIsOpen}
         ariaHideApp={false}
         onRequestClose={handleClose}
-        style={MODAL_STYLES}
+        className="Modal"
+        overlayClassName="Overlay"
       >
         <h1> Trade {props.tickerId.toUpperCase()} </h1>
 
@@ -148,13 +150,13 @@ function Coin(props) {
         {props.isBuy &&
           <div className="alert alert-dismissible alert-success">
             <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
-            <strong>Success!</strong> Purchase of {props.tickerId} is Completed.</div>
+            <strong>Success! {props.buyInputValue} </strong> Token of {props.tickerId} at {props.price} purchased.</div>
         }
 
         {(props.isSold) &&
           <div className="alert alert-dismissible alert-info">
             <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
-            <strong>Success!</strong> Token {props.tickerId} sold</div>
+            <strong>Success! {props.buyInputValue} </strong> Token {props.tickerId} at {props.price} sold</div>
         }
 
         <TradeInput id="buyInput"
@@ -165,8 +167,9 @@ function Coin(props) {
 
         <Button className="btn btn-success" onClick={handleBuyClick}>Buy</Button>
         <Button className="btn btn-warning" onClick={handleSellClick}>Sell</Button>
-        <Button className="btn btn-primary" onClick={handleClose}>Cancel</Button>
-      </Modal>
+        <Button className="btn btn-outline-secondary" onClick={handleClose}>Cancel</Button>
+      </ReactModal>
+
     </>
 
   );

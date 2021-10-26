@@ -6,31 +6,18 @@ import AccountBalance from './components/AccountBalance/AccountBalance';
 import ExchangeHeader from './components/ExchangeHeader/ExchangeHeader';
 import styled from 'styled-components';
 import axios from 'axios';
-//import Modal from './components/Coin/Modal';
 
 
 //instructor: zsolt-nagy
 
 import "fontawesome-free/js/all.js";
 
+
 // bkg area for table
 const Div = styled.div`
 text-align: center;
 background-color: #3E434F;
 color: #ccc;`;
-
-/*
-const BUTTON_WRAPPER_STYLES = {
-  position: "relative",
-  zIndex: 1
-};
-
-const OTHER_CONTENT_STYLES = {
-  position: "relative",
-  zIndex: 2,
-  padding: "10px"
-};
-*/
 
 
 
@@ -41,7 +28,6 @@ const formatPrice = price => parseFloat(Number(price).toFixed(4));
 
 function App() {
 
-  const [coinBalance, setCoinBalance] = useState(0)
   const [accountBalance, setAccountBalance] = useState(10000);
   const [showBalance, setShowBalance] = useState(false);
   const [coinData, setCoinData] = useState([]);
@@ -52,6 +38,7 @@ function App() {
   const [isSold, setIsSold] = useState(false);
 
   const componentDidMount = async () => {
+  
     //console.log("MOUNT");
     const response = await axios.get('https://api.coinpaprika.com/v1/coins');
     // we are now receiving strings as data so we don't need an object anymore
@@ -100,7 +87,7 @@ function App() {
   const handleToggleChange = () => {
     setShowBalance(prevValue => !prevValue);
   }
-
+  
 
   // create isBuy and valueChangId args
   const handleBuy = async (valueChangeId, amountValue) => {
@@ -114,8 +101,8 @@ function App() {
         let amountOfCoin = parseFloat(amountValue);
         let newAccountBalance = accountBalance - (newPrice * amountOfCoin);
 
-        if (newAccountBalance > 0) {
-          setAccountBalance(newAccountBalance)
+        if (newAccountBalance > 0 && amountValue > 0) {
+          setAccountBalance(newAccountBalance);
           newValues.balance += amountOfCoin;
           setInsufficientUsdBalMessage(false);
           setIsBuy(true);
@@ -144,7 +131,7 @@ function App() {
         let amountOfCoin = parseFloat(amountValue);
         let newAccountBalance = accountBalance + (newPrice * amountOfCoin);
 
-        if (amountOfCoin <= newValues.balance) {
+        if (amountOfCoin <= newValues.balance && amountValue > 0) {
           setAccountBalance(newAccountBalance);
           newValues.balance -= amountOfCoin;
           setInsufficientTokenBalMessage(false);
@@ -183,19 +170,15 @@ function App() {
   return (
     <>
 
-
-      <Div className="App">
-        <ExchangeHeader />
+     <Div className="App">
+        <ExchangeHeader/>
         <AccountBalance
           amount={accountBalance}
           showBalance={showBalance}
           handleBrrr={handleBrrr}
-          handleToggleChange={handleToggleChange}
-        />
+          handleToggleChange={handleToggleChange}/>
 
         <CoinList
-          coinBalance={coinBalance}
-          setCoinBalance={setCoinBalance}
           coinData={coinData}
           showBalance={showBalance}
           handleBuy={handleBuy}
@@ -210,12 +193,9 @@ function App() {
           isBuy={isBuy}
           setIsBuy={setIsBuy}
           isSold={isSold}
-          setIsSold={setIsSold}
-        />
+          setIsSold={setIsSold}/>
 
       </Div>
-
-
     </>
 
   );

@@ -33,8 +33,6 @@ function CoinList(props) {
               handleSell={props.handleSell}
               buyInputValue={props.buyInputValue}
               setBuyInputValue={props.setBuyInputValue}
-              coinBalance={props.coinBalance}
-              setCoinBalance={props.setCoinBalance}
               name={name} 
               ticker={ticker}
               showBalance={props.showBalance}
