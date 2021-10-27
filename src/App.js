@@ -6,11 +6,14 @@ import AccountBalance from './components/AccountBalance/AccountBalance';
 import ExchangeHeader from './components/ExchangeHeader/ExchangeHeader';
 import styled from 'styled-components';
 import axios from 'axios';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 
 //instructor: zsolt-nagy
 
-import "fontawesome-free/js/all.js";
+import "fontawesome-free/js/all.js"; // icons
+import Navbar from './components/ExchangeHeader/Navbar';
+import CoinInfo from './components/Coin/CoinInfo';
 
 
 // bkg area for table
@@ -21,8 +24,8 @@ color: #ccc;`;
 
 
 
-// UTILITY FUNCTIONS
-const COIN_COUNT = 3;
+// UTILITY FUNCTIONS 
+const COIN_COUNT = 3; // look up sort method in JS to lsit by rank
 const formatPrice = price => parseFloat(Number(price).toFixed(4));
 
 
@@ -37,8 +40,8 @@ function App() {
   const [isBuy, setIsBuy] = useState(false);
   const [isSold, setIsSold] = useState(false);
 
+    // read about Temporal Deadzone
   const componentDidMount = async () => {
-  
     //console.log("MOUNT");
     const response = await axios.get('https://api.coinpaprika.com/v1/coins');
     // we are now receiving strings as data so we don't need an object anymore
@@ -87,7 +90,7 @@ function App() {
   const handleToggleChange = () => {
     setShowBalance(prevValue => !prevValue);
   }
-  
+
 
   // create isBuy and valueChangId args
   const handleBuy = async (valueChangeId, amountValue) => {
@@ -149,6 +152,7 @@ function App() {
     setCoinData(newCoinData);
   }
 
+
   //https://api.coinpaprika.com/v1/tickers/{coin_id}/historical
   const handleRefresh = async (valueChangeId) => {
     const ticketUrl = `https://api.coinpaprika.com/v1/tickers/${valueChangeId}`;
@@ -169,33 +173,55 @@ function App() {
 
   return (
     <>
+      <Router>
+        <div className='container'>
+          <Navbar />
+          <div className='content'>
+            <Switch>
+              <Route exact path="/">
+                <Div className="App">
+                  <ExchangeHeader />
+                  <AccountBalance
+                    amount={accountBalance}
+                    showBalance={showBalance}
+                    handleBrrr={handleBrrr}
+                    handleToggleChange={handleToggleChange} />
 
-     <Div className="App">
-        <ExchangeHeader/>
-        <AccountBalance
-          amount={accountBalance}
-          showBalance={showBalance}
-          handleBrrr={handleBrrr}
-          handleToggleChange={handleToggleChange}/>
+                  <CoinList
+                    coinData={coinData}
+                    showBalance={showBalance}
+                    handleBuy={handleBuy}
+                    handleSell={handleSell}
+                    handleRefresh={handleRefresh}
+                    buyInputValue={buyInputValue}
+                    setBuyInputValue={setBuyInputValue}
+                    insufficientUsdBalMessage={insufficientUsdBalMessage}
+                    setInsufficientUsdBalMessage={setInsufficientUsdBalMessage}
+                    insufficientTokenBalMessage={insufficientTokenBalMessage}
+                    setInsufficientTokenBalMessage={setInsufficientTokenBalMessage}
+                    isBuy={isBuy}
+                    setIsBuy={setIsBuy}
+                    isSold={isSold}
+                    setIsSold={setIsSold} />
+                </Div>
+              </Route>
+              <Route path="/coinInfo">
+                <CoinInfo
+                handleRefresh={handleRefresh}
+                
+                />
+              
+              </Route>
+          
+            </Switch>
 
-        <CoinList
-          coinData={coinData}
-          showBalance={showBalance}
-          handleBuy={handleBuy}
-          handleSell={handleSell}
-          handleRefresh={handleRefresh}
-          buyInputValue={buyInputValue}
-          setBuyInputValue={setBuyInputValue}
-          insufficientUsdBalMessage={insufficientUsdBalMessage}
-          setInsufficientUsdBalMessage={setInsufficientUsdBalMessage}
-          insufficientTokenBalMessage={insufficientTokenBalMessage}
-          setInsufficientTokenBalMessage={setInsufficientTokenBalMessage}
-          isBuy={isBuy}
-          setIsBuy={setIsBuy}
-          isSold={isSold}
-          setIsSold={setIsSold}/>
+          </div>
 
-      </Div>
+        </div>
+
+      </Router>
+
+
     </>
 
   );

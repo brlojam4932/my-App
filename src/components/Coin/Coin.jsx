@@ -71,7 +71,7 @@ function Coin(props) {
   }
 
 
-  const handleInfo = (event) => {
+  const handleClickInfo = (event) => {
     // prevent form from being submitted
     event.preventDefault();
     props.handleRefresh(props.tickerId);
@@ -80,7 +80,8 @@ function Coin(props) {
     alert(props.tickerId
       + "Rank:" + props.rank
       + "circulating_supply"
-      + props.circulating_supply);
+      + props.circulating_supply);   
+
   }
 
   const handleClose = () => {
@@ -100,7 +101,6 @@ function Coin(props) {
       + props.circulating_supply}</h6>
 
     </div>
-    
 
       <tr>
         <TdName>{props.name}</TdName>
@@ -115,7 +115,7 @@ function Coin(props) {
 
             <Button className="btn btn-info" onClick={handleRefresh}>Refresh</Button>
 
-            <Button className='btn btn-outline-info' onClick={handleInfo}>Info</Button>
+            <Button className='btn btn-outline-info' onClick={handleClickInfo}>Info</Button>
 
           </form>
         </TdControls>
@@ -131,7 +131,7 @@ function Coin(props) {
         className="Modal"
         overlayClassName="Overlay"
       >
-        <h1> Trade {props.tickerId.toUpperCase()} </h1>
+        <h1> Trade {props.tickerId} </h1>
 
         <label> Amount of Coins to Buy/Sell</label>
         {props.insufficientUsdBalMessage &&
@@ -173,6 +173,7 @@ function Coin(props) {
     </>
 
   );
+
 
 }
 
