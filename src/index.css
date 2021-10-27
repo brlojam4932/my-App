@@ -35,3 +35,40 @@ code {
   bottom: 0;
   background-color: rgba(0,0,0,.7);
 }
+
+/* ////////////// POP-UP /////////////// */
+
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.2);
+  font-family: "Fira Sans", sans-serif;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.popup-inner {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  font-family: "Fira Sans", sans-serif;
+}
+
+.popup-inner .btn-close {
+  width: 74em;
+
+}
+
+.open-btn {
+  background-color: rgb(14, 14, 14);
+  color: rgb(202, 202, 202);
+  font-family: "Fira Sans", sans-serif;
+}
+
+

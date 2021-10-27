@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 //import Modal from 'react-modal';
 import ReactModal from 'react-modal';
+import PopUp from './PopUp';
 
 
 // table
@@ -28,19 +29,18 @@ const Button = styled.button`
   margin: 3px 5px 0;
 `;
 
-/*
-{const CoinInfo = styled.div`
-  font-size: 8px;
-  with: 70px;
-  margin: 2px 4px 0;
-`};
-*/
 
 const TradeInput = styled.input`
-width: 34%;
+width: 100%;
+padding: 12px 20px;
+margin: 8px 0;
+display: inline-block;
+border: 1px solid #ccc;
+border-radius: 4px;
+box-sizing: border-box;
+background-color: black;
+color: white;
 `
-
-
 
 // LIFT THE STATE UP
 
@@ -49,8 +49,8 @@ width: 34%;
 
 function Coin(props) {
 
-
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [buttonPopup, setButtonPopup] = useState(false);
 
   const handleRefresh = (event) => {
     event.preventDefault();
@@ -62,7 +62,6 @@ function Coin(props) {
     event.preventDefault();
     props.handleBuy(props.tickerId, props.buyInputValue);
 
-    //console.log('Buy Clicked');
   }
 
   const handleSellClick = (event) => {
@@ -70,19 +69,6 @@ function Coin(props) {
     props.handleSell(props.tickerId, props.buyInputValue);
   }
 
-
-  const handleClickInfo = (event) => {
-    // prevent form from being submitted
-    event.preventDefault();
-    props.handleRefresh(props.tickerId);
-    // if btc is picked by tickerId
-    // display text info about that token
-    alert(props.tickerId
-      + "Rank:" + props.rank
-      + "circulating_supply"
-      + props.circulating_supply);   
-
-  }
 
   const handleClose = () => {
     setModalIsOpen(false);
@@ -94,14 +80,6 @@ function Coin(props) {
 
   return (
     <>
-    <div className='container'>
-    <h6>{props.tickerId
-      + "Rank:" + props.rank
-      + "circulating_supply"
-      + props.circulating_supply}</h6>
-
-    </div>
-
       <tr>
         <TdName>{props.name}</TdName>
         <Td>{props.ticker}</Td>
@@ -115,16 +93,32 @@ function Coin(props) {
 
             <Button className="btn btn-info" onClick={handleRefresh}>Refresh</Button>
 
-            <Button className='btn btn-outline-info' onClick={handleClickInfo}>Info</Button>
+            <Button className='btn btn-outline-info' onClick={() => setButtonPopup(true)}>Info</Button>
 
           </form>
         </TdControls>
 
       </tr>
 
+      <PopUp trigger={buttonPopup} setTrigger={setButtonPopup} >
+        <div className="alert alert-dismissible alert-primary">
+          <strong>
+            Token: &nbsp;
+          </strong>
+          {props.tickerId} &nbsp;
+          <strong>
+            Rank: &nbsp;
+          </strong>
+          {props.rank} &nbsp;
+          <strong>
+            Circulating Supply: &nbsp;
+          </strong>
+          {props.circulating_supply} &nbsp;
+        </div>
+      </PopUp>
+
 
       <ReactModal
-
         isOpen={modalIsOpen}
         ariaHideApp={false}
         onRequestClose={handleClose}
