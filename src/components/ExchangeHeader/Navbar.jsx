@@ -23,19 +23,19 @@ const Navbar = () => {
           <Link className="nav-link" to={link}>Features</Link>
         </li>
         <li className="nav-item">
-          <a className="nav-link" href="#">Pricing</a>
+          <Link className="nav-link "to="/">Pricing</Link>
         </li>
         <li className="nav-item">
-          <a className="nav-link" href="#">About</a>
+          <Link className="nav-link" to="/">About</Link>
         </li>
         <li className="nav-item dropdown">
-          <a className="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+          <Link className="nav-link dropdown-toggle" data-bs-toggle="dropdown" to="/" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</Link>
           <div className="dropdown-menu">
-            <a className="dropdown-item" href="#">Action</a>
-            <a className="dropdown-item" href="#">Another action</a>
-            <a className="dropdown-item" href="#">Something else here</a>
+            <Link className="dropdown-item"to="/">Action</Link>
+            <Link className="dropdown-item" to="/">Another action</Link>
+            <Link className="dropdown-item" to="/">Something else here</Link>
             <div className="dropdown-divider"></div>
-            <a className="dropdown-item" href="#">Separated link</a>
+            <Link className="dropdown-item" to="/">Separated link</Link>
           </div>
         </li>
       </ul>

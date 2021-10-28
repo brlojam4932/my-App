@@ -174,8 +174,7 @@ function App() {
   return (
     <>
       <Router>
-        <div className='container'>
-          <Navbar />
+      <Navbar />
           <div className='content'>
             <Switch>
               <Route exact path="/">
@@ -216,8 +215,6 @@ function App() {
             </Switch>
 
           </div>
-
-        </div>
 
       </Router>
 

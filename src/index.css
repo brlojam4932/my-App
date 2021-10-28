@@ -5,8 +5,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
- 
 }
+
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
@@ -20,8 +20,8 @@ code {
 .Modal {
   position: absolute;
   top: 335px;
-  left: 40px;
-  right: 40px;
+  left: 300px;
+  right: 300px;
   bottom: 400px;
   background-color: rgb(26, 27, 28);
   color: rgb(255, 255, 255);

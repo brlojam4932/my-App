@@ -49,8 +49,6 @@ function CoinList(props) {
               setIsBuy={props.setIsBuy}
               isSold={props.isSold}
               setIsSold={props.setIsSold}
-             
-
             />
 
           )

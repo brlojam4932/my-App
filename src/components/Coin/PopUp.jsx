@@ -2,7 +2,7 @@ import React from 'react'
 
 function PopUp(props) {
 
-  return (props.trigger) ? (
+  return props.trigger ? (
     <div className="popup">
       <div className="popup-inner">
       <button type="button" class="btn-close" data-bs-dismiss="alert" onClick={() => {props.setTrigger(false)}}></button>

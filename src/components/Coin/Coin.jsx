@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 // imp tab
 import PropTypes from 'prop-types';
-//import Modal from 'react-modal';
 import ReactModal from 'react-modal';
 import PopUp from './PopUp';
 
@@ -38,7 +37,7 @@ display: inline-block;
 border: 1px solid #ccc;
 border-radius: 4px;
 box-sizing: border-box;
-background-color: black;
+background-color: #35393f;
 color: white;
 `
 
@@ -103,17 +102,17 @@ function Coin(props) {
       <PopUp trigger={buttonPopup} setTrigger={setButtonPopup} >
         <div className="alert alert-dismissible alert-primary">
           <strong>
-            Token: &nbsp;
+            Token:&nbsp;
           </strong>
-          {props.tickerId} &nbsp;
+          <small class="text-muted">{props.tickerId}&nbsp; &nbsp; </small>
           <strong>
-            Rank: &nbsp;
+            Rank:&nbsp;
           </strong>
-          {props.rank} &nbsp;
-          <strong>
-            Circulating Supply: &nbsp;
+          <small class="text-muted">{props.rank}&nbsp; &nbsp;</small>
+          <strong> 
+            Circulating Supply:&nbsp;
           </strong>
-          {props.circulating_supply} &nbsp;
+          <small class="text-muted">{props.circulating_supply}&nbsp;</small>
         </div>
       </PopUp>
 
