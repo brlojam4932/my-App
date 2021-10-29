@@ -37,7 +37,7 @@ export default class ExchangeHeader extends Component {
         <Header>
           <Img src={logo} alt='React Logo' />
           <H1>
-            Coin Exchange
+            Atomic Coin Exchange
           </H1>
     
    

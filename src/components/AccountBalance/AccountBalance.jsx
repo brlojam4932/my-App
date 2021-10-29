@@ -38,8 +38,6 @@ var formatter = Intl.NumberFormat("en-US", {
   currency: "USD"
 });
 
-//<button type="button" class="btn btn-info">Info</button>
-//<button type="button" class="btn btn-warning">Warning</button>
 // rewrite account balance class component into a functional component
 export default function AccountBalance(props) {
 

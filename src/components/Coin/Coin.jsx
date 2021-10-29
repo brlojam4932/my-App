@@ -109,7 +109,7 @@ function Coin(props) {
             Rank:&nbsp;
           </strong>
           <small class="text-muted">{props.rank}&nbsp; &nbsp;</small>
-          <strong> 
+          <strong>
             Circulating Supply:&nbsp;
           </strong>
           <small class="text-muted">{props.circulating_supply}&nbsp;</small>
@@ -140,17 +140,25 @@ function Coin(props) {
           </div>
         }
 
+        {
+          <div className="alert alert-dismissible alert-secondary">
+            <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
+            <strong>Amount of coins to trade: {props.buyInputValue} </strong> Token/s of &nbsp; <strong>{props.tickerId}</strong> &nbsp; at $ {props.price}. &nbsp; <strong>Trade total:&nbsp; $</strong>{props.price * props.buyInputValue}</div>
+        }
+
         {props.isBuy &&
           <div className="alert alert-dismissible alert-success">
             <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
-            <strong>Success! {props.buyInputValue} </strong> Token of {props.tickerId} at {props.price} purchased.</div>
+            <strong>Success!</strong>Your purchase of &nbsp;<strong>{props.tickerId}</strong>is complete</div>
         }
 
         {(props.isSold) &&
           <div className="alert alert-dismissible alert-info">
             <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
-            <strong>Success! {props.buyInputValue} </strong> Token {props.tickerId} at {props.price} sold</div>
+            <strong>Success!</strong>Your sale of &nbsp;<strong>{props.tickerId}</strong> is complete</div>
         }
+
+
 
         <TradeInput id="buyInput"
           type="number"
@@ -160,7 +168,7 @@ function Coin(props) {
 
         <Button className="btn btn-success" onClick={handleBuyClick}>Buy</Button>
         <Button className="btn btn-warning" onClick={handleSellClick}>Sell</Button>
-        <Button className="btn btn-outline-secondary" onClick={handleClose}>Cancel</Button>
+        <Button className="btn btn-outline-secondary" onClick={handleClose}>Cancel/Close</Button>
       </ReactModal>
 
     </>

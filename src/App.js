@@ -25,7 +25,7 @@ color: #ccc;`;
 
 
 // UTILITY FUNCTIONS 
-const COIN_COUNT = 3; // look up sort method in JS to lsit by rank
+const COIN_COUNT = 5; // look up sort method in JS to lsit by rank
 const formatPrice = price => parseFloat(Number(price).toFixed(4));
 
 
