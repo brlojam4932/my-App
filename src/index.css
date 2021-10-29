@@ -36,7 +36,7 @@ code {
   background-color: rgba(0,0,0,.7);
 }
 
-/* ////////////// POP-UP /////////////// */
+/* //////////////INFO POP-UP /////////////// */
 
 .popup {
   position: fixed;
@@ -63,12 +63,6 @@ code {
 .popup-inner .btn-close {
   width: 74em;
 
-}
-
-.open-btn {
-  background-color: rgb(14, 14, 14);
-  color: rgb(202, 202, 202);
-  font-family: "Fira Sans", sans-serif;
 }
 
 

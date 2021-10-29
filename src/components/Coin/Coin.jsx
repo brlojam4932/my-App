@@ -126,7 +126,7 @@ function Coin(props) {
       >
         <h1> Trade {props.tickerId} </h1>
 
-        <label> Amount of Coins to Buy/Sell</label>
+        <label class="text-muted"> Amount of Coins to Buy/Sell</label>
         {props.insufficientUsdBalMessage &&
           <div className="alert alert-dismissible alert-danger">
             <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
@@ -140,10 +140,18 @@ function Coin(props) {
           </div>
         }
 
+        {/* Info for buy/sell etc*/}
+
         {
-          <div className="alert alert-dismissible alert-secondary">
+          <div className="alert alert-dismissible alert-primary" >
             <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
-            <strong>Amount of coins to trade: {props.buyInputValue} </strong> Token/s of &nbsp; <strong>{props.tickerId}</strong> &nbsp; at $ {props.price}. &nbsp; <strong>Trade total:&nbsp; $</strong>{props.price * props.buyInputValue}</div>
+            <div class="text-muted">
+              Amount:<strong> &nbsp;{props.buyInputValue}&nbsp;</strong>Token: &nbsp;
+              <strong>{props.tickerId}</strong> &nbsp; Price: &nbsp; <strong>$ {props.price}.</strong> &nbsp;
+              Trade total:&nbsp; <strong>$ {props.price * props.buyInputValue}</strong>
+            </div>
+
+          </div>
         }
 
         {props.isBuy &&
@@ -152,17 +160,17 @@ function Coin(props) {
             <strong>Success!</strong>Your purchase of &nbsp;<strong>{props.tickerId}</strong>is complete</div>
         }
 
-        {(props.isSold) &&
+        {props.isSold &&
           <div className="alert alert-dismissible alert-info">
             <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
             <strong>Success!</strong>Your sale of &nbsp;<strong>{props.tickerId}</strong> is complete</div>
         }
 
 
-
         <TradeInput id="buyInput"
           type="number"
           required
+          placeholder='Enter an amount'
           onChange={(e) => props.setBuyInputValue(+e.target.value)} >
         </TradeInput>
 
