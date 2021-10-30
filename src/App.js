@@ -7,15 +7,13 @@ import ExchangeHeader from './components/ExchangeHeader/ExchangeHeader';
 import styled from 'styled-components';
 import axios from 'axios';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-
-
-//instructor: zsolt-nagy
-
 import "fontawesome-free/js/all.js"; // icons
 import Navbar from './components/ExchangeHeader/Navbar';
 import CoinInfo from './components/Coin/CoinInfo';
+import Posts from './components/CoinList/Posts';
+import Pagination from './components/CoinList/Pagination';
 
-
+//instructor: zsolt-nagy
 // bkg area for table
 const Div = styled.div`
 text-align: center;
@@ -25,7 +23,7 @@ color: #ccc;`;
 
 
 // UTILITY FUNCTIONS 
-const COIN_COUNT = 5; // look up sort method in JS to lsit by rank
+//const COIN_COUNT = 5; // look up sort method in JS to lsit by rank
 const formatPrice = price => parseFloat(Number(price).toFixed(4));
 
 
@@ -40,13 +38,21 @@ function App() {
   const [isBuy, setIsBuy] = useState(false);
   const [isSold, setIsSold] = useState(false);
 
+  // posts for pagination
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [postsPerPage] = useState(10);
+
     // read about Temporal Deadzone
   const componentDidMount = async () => {
     //console.log("MOUNT");
     const response = await axios.get('https://api.coinpaprika.com/v1/coins');
+    setPosts(response.data);
+    setLoading(false);
     // we are now receiving strings as data so we don't need an object anymore
     // we also use const instead of let as we are not changing the data
-    const coinIds = response.data.slice(0, COIN_COUNT).map(coin => coin.id);
+    const coinIds = response.data.slice(indexOfFirstPost, indexOfLastPost).map(coin => coin.id);
     const ticketUrl = 'https://api.coinpaprika.com/v1/tickers/';
     // we get a promise that our data will be sent to us sometime in the future
     const promises = coinIds.map(id => axios.get(ticketUrl + id));
@@ -54,6 +60,7 @@ function App() {
     const coinData = await Promise.all(promises);
     const coinPriceData = coinData.map(function (response) {
       const coin = response.data;
+     
       return {
         key: coin.id, // here we have our key
         name: coin.name,
@@ -71,15 +78,25 @@ function App() {
   }
 
   // we don't want to call the same function over and over again. we only want to load it if we need it
-  // a synchronous function
+  // a synchronous function; moves up, before useEffect
   useEffect(() => {
     if (coinData.length === 0) {
       // component did mount
       componentDidMount();
+      console.log(posts);    
     }
   });
 
+  // Get current posts
+  // get index of last post = current page x postPerPage(10)
+  // get index of the first post = take index of last post - current page
+  // current posts = posts slice index of the first post and index of the last post
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
 
+  // Change pages
+  const paginate = pageNumber => setCurrentPage(pageNumber);
 
   const handleBrrr = () => {
     setAccountBalance(prevBalance => prevBalance + 1200);
@@ -203,6 +220,13 @@ function App() {
                     isSold={isSold}
                     setIsSold={setIsSold} />
                 </Div>
+                <Posts posts={currentPosts} loading={loading} />
+                <Pagination
+                postsPerPage={postsPerPage}
+                totalPosts={posts.length}
+                paginate={paginate}
+
+                />
               </Route>
               <Route path="/coinInfo">
                 <CoinInfo
