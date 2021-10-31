@@ -47,6 +47,7 @@ color: white;
 // here we rewrite a component into a functional component
 
 function Coin(props) {
+  
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [buttonPopup, setButtonPopup] = useState(false);

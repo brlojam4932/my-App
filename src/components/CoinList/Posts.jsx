@@ -1,18 +1,22 @@
 import React from 'react'
 
-function Posts({ posts, loading }) {
+function Posts({ coinData, loading }) {
 
   if (loading) {
     // try adding a spinner animation
     return <h2>Loading...</h2>
   }
 
-
+  // key, name, ticker, price, balance, rank, circulating_supply 
   return (
     <ul className='list-group mb-4'>
-      {posts.map(post => (
-        <li key={post.id} className='list-group-item'>
-          {post.id} {post.title} {post.body}
+      {coinData.map(post => (
+        <li key={post.key} className='list-group-item'>
+          {post.key} 
+          {post.name} 
+          {post.ticker} 
+          {post.price}
+          {post.balance}
         </li>
       ))}
 

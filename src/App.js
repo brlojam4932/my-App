@@ -10,8 +10,8 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import "fontawesome-free/js/all.js"; // icons
 import Navbar from './components/ExchangeHeader/Navbar';
 import CoinInfo from './components/Coin/CoinInfo';
-import Posts from './components/CoinList/Posts';
-import Pagination from './components/CoinList/Pagination';
+//import Posts from './components/CoinList/Posts';
+//import Pagination from './components/CoinList/Pagination';
 
 //instructor: zsolt-nagy
 // bkg area for table
@@ -39,16 +39,20 @@ function App() {
   const [isSold, setIsSold] = useState(false);
 
   // posts for pagination
-  const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(10);
+  //const [totalPosts] = useState(50);
+  const totalPosts = 50;
 
-    // read about Temporal Deadzone
+
+  // read about Temporal Deadzone
+  //JSON = Javascript Object Notation
   const componentDidMount = async () => {
     //console.log("MOUNT");
+    setLoading(true);
     const response = await axios.get('https://api.coinpaprika.com/v1/coins');
-    setPosts(response.data);
+    setCoinData(response.data);
     setLoading(false);
     // we are now receiving strings as data so we don't need an object anymore
     // we also use const instead of let as we are not changing the data
@@ -60,7 +64,8 @@ function App() {
     const coinData = await Promise.all(promises);
     const coinPriceData = coinData.map(function (response) {
       const coin = response.data;
-     
+      
+
       return {
         key: coin.id, // here we have our key
         name: coin.name,
@@ -82,9 +87,9 @@ function App() {
   useEffect(() => {
     if (coinData.length === 0) {
       // component did mount
-      componentDidMount();
-      console.log(posts);    
+      componentDidMount();   
     }
+    console.log(coinData);
   });
 
   // Get current posts
@@ -93,7 +98,15 @@ function App() {
   // current posts = posts slice index of the first post and index of the last post
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+  const currentPosts = coinData.slice(indexOfFirstPost, indexOfLastPost);
+
+  // Pagination
+  const pageNumbers = [];
+
+  for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
+    pageNumbers.push(i);
+  }
+
 
   // Change pages
   const paginate = pageNumber => setCurrentPage(pageNumber);
@@ -101,7 +114,6 @@ function App() {
   const handleBrrr = () => {
     setAccountBalance(prevBalance => prevBalance + 1200);
   }
-
 
   // there are no longer global variables, instead they are now local constants
   const handleToggleChange = () => {
@@ -191,54 +203,69 @@ function App() {
   return (
     <>
       <Router>
-      <Navbar />
-          <div className='content'>
-            <Switch>
-              <Route exact path="/">
-                <Div className="App">
-                  <ExchangeHeader />
-                  <AccountBalance
-                    amount={accountBalance}
-                    showBalance={showBalance}
-                    handleBrrr={handleBrrr}
-                    handleToggleChange={handleToggleChange} />
+        <Navbar />
+        <div className='content'>
+          <Switch>
+            <Route exact path="/">
+              <Div className="App">
+                <ExchangeHeader />
+                <AccountBalance
+                  amount={accountBalance}
+                  showBalance={showBalance}
+                  handleBrrr={handleBrrr}
+                  handleToggleChange={handleToggleChange} />
 
-                  <CoinList
-                    coinData={coinData}
-                    showBalance={showBalance}
-                    handleBuy={handleBuy}
-                    handleSell={handleSell}
-                    handleRefresh={handleRefresh}
-                    buyInputValue={buyInputValue}
-                    setBuyInputValue={setBuyInputValue}
-                    insufficientUsdBalMessage={insufficientUsdBalMessage}
-                    setInsufficientUsdBalMessage={setInsufficientUsdBalMessage}
-                    insufficientTokenBalMessage={insufficientTokenBalMessage}
-                    setInsufficientTokenBalMessage={setInsufficientTokenBalMessage}
-                    isBuy={isBuy}
-                    setIsBuy={setIsBuy}
-                    isSold={isSold}
-                    setIsSold={setIsSold} />
-                </Div>
-                <Posts posts={currentPosts} loading={loading} />
-                <Pagination
-                postsPerPage={postsPerPage}
-                totalPosts={posts.length}
-                paginate={paginate}
+                <CoinList
+                  coinData={currentPosts}
+                  showBalance={showBalance}
+                  handleBuy={handleBuy}
+                  handleSell={handleSell}
+                  handleRefresh={handleRefresh}
+                  buyInputValue={buyInputValue}
+                  setBuyInputValue={setBuyInputValue}
+                  insufficientUsdBalMessage={insufficientUsdBalMessage}
+                  setInsufficientUsdBalMessage={setInsufficientUsdBalMessage}
+                  insufficientTokenBalMessage={insufficientTokenBalMessage}
+                  setInsufficientTokenBalMessage={setInsufficientTokenBalMessage}
+                  isBuy={isBuy}
+                  setIsBuy={setIsBuy}
+                  isSold={isSold}
+                  setIsSold={setIsSold}
 
+                  loading={loading}
+                  setLoading={setLoading}
+                  currentPage={setCurrentPage}
+                  setCurrentPage={setCurrentPage}
+                  postsPerPage={postsPerPage}
+                 
                 />
-              </Route>
-              <Route path="/coinInfo">
-                <CoinInfo
+              </Div>
+              <nav>
+      <ul className='pagination'>
+        {pageNumbers.map(number => (
+          <li key={number} className='page-item' >
+            <a onClick={() => paginate(number)}  className='page-link'>
+              {number}
+            </a>
+          </li>
+        ))}
+
+      </ul>
+
+    </nav>
+             
+            </Route>
+            <Route path="/coinInfo">
+              <CoinInfo
                 handleRefresh={handleRefresh}
-                
-                />
-              
-              </Route>
-          
-            </Switch>
 
-          </div>
+              />
+
+            </Route>
+
+          </Switch>
+
+        </div>
 
       </Router>
 

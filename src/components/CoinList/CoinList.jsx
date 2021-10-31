@@ -10,7 +10,15 @@ font-size: 1rem;
 
 // rewrite coinlist component into functional component
 
-function CoinList(props) {
+function CoinList(props, {loading})  {
+  if (loading) {
+    // try adding a spinner animation
+    alert(loading);
+    return <h2>Loading...</h2>;
+    
+  }
+
+
   return (
 
     <Table className="table table-primary table border">
@@ -49,6 +57,13 @@ function CoinList(props) {
               setIsBuy={props.setIsBuy}
               isSold={props.isSold}
               setIsSold={props.setIsSold}
+
+              loading={props.loading}
+              setLoading={props.setLoading}
+              currentPage={props.setCurrentPage}
+              setCurrentPage={props.setCurrentPage}
+              postsPerPage={props.postsPerPage}
+              totalPosts={props.coinData.length}
             />
 
           )
