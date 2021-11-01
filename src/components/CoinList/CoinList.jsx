@@ -13,7 +13,6 @@ font-size: 1rem;
 function CoinList(props, {loading})  {
   if (loading) {
     // try adding a spinner animation
-    alert(loading);
     return <h2>Loading...</h2>;
     
   }
@@ -27,15 +26,17 @@ function CoinList(props, {loading})  {
           <th>Name</th>
           <th>Ticker</th>
           <th>Price</th>
-          {props.showBalance ? <th>Balance</th> : null}
+          {props.showBalance?<th>Balance</th> : null}
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
+        
         {
           //distructured version - recommended; more explicit
           props.coinData.map(({ key, name, ticker, price, balance, rank, circulating_supply }) =>
             <Coin key={key}
+              coinData={props.currentPosts}
               handleRefresh={props.handleRefresh}
               handleBuy={props.handleBuy}
               handleSell={props.handleSell}
@@ -59,11 +60,8 @@ function CoinList(props, {loading})  {
               setIsSold={props.setIsSold}
 
               loading={props.loading}
-              setLoading={props.setLoading}
-              currentPage={props.setCurrentPage}
-              setCurrentPage={props.setCurrentPage}
-              postsPerPage={props.postsPerPage}
-              totalPosts={props.coinData.length}
+          
+       
             />
 
           )

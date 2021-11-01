@@ -10,6 +10,7 @@
     "bootstrap": "^5.1.1",
     "bootswatch": "^5.1.1",
     "fontawesome-free": "^1.0.1",
+    "lodash": "^4.17.21",
     "npm": "^8.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",

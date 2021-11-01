@@ -80,7 +80,7 @@ function Coin(props) {
 
   return (
     <>
-      <tr>
+       <tr>
         <TdName>{props.name}</TdName>
         <Td>{props.ticker}</Td>
         <Td>${props.price}</Td>
@@ -105,15 +105,15 @@ function Coin(props) {
           <strong>
             Token:&nbsp;
           </strong>
-          <small class="text-muted">{props.tickerId}&nbsp; &nbsp; </small>
+          <small className="text-muted">{props.tickerId}&nbsp; &nbsp; </small>
           <strong>
             Rank:&nbsp;
           </strong>
-          <small class="text-muted">{props.rank}&nbsp; &nbsp;</small>
+          <small className="text-muted">{props.rank}&nbsp; &nbsp;</small>
           <strong>
             Circulating Supply:&nbsp;
           </strong>
-          <small class="text-muted">{props.circulating_supply}&nbsp;</small>
+          <small className="text-muted">{props.circulating_supply}&nbsp;</small>
         </div>
       </PopUp>
 
@@ -127,7 +127,7 @@ function Coin(props) {
       >
         <h1> Trade {props.tickerId} </h1>
 
-        <label class="text-muted"> Amount of Coins to Buy/Sell</label>
+        <label className="text-muted"> Amount of Coins to Buy/Sell</label>
         {props.insufficientUsdBalMessage &&
           <div className="alert alert-dismissible alert-danger">
             <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
@@ -146,7 +146,7 @@ function Coin(props) {
         {
           <div className="alert alert-dismissible alert-primary" >
             <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
-            <div class="text-muted">
+            <div className="text-muted">
               Amount:<strong> &nbsp;{props.buyInputValue}&nbsp;</strong>Token: &nbsp;
               <strong>{props.tickerId}</strong> &nbsp; Price: &nbsp; <strong>$ {props.price}.</strong> &nbsp;
               Trade total:&nbsp; <strong>$ {props.price * props.buyInputValue}</strong>
@@ -192,8 +192,8 @@ Coin.propTypes = {
   name: PropTypes.string.isRequired,
   ticker: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
-  rank: PropTypes.number.isRequired,
-  circulating_supply: PropTypes.number.isRequired
+  rank: PropTypes.number,
+  circulating_supply: PropTypes.number
 }
 
 export default Coin;
