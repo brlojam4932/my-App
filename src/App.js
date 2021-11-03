@@ -32,7 +32,7 @@ function App() {
 
   const [accountBalance, setAccountBalance] = useState(10000);
   const [showBalance, setShowBalance] = useState(false);
-  const [coinData, setCoinData] = useState([]);
+  //const [coinData, setCoinData] = useState([]);
   const [buyInputValue, setBuyInputValue] = useState('');
   const [insufficientUsdBalMessage, setInsufficientUsdBalMessage] = useState(false);
   const [insufficientTokenBalMessage, setInsufficientTokenBalMessage] = useState(false);
@@ -158,7 +158,7 @@ function App() {
     const ticketUrl = `https://api.coinpaprika.com/v1/tickers/${valueChangeId}`;
     const response = await axios.get(ticketUrl);
     const newPrice = formatPrice(response.data.quotes["USD"].price);
-    const newCoinData = coinData.map(function (values) {
+    const newCoinData = posts.map(function (values) {
       let newValues = { ...values };
 
       if (valueChangeId === values.key) {
@@ -180,7 +180,7 @@ function App() {
       return newValues;
 
     });
-    setCoinData(newCoinData);
+    setPosts(newCoinData);
   }
 
 
@@ -188,7 +188,7 @@ function App() {
     const ticketUrl = `https://api.coinpaprika.com/v1/tickers/${valueChangeId}`;
     const response = await axios.get(ticketUrl);
     const newPrice = formatPrice(response.data.quotes["USD"].price);
-    const newCoinData = coinData.map(function (values) {
+    const newCoinData = posts.map(function (values) {
       let newValues = { ...values };
 
       if (valueChangeId === values.key) {
@@ -210,7 +210,7 @@ function App() {
       return newValues;
 
     });
-    setCoinData(newCoinData);
+    setPosts(newCoinData);
   }
 
 
@@ -220,7 +220,7 @@ function App() {
     const response = await axios.get(ticketUrl);
     //debugger;
     const newPrice = formatPrice(response.data.quotes["USD"].price);
-    const newCoinData = coinData.map((values) => {
+    const newCoinData = posts.map((values) => {
       let newValues = { ...values }; // shallow cloning / deep copy
       if (valueChangeId === values.key) {
         //manipulate price here
@@ -229,7 +229,7 @@ function App() {
       return newValues;
     });
     // this.setState(prevState => {}) one way to write the new state
-    setCoinData(newCoinData);
+    setPosts(newCoinData);
   }
 
   return (
