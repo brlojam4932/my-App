@@ -10,8 +10,8 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import "fontawesome-free/js/all.js"; // icons
 import Navbar from './components/ExchangeHeader/Navbar';
 import CoinInfo from './components/Coin/CoinInfo';
-import Pagination from './components/CoinList/Pagination';
-//import Posts from './components/CoinList/Posts';
+//import Pagination from './components/CoinList/Pagination';
+import _ from "lodash";
 
 
 //instructor: zsolt-nagy
@@ -24,7 +24,7 @@ color: #ccc;`;
 
 
 // UTILITY FUNCTIONS 
-//const COIN_COUNT = 5; // look up sort method in JS to lsit by rank
+//const COIN_COUNT = 50; // look up sort method in JS to lsit by rank
 const formatPrice = price => parseFloat(Number(price).toFixed(4));
 
 
@@ -41,6 +41,7 @@ function App() {
 
   // posts for pagination
   const [posts, setPosts] = useState([]);
+  const [paginatedPosts, setPaginatedPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(10);
@@ -94,9 +95,8 @@ function App() {
     });
    */
 
-
   const fetchPosts = async () => {
-
+    setLoading(true);
     const response = await axios.get('https://api.coinpaprika.com/v1/coins');
     const coinIds = response.data.slice(indexOfFirstPost, indexOfLastPost).map(coin => coin.id);
     const ticketUrl = 'https://api.coinpaprika.com/v1/tickers/';
@@ -115,21 +115,24 @@ function App() {
       };
     });
     setPosts(coinPriceData);
+    setPaginatedPosts(_(coinPriceData).slice(0).take(postsPerPage).value());
+    setLoading(false);
+    console.log("coinPrice Data: " + coinPriceData);
+    console.log("posts per page: " + postsPerPage);
+   
 
   }
 
 
   useEffect(() => {
-
     if (posts.length === 0) {
       // component did mount
       fetchPosts();
-
-
     }
-    console.log(posts);
+    console.log('posts: ' + posts);
 
   });
+ 
 
   // Get current posts
   // get index of last post = current page x postPerPage(10)
@@ -141,7 +144,25 @@ function App() {
 
   // Change Page
   // number (from PrePagination) is passed as an argument here
-  const paginate = pageNumber => setCurrentPage(pageNumber);
+  //const paginate = pageNumber => setCurrentPage(pageNumber);
+
+  const totalPages = 100;
+  const pageCount = posts ? Math.ceil(totalPages / postsPerPage) : 0;
+  if (pageCount === 1) return null;
+  console.log('page count:' + pageCount);
+  const pages = _.range(1, pageCount + 1);
+  console.log('pages:' + pages);
+
+  //_.range([start=0], end, [step=1])
+  // _.take(array, [n=1])
+  // _.slice(array, [start=0], [end=array.length])
+  const paginate = (pageNo) => {
+    setCurrentPage(pageNo);
+    const startIndex = (pageNo - 1) * postsPerPage;
+    const paginatedPost = _(posts).slice(startIndex).take(postsPerPage).value();
+    setPaginatedPosts(paginatedPost);
+    console.log("paginated posts: " + paginatedPosts);
+  };
 
   const handleBrrr = () => {
     setAccountBalance(prevBalance => prevBalance + 1200);
@@ -158,7 +179,7 @@ function App() {
     const ticketUrl = `https://api.coinpaprika.com/v1/tickers/${valueChangeId}`;
     const response = await axios.get(ticketUrl);
     const newPrice = formatPrice(response.data.quotes["USD"].price);
-    const newCoinData = posts.map(function (values) {
+    const newCoinData = paginatedPosts.map(function (values) {
       let newValues = { ...values };
 
       if (valueChangeId === values.key) {
@@ -180,7 +201,7 @@ function App() {
       return newValues;
 
     });
-    setPosts(newCoinData);
+    setPaginatedPosts(newCoinData);
   }
 
 
@@ -188,7 +209,7 @@ function App() {
     const ticketUrl = `https://api.coinpaprika.com/v1/tickers/${valueChangeId}`;
     const response = await axios.get(ticketUrl);
     const newPrice = formatPrice(response.data.quotes["USD"].price);
-    const newCoinData = posts.map(function (values) {
+    const newCoinData = paginatedPosts.map(function (values) {
       let newValues = { ...values };
 
       if (valueChangeId === values.key) {
@@ -210,7 +231,7 @@ function App() {
       return newValues;
 
     });
-    setPosts(newCoinData);
+    setPaginatedPosts(newCoinData);
   }
 
 
@@ -220,7 +241,7 @@ function App() {
     const response = await axios.get(ticketUrl);
     //debugger;
     const newPrice = formatPrice(response.data.quotes["USD"].price);
-    const newCoinData = posts.map((values) => {
+    const newCoinData = paginatedPosts.map((values) => {
       let newValues = { ...values }; // shallow cloning / deep copy
       if (valueChangeId === values.key) {
         //manipulate price here
@@ -229,7 +250,7 @@ function App() {
       return newValues;
     });
     // this.setState(prevState => {}) one way to write the new state
-    setPosts(newCoinData);
+    setPaginatedPosts(newCoinData);
   }
 
   return (
@@ -270,17 +291,21 @@ function App() {
                   currentPage={setCurrentPage}
                   setCurrentPage={setCurrentPage}
                   postsPerPage={postsPerPage}
+                  paginatedPosts={paginatedPosts}
 
                 />
               </Div>
               <nav>
-                <Pagination
-                  postsPerPage={postsPerPage}
-                  totalPosts={posts.length}
-                  paginate={paginate}
-                />
+                <ul className='pagination'>
+                  {pages.map((page) => (
+                    <li key={page} className='page-item' >
+                      <p onClick={() => paginate(page)} className='page-link'>
+                        {page}
+                      </p>
+                    </li>
+                  ))}
 
-
+                </ul>
 
               </nav>
             </Route>

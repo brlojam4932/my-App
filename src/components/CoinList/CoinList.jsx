@@ -11,12 +11,13 @@ font-size: 1rem;
 // rewrite coinlist component into functional component
 
 function CoinList(props, {loading})  {
+
   if (loading) {
     // try adding a spinner animation
+    console.log('loading');
     return <h2>Loading...</h2>;
     
   }
-
 
   return (
 
@@ -34,7 +35,7 @@ function CoinList(props, {loading})  {
         
         {
           //distructured version - recommended; more explicit
-          props.posts.map(({ key, name, ticker, price, balance, rank, circulating_supply }) =>
+          props.paginatedPosts.map(({ key, name, ticker, price, balance, rank, circulating_supply }) =>
             <Coin key={key}
               coinData={props.currentPosts}
               handleRefresh={props.handleRefresh}
@@ -61,6 +62,7 @@ function CoinList(props, {loading})  {
 
               loading={props.loading}
               posts={props.currentPosts}
+              paginatedPosts={props.paginatedPosts}
           
        
             />
