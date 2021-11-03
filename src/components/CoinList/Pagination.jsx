@@ -1,10 +1,10 @@
 import React from 'react'
 
-export default function Pagination( { postsPerPage, totalPosts, paginate }) {
-
+export default function Pagination( { postsPerPage, paginate }) {
+  const totalPosts = 100;
   const pageNumbers = [];
 
-  for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
+  for (let i = 1; i <= (totalPosts / postsPerPage); i++) {
     pageNumbers.push(i);
   }
 
@@ -14,9 +14,9 @@ export default function Pagination( { postsPerPage, totalPosts, paginate }) {
       <ul className='pagination'>
         {pageNumbers.map(number => (
           <li key={number} className='page-item' >
-            <a onClick={() => paginate(number)}  className='page-link'>
+            <p onClick={() => paginate(number)}  className='page-link'>
               {number}
-            </a>
+            </p>
           </li>
         ))}
 

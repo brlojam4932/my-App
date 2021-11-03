@@ -34,7 +34,7 @@ function CoinList(props, {loading})  {
         
         {
           //distructured version - recommended; more explicit
-          props.coinData.map(({ key, name, ticker, price, balance, rank, circulating_supply }) =>
+          props.posts.map(({ key, name, ticker, price, balance, rank, circulating_supply }) =>
             <Coin key={key}
               coinData={props.currentPosts}
               handleRefresh={props.handleRefresh}
@@ -60,6 +60,7 @@ function CoinList(props, {loading})  {
               setIsSold={props.setIsSold}
 
               loading={props.loading}
+              posts={props.currentPosts}
           
        
             />

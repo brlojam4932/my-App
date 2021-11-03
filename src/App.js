@@ -10,8 +10,9 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import "fontawesome-free/js/all.js"; // icons
 import Navbar from './components/ExchangeHeader/Navbar';
 import CoinInfo from './components/Coin/CoinInfo';
+import Pagination from './components/CoinList/Pagination';
 //import Posts from './components/CoinList/Posts';
-//import Pagination from './components/CoinList/Pagination';
+
 
 //instructor: zsolt-nagy
 // bkg area for table
@@ -39,33 +40,70 @@ function App() {
   const [isSold, setIsSold] = useState(false);
 
   // posts for pagination
+  const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(10);
   //const [totalPosts] = useState(50);
-  const totalPosts = 50;
+  //const totalPosts = 50;
 
-
+  /*
   // read about Temporal Deadzone
-  //JSON = Javascript Object Notation
-  const componentDidMount = async () => {
-    //console.log("MOUNT");
-    setLoading(true);
+    //JSON = Javascript Object Notation
+    const componentDidMount = async () => {
+      //console.log("MOUNT");
+      const response = await axios.get('https://api.coinpaprika.com/v1/coins');
+      setCoinData(response.data);
+      // we are now receiving strings as data so we don't need an object anymore
+      // we also use const instead of let as we are not changing the data
+      const coinIds = response.data.slice(indexOfFirstPost, indexOfLastPost).map(coin => coin.id);
+      const ticketUrl = 'https://api.coinpaprika.com/v1/tickers/';
+      //debugger;
+      // we get a promise that our data will be sent to us sometime in the future
+      const promises = coinIds.map(id => axios.get(ticketUrl + id));
+      // we use the await operator to wait for our promise
+      const coinData = await Promise.all(promises);
+      const coinPriceData = coinData.map(function (response) {
+        const coin = response.data;
+        return {
+          key: coin.id, // here we have our key
+          name: coin.name,
+          ticker: coin.symbol,
+          balance: 0,
+          price: formatPrice(coin.quotes["USD"].price),
+          rank: coin.rank,
+          circulating_supply: coin.circulating_supply
+        };
+      });
+  
+      // Retrieve the prices
+      setCoinData(coinPriceData);
+      //console.log(response); 
+    }
+  
+      // we don't want to call the same function over and over again. we only want to load it if we need it
+    // a synchronous function; moves up, before useEffect
+    useEffect(() => {
+      if (coinData.length === 0) {
+        // component did mount
+        componentDidMount(); 
+          
+      }
+      console.log(coinData);
+      
+    });
+   */
+
+
+  const fetchPosts = async () => {
+
     const response = await axios.get('https://api.coinpaprika.com/v1/coins');
-    setCoinData(response.data);
-    setLoading(false);
-    // we are now receiving strings as data so we don't need an object anymore
-    // we also use const instead of let as we are not changing the data
     const coinIds = response.data.slice(indexOfFirstPost, indexOfLastPost).map(coin => coin.id);
     const ticketUrl = 'https://api.coinpaprika.com/v1/tickers/';
-    // we get a promise that our data will be sent to us sometime in the future
     const promises = coinIds.map(id => axios.get(ticketUrl + id));
-    // we use the await operator to wait for our promise
     const coinData = await Promise.all(promises);
     const coinPriceData = coinData.map(function (response) {
       const coin = response.data;
-      
-
       return {
         key: coin.id, // here we have our key
         name: coin.name,
@@ -76,20 +114,21 @@ function App() {
         circulating_supply: coin.circulating_supply
       };
     });
+    setPosts(coinPriceData);
 
-    // Retrieve the prices
-    setCoinData(coinPriceData);
-    //console.log(response); 
   }
 
-  // we don't want to call the same function over and over again. we only want to load it if we need it
-  // a synchronous function; moves up, before useEffect
+
   useEffect(() => {
-    if (coinData.length === 0) {
+
+    if (posts.length === 0) {
       // component did mount
-      componentDidMount();   
+      fetchPosts();
+
+
     }
-    console.log(coinData);
+    console.log(posts);
+
   });
 
   // Get current posts
@@ -98,17 +137,10 @@ function App() {
   // current posts = posts slice index of the first post and index of the last post
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = coinData.slice(indexOfFirstPost, indexOfLastPost);
+  const currentPosts = posts;
 
-  // Pagination
-  const pageNumbers = [];
-
-  for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
-    pageNumbers.push(i);
-  }
-
-
-  // Change pages
+  // Change Page
+  // number (from PrePagination) is passed as an argument here
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
   const handleBrrr = () => {
@@ -233,27 +265,24 @@ function App() {
                   setIsSold={setIsSold}
 
                   loading={loading}
+                  posts={currentPosts}
                   setLoading={setLoading}
                   currentPage={setCurrentPage}
                   setCurrentPage={setCurrentPage}
                   postsPerPage={postsPerPage}
-                 
+
                 />
               </Div>
               <nav>
-      <ul className='pagination'>
-        {pageNumbers.map(number => (
-          <li key={number} className='page-item' >
-            <p onClick={() => paginate(number)}  className='page-link'>
-              {number}
-            </p>
-          </li>
-        ))}
+                <Pagination
+                  postsPerPage={postsPerPage}
+                  totalPosts={posts.length}
+                  paginate={paginate}
+                />
 
-      </ul>
 
-    </nav>
-             
+
+              </nav>
             </Route>
             <Route path="/coinInfo">
               <CoinInfo
