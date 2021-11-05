@@ -10,15 +10,15 @@ font-size: 1rem;
 
 // rewrite coinlist component into functional component
 
-function CoinList(props, {loading})  {
+function CoinList(props) {
 
-  if (loading) {
+  if (props.loading) {
     // try adding a spinner animation
-    console.log('loading');
-    return <h2>Loading...</h2>;
-    
+    return <div className="alert alert-dismissible alert-danger">
+    <button type="button" className="btn-close" data-bs-dismiss="alert"></button>
+    <strong>Request failed!  &nbsp;</strong>Loading...
+  </div>
   }
-
   return (
 
     <Table className="table table-primary table border">
@@ -27,17 +27,15 @@ function CoinList(props, {loading})  {
           <th>Name</th>
           <th>Ticker</th>
           <th>Price</th>
-          {props.showBalance?<th>Balance</th> : null}
+          {props.showBalance ? <th>Balance</th> : null}
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        
         {
           //distructured version - recommended; more explicit
-          props.paginatedPosts.map(({ key, name, ticker, price, balance, rank, circulating_supply }) =>
+          props.coinData.map(({ key, name, ticker, price, balance, rank, circulating_supply }) =>
             <Coin key={key}
-              coinData={props.currentPosts}
               handleRefresh={props.handleRefresh}
               handleBuy={props.handleBuy}
               handleSell={props.handleSell}
@@ -59,12 +57,6 @@ function CoinList(props, {loading})  {
               setIsBuy={props.setIsBuy}
               isSold={props.isSold}
               setIsSold={props.setIsSold}
-
-              loading={props.loading}
-              posts={props.currentPosts}
-              paginatedPosts={props.paginatedPosts}
-          
-       
             />
 
           )

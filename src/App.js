@@ -10,9 +10,8 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import "fontawesome-free/js/all.js"; // icons
 import Navbar from './components/ExchangeHeader/Navbar';
 import CoinInfo from './components/Coin/CoinInfo';
-//import Pagination from './components/CoinList/Pagination';
-import _ from "lodash";
-
+//import Posts from './components/CoinList/Posts';
+import Pagination from './components/CoinList/Pagination';
 
 //instructor: zsolt-nagy
 // bkg area for table
@@ -24,7 +23,8 @@ color: #ccc;`;
 
 
 // UTILITY FUNCTIONS 
-//const COIN_COUNT = 50; // look up sort method in JS to lsit by rank
+// total count 8 / post per page 4 = 2 pages
+const COIN_COUNT = 10; // look up sort method in JS to lsit by rank
 const formatPrice = price => parseFloat(Number(price).toFixed(4));
 
 
@@ -32,7 +32,7 @@ function App() {
 
   const [accountBalance, setAccountBalance] = useState(10000);
   const [showBalance, setShowBalance] = useState(false);
-  //const [coinData, setCoinData] = useState([]);
+  const [coinData, setCoinData] = useState([]);
   const [buyInputValue, setBuyInputValue] = useState('');
   const [insufficientUsdBalMessage, setInsufficientUsdBalMessage] = useState(false);
   const [insufficientTokenBalMessage, setInsufficientTokenBalMessage] = useState(false);
@@ -40,70 +40,28 @@ function App() {
   const [isSold, setIsSold] = useState(false);
 
   // posts for pagination
-  const [posts, setPosts] = useState([]);
-  const [paginatedPosts, setPaginatedPosts] = useState([]);
+  //const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(10);
-  //const [totalPosts] = useState(50);
-  //const totalPosts = 50;
+  const [postsPerPage] = useState(4);
 
-  /*
-  // read about Temporal Deadzone
-    //JSON = Javascript Object Notation
-    const componentDidMount = async () => {
-      //console.log("MOUNT");
-      const response = await axios.get('https://api.coinpaprika.com/v1/coins');
-      setCoinData(response.data);
-      // we are now receiving strings as data so we don't need an object anymore
-      // we also use const instead of let as we are not changing the data
-      const coinIds = response.data.slice(indexOfFirstPost, indexOfLastPost).map(coin => coin.id);
-      const ticketUrl = 'https://api.coinpaprika.com/v1/tickers/';
-      //debugger;
-      // we get a promise that our data will be sent to us sometime in the future
-      const promises = coinIds.map(id => axios.get(ticketUrl + id));
-      // we use the await operator to wait for our promise
-      const coinData = await Promise.all(promises);
-      const coinPriceData = coinData.map(function (response) {
-        const coin = response.data;
-        return {
-          key: coin.id, // here we have our key
-          name: coin.name,
-          ticker: coin.symbol,
-          balance: 0,
-          price: formatPrice(coin.quotes["USD"].price),
-          rank: coin.rank,
-          circulating_supply: coin.circulating_supply
-        };
-      });
-  
-      // Retrieve the prices
-      setCoinData(coinPriceData);
-      //console.log(response); 
-    }
-  
-      // we don't want to call the same function over and over again. we only want to load it if we need it
-    // a synchronous function; moves up, before useEffect
-    useEffect(() => {
-      if (coinData.length === 0) {
-        // component did mount
-        componentDidMount(); 
-          
-      }
-      console.log(coinData);
-      
-    });
-   */
-
-  const fetchPosts = async () => {
+    // read about Temporal Deadzone
+  const componentDidMount = async () => {
+    //console.log("MOUNT");
     setLoading(true);
     const response = await axios.get('https://api.coinpaprika.com/v1/coins');
-    const coinIds = response.data.slice(indexOfFirstPost, indexOfLastPost).map(coin => coin.id);
+   
+    // we are now receiving strings as data so we don't need an object anymore
+    // we also use const instead of let as we are not changing the data
+    const coinIds = response.data.slice(0, COIN_COUNT).map(coin => coin.id);
     const ticketUrl = 'https://api.coinpaprika.com/v1/tickers/';
+    // we get a promise that our data will be sent to us sometime in the future
     const promises = coinIds.map(id => axios.get(ticketUrl + id));
+    // we use the await operator to wait for our promise
     const coinData = await Promise.all(promises);
     const coinPriceData = coinData.map(function (response) {
       const coin = response.data;
+     
       return {
         key: coin.id, // here we have our key
         name: coin.name,
@@ -114,25 +72,24 @@ function App() {
         circulating_supply: coin.circulating_supply
       };
     });
-    setPosts(coinPriceData);
-    setPaginatedPosts(_(coinPriceData).slice(0).take(postsPerPage).value());
-    setLoading(false);
-    console.log("coinPrice Data: " + coinPriceData);
-    console.log("posts per page: " + postsPerPage);
-   
 
+    // Retrieve the prices
+    //setPosts(coinPriceData);
+    setCoinData(coinPriceData);
+    setLoading(false);
+    //console.log(response); 
   }
 
-
+  // we don't want to call the same function over and over again. we only want to load it if we need it
+  // a synchronous function; moves up, before useEffect
   useEffect(() => {
-    if (posts.length === 0) {
+    if (coinData.length === 0) {
       // component did mount
-      fetchPosts();
+      componentDidMount();
+      console.log('coin data: ' + coinData);    
     }
-    console.log('posts: ' + posts);
-
   });
- 
+
 
   // Get current posts
   // get index of last post = current page x postPerPage(10)
@@ -140,33 +97,15 @@ function App() {
   // current posts = posts slice index of the first post and index of the last post
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = posts;
+  const currentPosts = coinData.slice(indexOfFirstPost, indexOfLastPost);
 
-  // Change Page
-  // number (from PrePagination) is passed as an argument here
-  //const paginate = pageNumber => setCurrentPage(pageNumber);
-
-  const totalPages = 100;
-  const pageCount = posts ? Math.ceil(totalPages / postsPerPage) : 0;
-  if (pageCount === 1) return null;
-  console.log('page count:' + pageCount);
-  const pages = _.range(1, pageCount + 1);
-  console.log('pages:' + pages);
-
-  //_.range([start=0], end, [step=1])
-  // _.take(array, [n=1])
-  // _.slice(array, [start=0], [end=array.length])
-  const paginate = (pageNo) => {
-    setCurrentPage(pageNo);
-    const startIndex = (pageNo - 1) * postsPerPage;
-    const paginatedPost = _(posts).slice(startIndex).take(postsPerPage).value();
-    setPaginatedPosts(paginatedPost);
-    console.log("paginated posts: " + paginatedPosts);
-  };
+  // Change pages
+  const paginate = pageNumber => setCurrentPage(pageNumber);
 
   const handleBrrr = () => {
     setAccountBalance(prevBalance => prevBalance + 1200);
   }
+
 
   // there are no longer global variables, instead they are now local constants
   const handleToggleChange = () => {
@@ -179,7 +118,7 @@ function App() {
     const ticketUrl = `https://api.coinpaprika.com/v1/tickers/${valueChangeId}`;
     const response = await axios.get(ticketUrl);
     const newPrice = formatPrice(response.data.quotes["USD"].price);
-    const newCoinData = paginatedPosts.map(function (values) {
+    const newCoinData = coinData.map(function (values) {
       let newValues = { ...values };
 
       if (valueChangeId === values.key) {
@@ -201,7 +140,7 @@ function App() {
       return newValues;
 
     });
-    setPaginatedPosts(newCoinData);
+    setCoinData(newCoinData);
   }
 
 
@@ -209,7 +148,7 @@ function App() {
     const ticketUrl = `https://api.coinpaprika.com/v1/tickers/${valueChangeId}`;
     const response = await axios.get(ticketUrl);
     const newPrice = formatPrice(response.data.quotes["USD"].price);
-    const newCoinData = paginatedPosts.map(function (values) {
+    const newCoinData = coinData.map(function (values) {
       let newValues = { ...values };
 
       if (valueChangeId === values.key) {
@@ -231,7 +170,7 @@ function App() {
       return newValues;
 
     });
-    setPaginatedPosts(newCoinData);
+    setCoinData(newCoinData);
   }
 
 
@@ -241,7 +180,7 @@ function App() {
     const response = await axios.get(ticketUrl);
     //debugger;
     const newPrice = formatPrice(response.data.quotes["USD"].price);
-    const newCoinData = paginatedPosts.map((values) => {
+    const newCoinData = coinData.map((values) => {
       let newValues = { ...values }; // shallow cloning / deep copy
       if (valueChangeId === values.key) {
         //manipulate price here
@@ -250,76 +189,64 @@ function App() {
       return newValues;
     });
     // this.setState(prevState => {}) one way to write the new state
-    setPaginatedPosts(newCoinData);
+    setCoinData(newCoinData);
   }
 
   return (
     <>
       <Router>
-        <Navbar />
-        <div className='content'>
-          <Switch>
-            <Route exact path="/">
-              <Div className="App">
-                <ExchangeHeader />
-                <AccountBalance
-                  amount={accountBalance}
-                  showBalance={showBalance}
-                  handleBrrr={handleBrrr}
-                  handleToggleChange={handleToggleChange} />
+      <Navbar />
+          <div className='content'>
+            <Switch>
+              <Route exact path="/">
+                <Div className="App">
+                  <ExchangeHeader />
+                  <AccountBalance
+                    amount={accountBalance}
+                    showBalance={showBalance}
+                    handleBrrr={handleBrrr}
+                    handleToggleChange={handleToggleChange} />
 
-                <CoinList
-                  coinData={currentPosts}
-                  showBalance={showBalance}
-                  handleBuy={handleBuy}
-                  handleSell={handleSell}
-                  handleRefresh={handleRefresh}
-                  buyInputValue={buyInputValue}
-                  setBuyInputValue={setBuyInputValue}
-                  insufficientUsdBalMessage={insufficientUsdBalMessage}
-                  setInsufficientUsdBalMessage={setInsufficientUsdBalMessage}
-                  insufficientTokenBalMessage={insufficientTokenBalMessage}
-                  setInsufficientTokenBalMessage={setInsufficientTokenBalMessage}
-                  isBuy={isBuy}
-                  setIsBuy={setIsBuy}
-                  isSold={isSold}
-                  setIsSold={setIsSold}
+                  <CoinList
+                    //coinData={coinData}
+                    showBalance={showBalance}
+                    handleBuy={handleBuy}
+                    handleSell={handleSell}
+                    handleRefresh={handleRefresh}
+                    buyInputValue={buyInputValue}
+                    setBuyInputValue={setBuyInputValue}
+                    insufficientUsdBalMessage={insufficientUsdBalMessage}
+                    setInsufficientUsdBalMessage={setInsufficientUsdBalMessage}
+                    insufficientTokenBalMessage={insufficientTokenBalMessage}
+                    setInsufficientTokenBalMessage={setInsufficientTokenBalMessage}
+                    isBuy={isBuy}
+                    setIsBuy={setIsBuy}
+                    isSold={isSold}
+                    setIsSold={setIsSold} 
 
-                  loading={loading}
-                  posts={currentPosts}
-                  setLoading={setLoading}
-                  currentPage={setCurrentPage}
-                  setCurrentPage={setCurrentPage}
-                  postsPerPage={postsPerPage}
-                  paginatedPosts={paginatedPosts}
+                    coinData={currentPosts} 
+                    loading={loading}
+                    />
+                </Div>
+              
+                <Pagination
+                postsPerPage={postsPerPage}
+                totalPosts={coinData.length}
+                paginate={paginate}
 
                 />
-              </Div>
-              <nav>
-                <ul className='pagination'>
-                  {pages.map((page) => (
-                    <li key={page} className='page-item' >
-                      <p onClick={() => paginate(page)} className='page-link'>
-                        {page}
-                      </p>
-                    </li>
-                  ))}
-
-                </ul>
-
-              </nav>
-            </Route>
-            <Route path="/coinInfo">
-              <CoinInfo
+              </Route>
+              <Route path="/coinInfo">
+                <CoinInfo
                 handleRefresh={handleRefresh}
+                
+                />
+              
+              </Route>
+          
+            </Switch>
 
-              />
-
-            </Route>
-
-          </Switch>
-
-        </div>
+          </div>
 
       </Router>
 
