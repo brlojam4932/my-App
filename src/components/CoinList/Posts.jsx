@@ -1,5 +1,7 @@
 import React from 'react'
 
+// NOT USING THIS
+
 function Posts({ coinData, loading }) {
 
   if (loading) {

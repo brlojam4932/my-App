@@ -23,8 +23,8 @@ color: #ccc;`;
 
 
 // UTILITY FUNCTIONS 
-// total count 8 / post per page 4 = 2 pages
-const COIN_COUNT = 10; // look up sort method in JS to lsit by rank
+// total count 12 / post per page 4 = 3 pages
+const COIN_COUNT = 8; // look up sort method in JS to lsit by rank
 const formatPrice = price => parseFloat(Number(price).toFixed(4));
 
 
@@ -43,7 +43,7 @@ function App() {
   //const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(4);
+  const [postsPerPage] = useState(2);
 
     // read about Temporal Deadzone
   const componentDidMount = async () => {

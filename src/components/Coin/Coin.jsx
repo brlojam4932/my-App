@@ -87,7 +87,7 @@ function Coin(props) {
         <Td>{props.showBalance?props.balance : "-"}</Td>
 
         <TdControls>
-          <form action="#" method="POST" >
+          <form action="#"  >
 
             <Button className="btn btn-success" onClick={() => setModalIsOpen(true)} >Trade</Button>
 
