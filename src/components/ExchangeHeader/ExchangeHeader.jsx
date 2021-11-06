@@ -10,7 +10,7 @@ const Img = styled.img`
 // TO MOVE FILES USE GIT MV
 // we create a const variable and import the values from the CSS sytling file
 const Header = styled.header`
-  background-color: #282c34;
+  background-color: #1d2124;;
   min-height: 10vh;
   width: 100%;
   display: flex;

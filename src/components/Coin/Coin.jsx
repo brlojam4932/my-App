@@ -47,7 +47,7 @@ color: white;
 // here we rewrite a component into a functional component
 
 function Coin(props) {
-  
+
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [buttonPopup, setButtonPopup] = useState(false);
@@ -80,16 +80,16 @@ function Coin(props) {
 
   return (
     <>
-       <tr>
+      <tr>
         <TdName>{props.name}</TdName>
         <Td>{props.ticker}</Td>
         <Td>${props.price}</Td>
-        <Td>{props.showBalance?props.balance : "-"}</Td>
+        <Td>{props.showBalance ? props.balance : "-"}</Td>
 
         <TdControls>
-          <form action="#"  >
+          <form action="#">
 
-            <Button className="btn btn-success" onClick={() => setModalIsOpen(true)} >Trade</Button>
+            <Button className="btn btn-success" onClick={() => setModalIsOpen(true)}>Trade</Button>
 
             <Button className="btn btn-info" onClick={handleRefresh}>Refresh</Button>
 
@@ -97,24 +97,45 @@ function Coin(props) {
 
           </form>
         </TdControls>
-
       </tr>
 
-      <PopUp trigger={buttonPopup} setTrigger={setButtonPopup} >
-        <div className="alert alert-dismissible alert-primary">
-          <strong>
-            Token:&nbsp;
-          </strong>
-          <small className="text-muted">{props.tickerId}&nbsp; &nbsp; </small>
-          <strong>
-            Rank:&nbsp;
-          </strong>
-          <small className="text-muted">{props.rank}&nbsp; &nbsp;</small>
-          <strong>
-            Circulating Supply:&nbsp;
-          </strong>
-          <small className="text-muted">{props.circulating_supply}&nbsp;</small>
-        </div>
+    
+
+      <PopUp trigger={buttonPopup} setTrigger={setButtonPopup}>   
+      
+        <ul className="list-group">
+          <li className="list-group-item d-flex justify-content-between align-items-center">
+          Token:
+            <span className="badge bg-primary rounded-pill">{props.tickerId}</span>
+          </li>
+          <li className="list-group-item d-flex justify-content-between align-items-center">
+            Rank:
+            <span className="badge bg-primary rounded-pill">{props.rank}</span>
+          </li>
+          <li className="list-group-item d-flex justify-content-between align-items-center">
+          Circulating Supply:
+            <span className="badge bg-primary rounded-pill">{props.circulating_supply}</span>
+          </li>
+          <li className="list-group-item d-flex justify-content-between align-items-center">
+          Total_supply:
+            <span className="badge bg-primary rounded-pill">{props.total_supply}</span>
+          </li>
+          <li className="list-group-item d-flex justify-content-between align-items-center">
+          Max_supply:
+            <span className="badge bg-primary rounded-pill">{props.max_supply}</span>
+          </li>
+          <li className="list-group-item d-flex justify-content-between align-items-center">
+          First_data_at:
+            <span className="badge bg-primary rounded-pill">{props.first_data_at}</span>
+          </li>
+          <li className="list-group-item d-flex justify-content-between align-items-center">
+          Last_updated:
+            <span className="badge bg-primary rounded-pill">{props.last_updated}</span>
+          </li>
+        </ul>
+
+
+
       </PopUp>
 
 
@@ -125,9 +146,9 @@ function Coin(props) {
         className="Modal"
         overlayClassName="Overlay"
       >
-        <h1> Trade {props.tickerId} </h1>
+        <h1>Trade {props.tickerId}</h1>
 
-        <label className="text-muted"> Amount of Coins to Buy/Sell</label>
+        <label className="text-muted">Amount of Coins to Buy/Sell</label>
         {props.insufficientUsdBalMessage &&
           <div className="alert alert-dismissible alert-danger">
             <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
@@ -144,12 +165,12 @@ function Coin(props) {
         {/* Info for buy/sell etc*/}
 
         {
-          <div className="alert alert-dismissible alert-primary" >
+          <div className="alert alert-dismissible alert-secondary" >
             <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
             <div className="text-muted">
               Amount:<strong> &nbsp;{props.buyInputValue}&nbsp;</strong>Token: &nbsp;
               <strong>{props.tickerId}</strong> &nbsp; Price: &nbsp; <strong>$ {props.price}.</strong> &nbsp;
-              Trade total:&nbsp; <strong>$ {props.price * props.buyInputValue}</strong>
+              Trade total:&nbsp; <strong>$&nbsp;{props.price * props.buyInputValue}</strong>
             </div>
 
           </div>

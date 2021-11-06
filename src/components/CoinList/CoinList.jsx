@@ -11,17 +11,18 @@ font-size: 1rem;
 // rewrite coinlist component into functional component
 
 function CoinList(props) {
-
+  
   if (props.loading) {
     // try adding a spinner animation
     return <div className="alert alert-dismissible alert-danger">
     <button type="button" className="btn-close" data-bs-dismiss="alert"></button>
-    <strong>Request failed!  &nbsp;</strong>Loading...
+    <strong>Request failed!&nbsp;</strong>Loading...
   </div>
   }
+
   return (
 
-    <Table className="table table-primary table border">
+    <Table className="table table-secondary table border table table-hover">
       <thead>
         <tr>
           <th>Name</th>
@@ -34,7 +35,9 @@ function CoinList(props) {
       <tbody>
         {
           //distructured version - recommended; more explicit
-          props.coinData.map(({ key, name, ticker, price, balance, rank, circulating_supply }) =>
+          props.coinData.map(({ 
+            key, name, ticker, balance, rank, circulating_supply, price, total_supply, max_supply, beta_value, first_data_at, last_updated
+           }) =>
             <Coin key={key}
               handleRefresh={props.handleRefresh}
               handleBuy={props.handleBuy}
@@ -45,10 +48,17 @@ function CoinList(props) {
               ticker={ticker}
               showBalance={props.showBalance}
               balance={balance}
-              price={price}
               tickerId={key}
               rank={rank}
               circulating_supply={circulating_supply}
+              total_supply={total_supply}
+              max_supply={max_supply}
+              beta_value={beta_value}
+              first_data_at={first_data_at}
+              last_updated={last_updated}
+
+              price={price}
+            
               insufficientUsdBalMessage={props.insufficientUsdBalMessage}
               setInsufficientUsdBalMessage={props.setInsufficientUsdBalMessage}
               insufficientTokenBalMessage={props.insufficientTokenBalMessage}

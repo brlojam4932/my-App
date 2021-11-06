@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 // imp tab
-import "bootswatch/dist/flatly/bootstrap.min.css";
+import "bootswatch/dist/darkly/bootstrap.min.css";
 import CoinList from "./components/CoinList/CoinList";
 import AccountBalance from './components/AccountBalance/AccountBalance';
 import ExchangeHeader from './components/ExchangeHeader/ExchangeHeader';
@@ -29,6 +29,11 @@ const formatPrice = price => parseFloat(Number(price).toFixed(4));
 
 
 function App() {
+  // posts for pagination
+  //const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage] = useState(2);
 
   const [accountBalance, setAccountBalance] = useState(10000);
   const [showBalance, setShowBalance] = useState(false);
@@ -39,18 +44,11 @@ function App() {
   const [isBuy, setIsBuy] = useState(false);
   const [isSold, setIsSold] = useState(false);
 
-  // posts for pagination
-  //const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(2);
-
-    // read about Temporal Deadzone
+  // read about Temporal Deadzone
   const componentDidMount = async () => {
     //console.log("MOUNT");
     setLoading(true);
     const response = await axios.get('https://api.coinpaprika.com/v1/coins');
-   
     // we are now receiving strings as data so we don't need an object anymore
     // we also use const instead of let as we are not changing the data
     const coinIds = response.data.slice(0, COIN_COUNT).map(coin => coin.id);
@@ -58,26 +56,47 @@ function App() {
     // we get a promise that our data will be sent to us sometime in the future
     const promises = coinIds.map(id => axios.get(ticketUrl + id));
     // we use the await operator to wait for our promise
-    const coinData = await Promise.all(promises);
+    const coinData = await Promise.all(promises)
+      .catch(function (error) {
+        if (error.response) {
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          console.log(error.request);
+        } else {
+          throw Error("Could not fetch data");
+          //console.log('Error', error.message);
+        }
+        console.log(error.config);
+      });
     const coinPriceData = coinData.map(function (response) {
       const coin = response.data;
-     
+
       return {
         key: coin.id, // here we have our key
         name: coin.name,
         ticker: coin.symbol,
         balance: 0,
-        price: formatPrice(coin.quotes["USD"].price),
         rank: coin.rank,
-        circulating_supply: coin.circulating_supply
-      };
-    });
+        circulating_supply: coin.circulating_supply,
+        total_supply: coin.total_supply,
+        max_supply: coin.max_supply,
+        beta_value: coin.beta_value,
+        first_data_at: coin.first_data_at,
+        last_updated: coin.last_updated,
+        price: formatPrice(coin.quotes["USD"].price),
+
+      }
+
+    })
 
     // Retrieve the prices
     //setPosts(coinPriceData);
     setCoinData(coinPriceData);
     setLoading(false);
-    //console.log(response); 
+    console.log("currentPosts ", currentPosts);
+
   }
 
   // we don't want to call the same function over and over again. we only want to load it if we need it
@@ -86,10 +105,27 @@ function App() {
     if (coinData.length === 0) {
       // component did mount
       componentDidMount();
-      console.log('coin data: ' + coinData);    
+      console.log('coin data: ' + coinData);
     }
-  });
 
+  })
+
+ /*
+  axios.get('https://api.coinpaprika.com/v1/tags/{tag_id}', {
+    params: {
+      id: 'blockchain-service'
+    }
+  })
+  .then(function (response) {
+    console.log(response);
+  })
+  .catch(function (error) {
+    console.log(error);
+  })
+  .then(() => {
+
+  });
+  */
 
   // Get current posts
   // get index of last post = current page x postPerPage(10)
@@ -195,58 +231,53 @@ function App() {
   return (
     <>
       <Router>
-      <Navbar />
-          <div className='content'>
-            <Switch>
-              <Route exact path="/">
-                <Div className="App">
-                  <ExchangeHeader />
-                  <AccountBalance
-                    amount={accountBalance}
-                    showBalance={showBalance}
-                    handleBrrr={handleBrrr}
-                    handleToggleChange={handleToggleChange} />
+        <Navbar />
+        <div className='content'>
+          <Switch>
+            <Route exact path="/">
+              <Div className="App">
+                <ExchangeHeader/>
+                <AccountBalance
+                  amount={accountBalance}
+                  showBalance={showBalance}
+                  handleBrrr={handleBrrr}
+                  handleToggleChange={handleToggleChange}/>
 
-                  <CoinList
-                    //coinData={coinData}
-                    showBalance={showBalance}
-                    handleBuy={handleBuy}
-                    handleSell={handleSell}
-                    handleRefresh={handleRefresh}
-                    buyInputValue={buyInputValue}
-                    setBuyInputValue={setBuyInputValue}
-                    insufficientUsdBalMessage={insufficientUsdBalMessage}
-                    setInsufficientUsdBalMessage={setInsufficientUsdBalMessage}
-                    insufficientTokenBalMessage={insufficientTokenBalMessage}
-                    setInsufficientTokenBalMessage={setInsufficientTokenBalMessage}
-                    isBuy={isBuy}
-                    setIsBuy={setIsBuy}
-                    isSold={isSold}
-                    setIsSold={setIsSold} 
+                <CoinList
+                  //coinData={coinData}
+                  showBalance={showBalance}
+                  handleBuy={handleBuy}
+                  handleSell={handleSell}
+                  handleRefresh={handleRefresh}
+                  buyInputValue={buyInputValue}
+                  setBuyInputValue={setBuyInputValue}
+                  insufficientUsdBalMessage={insufficientUsdBalMessage}
+                  setInsufficientUsdBalMessage={setInsufficientUsdBalMessage}
+                  insufficientTokenBalMessage={insufficientTokenBalMessage}
+                  setInsufficientTokenBalMessage={setInsufficientTokenBalMessage}
+                  isBuy={isBuy}
+                  setIsBuy={setIsBuy}
+                  isSold={isSold}
+                  setIsSold={setIsSold}
 
-                    coinData={currentPosts} 
-                    loading={loading}
-                    />
-                </Div>
-              
-                <Pagination
+                  coinData={currentPosts}
+                  loading={loading}/>
+              </Div>
+
+              <Pagination
                 postsPerPage={postsPerPage}
                 totalPosts={coinData.length}
-                paginate={paginate}
+                paginate={paginate}/>
+            </Route>
+            <Route path="/coinInfo">
+              <CoinInfo
+                handleRefresh={handleRefresh}/>
 
-                />
-              </Route>
-              <Route path="/coinInfo">
-                <CoinInfo
-                handleRefresh={handleRefresh}
-                
-                />
-              
-              </Route>
-          
-            </Switch>
+            </Route>
 
-          </div>
+          </Switch>
+
+        </div>
 
       </Router>
 

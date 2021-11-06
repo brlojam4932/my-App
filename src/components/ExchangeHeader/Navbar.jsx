@@ -5,7 +5,7 @@ const Navbar = () => {
   const link = "/coinInfo";
 /* select + ctrl D x; selects all */
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav className="navbar navbar-expand-sm navbar-dark bg-dark">
   <div className="container-fluid">
     <Link className="navbar-brand" to='/'>Navbar</Link>
     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">

@@ -9,6 +9,7 @@ const Section = styled.section`
   font-size: 2rem;
   text-align: center;
   line-height: 3rem;
+  background-color: #1d1f24;
   `;
 
 // spacing for show balance when it appears
@@ -18,6 +19,7 @@ position: relative;
   min width: 20px;
   margin: .5rem 0 0 2.5rem;
   font-size: 1.5rem;
+  background-color: #1d1f24;
   
   `;
 
