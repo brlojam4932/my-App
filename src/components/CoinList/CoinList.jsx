@@ -39,6 +39,7 @@ function CoinList(props) {
             key, name, ticker, balance, rank, circulating_supply, price, total_supply, max_supply, beta_value, first_data_at, last_updated
            }) =>
             <Coin key={key}
+              coinData={props.paginatedPosts}
               handleRefresh={props.handleRefresh}
               handleBuy={props.handleBuy}
               handleSell={props.handleSell}
@@ -56,9 +57,7 @@ function CoinList(props) {
               beta_value={beta_value}
               first_data_at={first_data_at}
               last_updated={last_updated}
-
               price={price}
-            
               insufficientUsdBalMessage={props.insufficientUsdBalMessage}
               setInsufficientUsdBalMessage={props.setInsufficientUsdBalMessage}
               insufficientTokenBalMessage={props.insufficientTokenBalMessage}
@@ -67,6 +66,13 @@ function CoinList(props) {
               setIsBuy={props.setIsBuy}
               isSold={props.isSold}
               setIsSold={props.setIsSold}
+              loading={props.loading}
+              setLoading={props.setLoading}
+              //paginatedPosts={props.paginatedPosts}
+              setPaginatedPosts={props.setPaginatedPosts}
+              currentPage={props.currentPage}
+              setCurrentPage={props.setCurrentPage}
+              postsPerPage={props.postsPerPage}
             />
 
           )

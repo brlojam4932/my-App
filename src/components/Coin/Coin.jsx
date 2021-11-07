@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
 import PopUp from './PopUp';
+//import BlogList from './BlogList';
 
 
 // table
@@ -52,6 +53,52 @@ function Coin(props) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [buttonPopup, setButtonPopup] = useState(false);
 
+  /*
+  const [blogs, setBlogs] = useState(
+  
+    [
+      { id: 1,
+        coin: "bitcoin",
+        info: "Loreuam aperiam sed aut tenetur, itaque error nostrum voluptatem consectetur id a quaerat laborum et cupiditate? Alias assumenda nisi animi porro libero tempora eum dolor. Ipsum!",
+        author: "mario"
+        
+      },
+      {
+        id: 2,
+        coin: "Ethereum",
+        info: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sit corrupti debsamus eos aliquam. Iste upiditate? Alias assumenda nisi animi porro libero tempora eum dolor. Ipsum!",
+        author: "mario"
+      },
+      {
+        id: 3,
+        coin: "Third Coin",
+        info: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sit corrupti debitis excemus commodi autem?",
+        author: "mario"
+      
+      },
+      {
+        id: 4,
+        coin: "Fourth Coin",
+        info: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sit m consectetur id a quaerat laborum et cupiditate? Alias assumenda nisi animi porro libero tempora eum dolor. Ipsum!",
+        author: "mario"
+      },
+      {
+        id: 5,
+        coin: "Fifth Coin",
+        info: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sit cupiditate? Alias assumenda nisi animi porro libero tempora eum dolor. Ipsum!",
+        author: "mario"
+      },
+      {
+        id: 6,
+        coin: "Sixth Coin",
+        info: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sit corrupti debitis excepturi reprehenderit, accusamus eos aliquam. Iste  nostrum voluptatem consectetur id a quaerat laborum et cupiditate? Alias assumenda nisi animi porro libero tempora eum dolor. Ipsum!",
+        author: "mario"
+      }
+    ]
+  
+)
+*/
+
   const handleRefresh = (event) => {
     event.preventDefault();
     props.handleRefresh(props.tickerId);
@@ -61,7 +108,6 @@ function Coin(props) {
   const handleBuyClick = (event) => {
     event.preventDefault();
     props.handleBuy(props.tickerId, props.buyInputValue);
-
   }
 
   const handleSellClick = (event) => {
@@ -78,9 +124,11 @@ function Coin(props) {
     props.setIsSold(false);
   }
 
+
   return (
     <>
       <tr>
+        {/* ---------TABLE: NAME, PRICE, TICKER, BALANCE------------ */ }
         <TdName>{props.name}</TdName>
         <Td>{props.ticker}</Td>
         <Td>${props.price}</Td>
@@ -94,13 +142,11 @@ function Coin(props) {
             <Button className="btn btn-info" onClick={handleRefresh}>Refresh</Button>
 
             <Button className='btn btn-outline-info' onClick={() => setButtonPopup(true)}>Info</Button>
-
           </form>
         </TdControls>
       </tr>
 
-    
-
+      {/* ---------POP UP: FOR INFO ABOU THE COIN------------ */ }
       <PopUp trigger={buttonPopup} setTrigger={setButtonPopup}>   
       
         <ul className="list-group">
@@ -134,11 +180,9 @@ function Coin(props) {
           </li>
         </ul>
 
-
-
       </PopUp>
 
-
+      {/* ---------MODAL: FOR BUY/SELL----------- */ }
       <ReactModal
         isOpen={modalIsOpen}
         ariaHideApp={false}

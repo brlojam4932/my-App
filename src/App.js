@@ -10,8 +10,9 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import "fontawesome-free/js/all.js"; // icons
 import Navbar from './components/ExchangeHeader/Navbar';
 import CoinInfo from './components/Coin/CoinInfo';
-//import Posts from './components/CoinList/Posts';
-import Pagination from './components/CoinList/Pagination';
+//import Pagination from './components/CoinList/Pagination';
+import _ from "lodash";
+
 
 //instructor: zsolt-nagy
 // bkg area for table
@@ -29,12 +30,6 @@ const formatPrice = price => parseFloat(Number(price).toFixed(4));
 
 
 function App() {
-  // posts for pagination
-  //const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(2);
-
   const [accountBalance, setAccountBalance] = useState(10000);
   const [showBalance, setShowBalance] = useState(false);
   const [coinData, setCoinData] = useState([]);
@@ -44,35 +39,22 @@ function App() {
   const [isBuy, setIsBuy] = useState(false);
   const [isSold, setIsSold] = useState(false);
 
+  const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [paginatedPosts, setPaginatedPosts] = useState([]);
+  const [postsPerPage] = useState(2);
+
   // read about Temporal Deadzone
   const componentDidMount = async () => {
     //console.log("MOUNT");
     setLoading(true);
-    const response = await axios.get('https://api.coinpaprika.com/v1/coins');
-    // we are now receiving strings as data so we don't need an object anymore
-    // we also use const instead of let as we are not changing the data
+    const response = await axios.get('https://api.coinpaprika.com/v1/coins/');
     const coinIds = response.data.slice(0, COIN_COUNT).map(coin => coin.id);
     const ticketUrl = 'https://api.coinpaprika.com/v1/tickers/';
-    // we get a promise that our data will be sent to us sometime in the future
     const promises = coinIds.map(id => axios.get(ticketUrl + id));
-    // we use the await operator to wait for our promise
-    const coinData = await Promise.all(promises)
-      .catch(function (error) {
-        if (error.response) {
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        } else if (error.request) {
-          console.log(error.request);
-        } else {
-          throw Error("Could not fetch data");
-          //console.log('Error', error.message);
-        }
-        console.log(error.config);
-      });
+    const coinData = await Promise.all(promises);
     const coinPriceData = coinData.map(function (response) {
       const coin = response.data;
-
       return {
         key: coin.id, // here we have our key
         name: coin.name,
@@ -85,19 +67,20 @@ function App() {
         beta_value: coin.beta_value,
         first_data_at: coin.first_data_at,
         last_updated: coin.last_updated,
-        price: formatPrice(coin.quotes["USD"].price),
-
+        price: formatPrice(coin.quotes["USD"].price)
       }
 
     })
 
     // Retrieve the prices
-    //setPosts(coinPriceData);
+    console.log("coinData ", coinData);
+    //console.log("currentPosts ", currentPosts);
     setCoinData(coinPriceData);
+    setPaginatedPosts(_(coinPriceData).slice(0).take(postsPerPage).value());
     setLoading(false);
-    console.log("currentPosts ", currentPosts);
-
   }
+
+
 
   // we don't want to call the same function over and over again. we only want to load it if we need it
   // a synchronous function; moves up, before useEffect
@@ -110,33 +93,20 @@ function App() {
 
   })
 
- /*
-  axios.get('https://api.coinpaprika.com/v1/tags/{tag_id}', {
-    params: {
-      id: 'blockchain-service'
-    }
-  })
-  .then(function (response) {
-    console.log(response);
-  })
-  .catch(function (error) {
-    console.log(error);
-  })
-  .then(() => {
 
-  });
-  */
+  const pageCount = coinData ? Math.ceil(coinData.length / postsPerPage) : 0;
+  if (pageCount === 1) return null;
+  const pages = _.range(1, pageCount + 1);
 
-  // Get current posts
-  // get index of last post = current page x postPerPage(10)
-  // get index of the first post = take index of last post - current page
-  // current posts = posts slice index of the first post and index of the last post
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = coinData.slice(indexOfFirstPost, indexOfLastPost);
+  const pagination = (pageNo) => {
+    setCurrentPage(pageNo);
+    const startIndex = (pageNo - 1) * postsPerPage;
+    const paginatedPost = _(coinData).slice(startIndex).take(postsPerPage).value();
+    console.log('paginatedPosts ', paginatedPosts);
+    setPaginatedPosts(paginatedPost);
+    //handleRefresh(props.tickerId);
+  }
 
-  // Change pages
-  const paginate = pageNumber => setCurrentPage(pageNumber);
 
   const handleBrrr = () => {
     setAccountBalance(prevBalance => prevBalance + 1200);
@@ -166,6 +136,8 @@ function App() {
           newValues.balance += amountOfCoin;
           setInsufficientUsdBalMessage(false);
           setIsBuy(true);
+         
+          
         }
         else {
           setInsufficientUsdBalMessage(true)
@@ -236,15 +208,15 @@ function App() {
           <Switch>
             <Route exact path="/">
               <Div className="App">
-                <ExchangeHeader/>
+                <ExchangeHeader />
                 <AccountBalance
                   amount={accountBalance}
                   showBalance={showBalance}
                   handleBrrr={handleBrrr}
-                  handleToggleChange={handleToggleChange}/>
+                  handleToggleChange={handleToggleChange} />
 
                 <CoinList
-                  //coinData={coinData}
+                  coinData={paginatedPosts}
                   showBalance={showBalance}
                   handleBuy={handleBuy}
                   handleSell={handleSell}
@@ -259,19 +231,36 @@ function App() {
                   setIsBuy={setIsBuy}
                   isSold={isSold}
                   setIsSold={setIsSold}
-
-                  coinData={currentPosts}
-                  loading={loading}/>
+                  loading={loading}
+                  setLoading={setLoading}
+                  //paginatedPosts={paginatedPosts}
+                  setPaginatedPosts={setPaginatedPosts}
+                  currentPage={currentPage}
+                  setCurrentPage={setCurrentPage}
+                  postsPerPage={postsPerPage}/>
+                  
               </Div>
 
-              <Pagination
-                postsPerPage={postsPerPage}
-                totalPosts={coinData.length}
-                paginate={paginate}/>
+
+              <nav>
+                <ul className='pagination'>
+                  {
+                    pages.map((page) => (
+                      <li  key={page.toString()} className={
+                        page === currentPage ? "page-item active" : "page-item"}>
+                        <p className='page-link'
+                          onClick={() => pagination(page.toString())}
+                        >{page}</p>
+                      </li>
+                    ))
+                  }
+                </ul>
+              </nav>
+
             </Route>
             <Route path="/coinInfo">
               <CoinInfo
-                handleRefresh={handleRefresh}/>
+                handleRefresh={handleRefresh} />
 
             </Route>
 
