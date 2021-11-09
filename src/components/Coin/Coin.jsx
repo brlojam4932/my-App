@@ -25,7 +25,7 @@ const TdName = styled(Td)`
 // buy / sell refresh button size
 const Button = styled.button`
   font-size: 11px;
-  with: 64px;
+  with: 100px;
   margin: 3px 5px 0;
 `;
 
@@ -53,51 +53,6 @@ function Coin(props) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [buttonPopup, setButtonPopup] = useState(false);
 
-  /*
-  const [blogs, setBlogs] = useState(
-  
-    [
-      { id: 1,
-        coin: "bitcoin",
-        info: "Loreuam aperiam sed aut tenetur, itaque error nostrum voluptatem consectetur id a quaerat laborum et cupiditate? Alias assumenda nisi animi porro libero tempora eum dolor. Ipsum!",
-        author: "mario"
-        
-      },
-      {
-        id: 2,
-        coin: "Ethereum",
-        info: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sit corrupti debsamus eos aliquam. Iste upiditate? Alias assumenda nisi animi porro libero tempora eum dolor. Ipsum!",
-        author: "mario"
-      },
-      {
-        id: 3,
-        coin: "Third Coin",
-        info: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sit corrupti debitis excemus commodi autem?",
-        author: "mario"
-      
-      },
-      {
-        id: 4,
-        coin: "Fourth Coin",
-        info: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sit m consectetur id a quaerat laborum et cupiditate? Alias assumenda nisi animi porro libero tempora eum dolor. Ipsum!",
-        author: "mario"
-      },
-      {
-        id: 5,
-        coin: "Fifth Coin",
-        info: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sit cupiditate? Alias assumenda nisi animi porro libero tempora eum dolor. Ipsum!",
-        author: "mario"
-      },
-      {
-        id: 6,
-        coin: "Sixth Coin",
-        info: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sit corrupti debitis excepturi reprehenderit, accusamus eos aliquam. Iste  nostrum voluptatem consectetur id a quaerat laborum et cupiditate? Alias assumenda nisi animi porro libero tempora eum dolor. Ipsum!",
-        author: "mario"
-      }
-    ]
-  
-)
-*/
 
   const handleRefresh = (event) => {
     event.preventDefault();

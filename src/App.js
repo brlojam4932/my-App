@@ -12,7 +12,7 @@ import Navbar from './components/ExchangeHeader/Navbar';
 import CoinInfo from './components/Coin/CoinInfo';
 //import Pagination from './components/CoinList/Pagination';
 import _ from "lodash";
-
+import Footer from './components/Coin/Footer';
 
 //instructor: zsolt-nagy
 // bkg area for table
@@ -44,11 +44,79 @@ function App() {
   const [paginatedPosts, setPaginatedPosts] = useState([]);
   const [postsPerPage] = useState(2);
 
+  const [items, setItems] = useState(
+    [
+      {
+        id: 1,
+        item: "Bitcoin has aperiam sed aut tenetur, itaque error nostrum voluptatem consectetur id a quaerat laborum et cupiditate? Alias assumenda nisi animi porro libero tempora eum dolor. Ipsum!",
+        author: "Rex",
+        checked: false
+
+      },
+      {
+        id: 2,
+        item: "Ethereum will ipsum dolor sit, amet consectetur adipisicing elit. Sit corrupti debsamus eos aliquam. Iste upiditate? Alias assumenda nisi animi porro libero tempora eum dolor. Ipsum!",
+        author: "Jill",
+        checked: false
+      },
+      {
+        id: 3,
+        item: "Third coin has ipsum dolor sit, amet consectetur adipisicing elit. Sit corrupti debitis excemus commodi autem?",
+        author: "mario",
+        checked: false
+
+      },
+      {
+        id: 4,
+        item: "Fourth Coin ipsum dolor sit, amet consectetur adipisicing elit. Sit m consectetur id a quaerat laborum et cupiditate? Alias assumenda nisi animi porro libero tempora eum dolor. Ipsum!",
+        author: "mario",
+        checked: false
+      },
+      {
+        id: 5,
+        item: "Fith Coin ipsum dolor sit, amet consectetur adipisicing elit. Sit cupiditate? Alias assumenda nisi animi porro libero tempora eum dolor. Ipsum!",
+        author: "mario",
+        checked: false
+      },
+      {
+        id: 6,
+        item: "Sixth Coin ipsum dolor sit, amet consectetur adipisicing elit. Sit corrupti debitis excepturi porro libero tempora eum dolor. Ipsum!",
+        author: "mario",
+        checked: false
+      }
+    ]
+  )
+
+  //-----------Coin Info------------------------------
+    // this could be a for loop
+    const handleCheck = (id) => {
+      //console.log(`key: ${id}`);
+      // list items = a mapping of the array items
+      // map the items to a new array if the item.id is the same as the id and flip the checkmark; else just list the item
+      const listItems = items.map((item ) => item.id === id ? {...item, checked: !item.checked} : (item));
+      setItems(listItems);
+      //saving to local storage
+      localStorage.setItem('coininfo', JSON.stringify(listItems));
+      
+    }
+ 
+    const handleDelete = (id) => {
+      //console.log(`delete: ${id}`);
+      // filter the item's id to id and map/copy into listItems array
+      const listItems = items.filter((item) => item.id !== id);
+      setItems(listItems);
+      localStorage.setItem('coininfo', JSON.stringify(listItems));
+
+
+    }
+
+
   // read about Temporal Deadzone
   const componentDidMount = async () => {
     //console.log("MOUNT");
     setLoading(true);
     const response = await axios.get('https://api.coinpaprika.com/v1/coins/');
+
     const coinIds = response.data.slice(0, COIN_COUNT).map(coin => coin.id);
     const ticketUrl = 'https://api.coinpaprika.com/v1/tickers/';
     const promises = coinIds.map(id => axios.get(ticketUrl + id));
@@ -136,8 +204,8 @@ function App() {
           newValues.balance += amountOfCoin;
           setInsufficientUsdBalMessage(false);
           setIsBuy(true);
-         
-          
+
+
         }
         else {
           setInsufficientUsdBalMessage(true)
@@ -213,7 +281,9 @@ function App() {
                   amount={accountBalance}
                   showBalance={showBalance}
                   handleBrrr={handleBrrr}
-                  handleToggleChange={handleToggleChange} />
+                  handleToggleChange={handleToggleChange}
+                  length={items.length}
+                  />
 
                 <CoinList
                   coinData={paginatedPosts}
@@ -233,12 +303,11 @@ function App() {
                   setIsSold={setIsSold}
                   loading={loading}
                   setLoading={setLoading}
-                  //paginatedPosts={paginatedPosts}
                   setPaginatedPosts={setPaginatedPosts}
                   currentPage={currentPage}
                   setCurrentPage={setCurrentPage}
-                  postsPerPage={postsPerPage}/>
-                  
+                  postsPerPage={postsPerPage} />
+
               </Div>
 
 
@@ -246,7 +315,7 @@ function App() {
                 <ul className='pagination'>
                   {
                     pages.map((page) => (
-                      <li  key={page.toString()} className={
+                      <li key={page.toString()} className={
                         page === currentPage ? "page-item active" : "page-item"}>
                         <p className='page-link'
                           onClick={() => pagination(page.toString())}
@@ -260,7 +329,12 @@ function App() {
             </Route>
             <Route path="/coinInfo">
               <CoinInfo
-                handleRefresh={handleRefresh} />
+                items={items}
+                setItems={setItems}
+                handleCheck={handleCheck}
+                handleDelete={handleDelete}
+              />
+              <Footer length={items.length} />
 
             </Route>
 
