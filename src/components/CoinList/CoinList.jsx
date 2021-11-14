@@ -68,7 +68,6 @@ function CoinList(props) {
               setIsSold={props.setIsSold}
               loading={props.loading}
               setLoading={props.setLoading}
-              //paginatedPosts={props.paginatedPosts}
               setPaginatedPosts={props.setPaginatedPosts}
               currentPage={props.currentPage}
               setCurrentPage={props.setCurrentPage}

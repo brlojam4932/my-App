@@ -86,7 +86,7 @@ function Coin(props) {
         {/* ---------TABLE: NAME, PRICE, TICKER, BALANCE------------ */ }
         <TdName>{props.name}</TdName>
         <Td>{props.ticker}</Td>
-        <Td>${props.price}</Td>
+        <Td>$ {props.price}</Td>
         <Td>{props.showBalance ? props.balance : "-"}</Td>
 
         <TdControls>
