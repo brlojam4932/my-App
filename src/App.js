@@ -11,7 +11,7 @@ import "fontawesome-free/js/all.js"; // icons
 import Navbar from './components/ExchangeHeader/Navbar';
 import CoinInfo from './components/Coin/CoinInfo';
 //import Pagination from './components/CoinList/Pagination';
-import _ from "lodash";
+
 import Footer from './components/Coin/Footer';
 
 //instructor: zsolt-nagy
@@ -25,7 +25,7 @@ color: #ccc;`;
 
 // UTILITY FUNCTIONS 
 // total count 12 / post per page 4 = 3 pages
-const COIN_COUNT = 8; // look up sort method in JS to lsit by rank
+const COIN_COUNT = 10; // look up sort method in JS to lsit by rank
 const formatPrice = price => parseFloat(Number(price).toFixed(4));
 
 
@@ -41,8 +41,7 @@ function App() {
 
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [paginatedPosts, setPaginatedPosts] = useState([]);
-  const [postsPerPage] = useState(2);
+
 
   const [items, setItems] = useState(
     [
@@ -88,65 +87,54 @@ function App() {
   )
 
   //-----------Coin Info------------------------------
-    // this could be a for loop
-    const handleCheck = (id) => {
-      //console.log(`key: ${id}`);
-      // list items = a mapping of the array items
-      // map the items to a new array if the item.id is the same as the id and flip the checkmark; else just list the item
-      const listItems = items.map((item ) => item.id === id ? {...item, checked: !item.checked} : (item));
-      setItems(listItems);
-      //saving to local storage
-      localStorage.setItem('coininfo', JSON.stringify(listItems));
-      
-    }
- 
-    const handleDelete = (id) => {
-      //console.log(`delete: ${id}`);
-      // filter the item's id to id and map/copy into listItems array
-      const listItems = items.filter((item) => item.id !== id);
-      setItems(listItems);
-      localStorage.setItem('coininfo', JSON.stringify(listItems));
+  // this could be a for loop
+  const handleCheck = (id) => {
+    //console.log(`key: ${id}`);
+    // list items = a mapping of the array items
+    // map the items to a new array if the item.id is the same as the id and flip the checkmark; else just list the item
+    const listItems = items.map((item) => item.id === id ? { ...item, checked: !item.checked } : (item));
+    setItems(listItems);
+    //saving to local storage
+    localStorage.setItem('coininfo', JSON.stringify(listItems));
+
+  }
+
+  const handleDelete = (id) => {
+    //console.log(`delete: ${id}`);
+    // filter the item's id to id and map/copy into listItems array
+    const listItems = items.filter((item) => item.id !== id);
+    setItems(listItems);
+    localStorage.setItem('coininfo', JSON.stringify(listItems));
 
 
-    }
+  }
 
 
   // read about Temporal Deadzone
   const componentDidMount = async () => {
-    //console.log("MOUNT");
     setLoading(true);
-    const response = await axios.get('https://api.coinpaprika.com/v1/coins/');
-
-    const coinIds = response.data.slice(0, COIN_COUNT).map(coin => coin.id);
-    const ticketUrl = 'https://api.coinpaprika.com/v1/tickers/';
-    const promises = coinIds.map(id => axios.get(ticketUrl + id));
-    const coinData = await Promise.all(promises);
-    const coinPriceData = coinData.map(function (response) {
-      const coin = response.data;
-      return {
-        key: coin.id, // here we have our key
-        name: coin.name,
-        ticker: coin.symbol,
-        balance: 0,
-        rank: coin.rank,
-        circulating_supply: coin.circulating_supply,
-        total_supply: coin.total_supply,
-        max_supply: coin.max_supply,
-        beta_value: coin.beta_value,
-        first_data_at: coin.first_data_at,
-        last_updated: coin.last_updated,
-        price: formatPrice(coin.quotes["USD"].price)
+    let response = await axios.get('https://api.coingecko.com/api/v3/coins/markets', {
+      params: {
+        vs_currency: 'usd',
+        ids: ''
       }
-
-    })
-
-    // Retrieve the prices
-    console.log("coinData ", coinData);
-    //console.log("currentPosts ", currentPosts);
-    setCoinData(coinPriceData);
-    setPaginatedPosts(_(coinPriceData).slice(0).take(postsPerPage).value());
+    });
+    let coinData = response.data.slice(0, COIN_COUNT).map(function (token) {
+      return {
+        key: token.id,
+        id: token.id,
+        image: token.image,
+        name: token.name,
+        ticker: token.symbol,
+        balance: 0,
+        price: formatPrice(token.current_price),
+        priceChange24h: parseFloat(Number(token.price_change_percentage_24h).toFixed(2)),
+      };
+    });
+    setCoinData(coinData);
     setLoading(false);
   }
+
 
 
 
@@ -159,21 +147,7 @@ function App() {
       console.log('coin data: ' + coinData);
     }
 
-  })
-
-
-  const pageCount = coinData ? Math.ceil(coinData.length / postsPerPage) : 0;
-  if (pageCount === 1) return null;
-  const pages = _.range(1, pageCount + 1);
-
-  const pagination = (pageNo) => {
-    setCurrentPage(pageNo);
-    const startIndex = (pageNo - 1) * postsPerPage;
-    const paginatedPost = _(coinData).slice(startIndex).take(postsPerPage).value();
-    console.log('paginatedPosts ', paginatedPosts);
-    setPaginatedPosts(paginatedPost);
-    //handleRefresh(props.tickerId);
-  }
+  }, []);
 
 
   const handleBrrr = () => {
@@ -189,9 +163,9 @@ function App() {
 
   // create isBuy and valueChangId args
   const handleBuy = async (valueChangeId, amountValue) => {
-    const ticketUrl = `https://api.coinpaprika.com/v1/tickers/${valueChangeId}`;
+    const ticketUrl = `https://api.coingecko.com/api/v3/coins/markets/${valueChangeId}`;
     const response = await axios.get(ticketUrl);
-    const newPrice = formatPrice(response.data.quotes["USD"].price);
+    const newPrice = formatPrice(response.data.current_price);
     const newCoinData = coinData.map(function (values) {
       let newValues = { ...values };
 
@@ -221,9 +195,9 @@ function App() {
 
 
   const handleSell = async (valueChangeId, amountValue) => {
-    const ticketUrl = `https://api.coinpaprika.com/v1/tickers/${valueChangeId}`;
+    const ticketUrl = `https://api.coingecko.com/api/v3/coins/markets/${valueChangeId}`;
     const response = await axios.get(ticketUrl);
-    const newPrice = formatPrice(response.data.quotes["USD"].price);
+    const newPrice = formatPrice(response.data.current_price);
     const newCoinData = coinData.map(function (values) {
       let newValues = { ...values };
 
@@ -249,24 +223,34 @@ function App() {
     setCoinData(newCoinData);
   }
 
-
-  //https://api.coinpaprika.com/v1/tickers/{coin_id}/historical
   const handleRefresh = async (valueChangeId) => {
-    const ticketUrl = `https://api.coinpaprika.com/v1/tickers/${valueChangeId}`;
-    const response = await axios.get(ticketUrl);
-    //debugger;
-    const newPrice = formatPrice(response.data.quotes["USD"].price);
-    const newCoinData = coinData.map((values) => {
-      let newValues = { ...values }; // shallow cloning / deep copy
-      if (valueChangeId === values.key) {
-        //manipulate price here
-        newValues.price = newPrice;
+    const response = await axios.get('https://api.coingecko.com/api/v3/coins/markets', {
+      params: {
+        vs_currency: "usd",
+        ids: ''
       }
-      return newValues;
     });
-    // this.setState(prevState => {}) one way to write the new state
+    let i = 0;
+    let newCoinData = response.data.slice(0, COIN_COUNT).map(function (token) {
+      const index = i;
+      i++;
+      return {
+        key: token.id,
+        id: token.id,
+        image: token.image,
+        name: token.name,
+        ticker: token.symbol,
+        balance: coinData[index].balance,
+        price: formatPrice(token.current_price),
+        priceChange24h: parseFloat(Number(token.price_change_percentage_24h).toFixed(2)),
+      };
+      
+    });
     setCoinData(newCoinData);
+    console.log(newCoinData);
   }
+
+
 
   return (
     <>
@@ -283,10 +267,10 @@ function App() {
                   handleBrrr={handleBrrr}
                   handleToggleChange={handleToggleChange}
                   length={items.length}
-                  />
+                />
 
                 <CoinList
-                  coinData={paginatedPosts}
+                  coinData={coinData}
                   showBalance={showBalance}
                   handleBuy={handleBuy}
                   handleSell={handleSell}
@@ -303,28 +287,14 @@ function App() {
                   setIsSold={setIsSold}
                   loading={loading}
                   setLoading={setLoading}
-                  setPaginatedPosts={setPaginatedPosts}
                   currentPage={currentPage}
                   setCurrentPage={setCurrentPage}
-                  postsPerPage={postsPerPage} />
+                />
 
               </Div>
 
 
-              <nav>
-                <ul className='pagination'>
-                  {
-                    pages.map((page) => (
-                      <li key={page.toString()} className={
-                        page === currentPage ? "page-item active" : "page-item"}>
-                        <p className='page-link'
-                          onClick={() => pagination(page.toString())}
-                        >{page}</p>
-                      </li>
-                    ))
-                  }
-                </ul>
-              </nav>
+
 
             </Route>
             <Route path="/coinInfo">

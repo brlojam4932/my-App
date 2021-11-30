@@ -42,6 +42,10 @@ background-color: #35393f;
 color: white;
 `
 
+const Img = styled.img`
+max-width: 33px
+`;
+
 // LIFT THE STATE UP
 
 //rcc tab for class-based component
@@ -84,10 +88,11 @@ function Coin(props) {
     <>
       <tr>
         {/* ---------TABLE: NAME, PRICE, TICKER, BALANCE------------ */ }
+        <Td><Img src={props.image}/></Td>
         <TdName>{props.name}</TdName>
         <Td>{props.ticker}</Td>
-        <Td>$ {props.price}</Td>
-        <Td>{props.showBalance ? props.balance : "-"}</Td>
+        <Td>$&nbsp;{props.price}</Td>
+        <Td>{props.showBalance? props.balance : "-"}</Td>
 
         <TdControls>
           <form action="#">
@@ -167,9 +172,9 @@ function Coin(props) {
           <div className="alert alert-dismissible alert-secondary" >
             <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
             <div className="text-muted">
-              Amount:<strong> &nbsp;{props.buyInputValue}&nbsp;</strong>Token: &nbsp;
-              <strong>{props.tickerId}</strong> &nbsp; Price: &nbsp; <strong>$ {props.price}.</strong> &nbsp;
-              Trade total:&nbsp; <strong>$&nbsp;{props.price * props.buyInputValue}</strong>
+              Amount:<strong>&nbsp;{props.buyInputValue}&nbsp;</strong>Token:&nbsp;
+              <strong>{props.tickerId}</strong>&nbsp; Price:&nbsp;<strong>$&nbsp;{props.price}.</strong>&nbsp;
+              Trade total:&nbsp;<strong>$&nbsp;{props.price * props.buyInputValue}</strong>
             </div>
 
           </div>
@@ -178,13 +183,13 @@ function Coin(props) {
         {props.isBuy &&
           <div className="alert alert-dismissible alert-success">
             <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
-            <strong>Success!</strong>Your purchase of &nbsp;<strong>{props.tickerId}</strong>is complete</div>
+            <strong>Success!</strong>Your purchase of&nbsp;<strong>{props.tickerId}</strong>is complete</div>
         }
 
         {props.isSold &&
           <div className="alert alert-dismissible alert-info">
             <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
-            <strong>Success!</strong>Your sale of &nbsp;<strong>{props.tickerId}</strong> is complete</div>
+            <strong>Success!</strong>Your sale of&nbsp;<strong>{props.tickerId}</strong>is complete</div>
         }
 
 

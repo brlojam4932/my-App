@@ -36,9 +36,10 @@ function CoinList(props) {
         {
           //distructured version - recommended; more explicit
           props.coinData.map(({ 
-            key, name, ticker, balance, rank, circulating_supply, price, total_supply, max_supply, beta_value, first_data_at, last_updated
+            key, id, name, image, ticker, balance, rank, price, market_cap
            }) =>
             <Coin key={key}
+              id={id}
               coinData={props.paginatedPosts}
               handleRefresh={props.handleRefresh}
               handleBuy={props.handleBuy}
@@ -46,17 +47,13 @@ function CoinList(props) {
               buyInputValue={props.buyInputValue}
               setBuyInputValue={props.setBuyInputValue}
               name={name}
+              image={image}
               ticker={ticker}
               showBalance={props.showBalance}
               balance={balance}
               tickerId={key}
               rank={rank}
-              circulating_supply={circulating_supply}
-              total_supply={total_supply}
-              max_supply={max_supply}
-              beta_value={beta_value}
-              first_data_at={first_data_at}
-              last_updated={last_updated}
+              market_cap={market_cap}
               price={price}
               insufficientUsdBalMessage={props.insufficientUsdBalMessage}
               setInsufficientUsdBalMessage={props.setInsufficientUsdBalMessage}
