@@ -9,7 +9,7 @@ import axios from 'axios';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import "fontawesome-free/js/all.js"; // icons
 import Navbar from './components/ExchangeHeader/Navbar';
-import CoinInfo from './components/Coin/CoinInfo';
+import CoinBlog from "./components/Coin/CoinIBlog";
 import News from './components/News/News';
 import useFetch from "./components/Utility/useFetch";
 //import Pagination from './components/CoinList/Pagination';
@@ -356,7 +356,7 @@ const handleRefresh = async () => {
 
             </Route>
             <Route path="/coinInfo">
-              <CoinInfo
+              <CoinBlog
                 items={items}
                 setItems={setItems}
                 handleCheck={handleCheck}

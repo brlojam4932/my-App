@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
 import PopUp from './PopUp';
 //import HistoryChart from '../chart/HistoryChart';
-import coinGecko from '../Utility/coinGecko';
+//import coinGecko from '../Utility/coinGecko';
 //import BlogList from './BlogList';
 
 
@@ -166,8 +166,6 @@ function Coin(props) {
       {/* ---------POP UP: FOR INFO ABOU THE COIN------------ */ }
       <PopUp trigger={buttonPopup} setTrigger={setButtonPopup}>
 
-         
-      
         <ul className="list-group">
           <li className="list-group-item d-flex justify-content-between align-items-center">
           Token:
