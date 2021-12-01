@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
+import { useParams } from "react-router-dom";
 import styled from 'styled-components';
 // imp tab
 import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
 import PopUp from './PopUp';
+//import HistoryChart from '../chart/HistoryChart';
+import coinGecko from '../Utility/coinGecko';
 //import BlogList from './BlogList';
 
 
@@ -52,26 +55,79 @@ max-width: 33px
 // here we rewrite a component into a functional component
 
 function Coin(props) {
-
-
+  const { id } = useParams()
+  // with use Params, we get back the id
+  //console.log("id: " + id);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [buttonPopup, setButtonPopup] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+ 
 
+  // take data from arrays into an object
+  const formatData = (data) => {
+    return data.map((el) => {
+      return {
+        t: el[0],
+        y: el[1].toFixed(2)
+      };
+    });
+  };
+
+  /*
+  useEffect(() => {
+    const fetchData = async () => {
+      isLoading(true);
+      //deconstruct values
+      const [day, week, year, detail] = await Promise.all([await coinGecko.get(`/coins/${id}/market_chart`, {
+        params: {
+          vs_currency: "usd",
+          days: "1",
+        },
+      }),
+      coinGecko.get(`/coins/${id}/market_chart`, {
+        params: {
+          vs_currency: "usd",
+          days: "7d",
+        },
+      }),
+      coinGecko.get(`/coins/${id}/market_chart`, {
+        params: {
+          vs_currency: "usd",
+          days: "365",
+        },
+      }),
+      // we get back the info for that coin
+      coinGecko.get("/coins/markets/", {
+        params: {
+          vs_currency: "usd",
+          ids: id,
+        },
+      }),
+    ]);
+
+    //setCoinData
+    }
+    return () => {
+      cleanup
+    }
+  }, [input])
+  */
+  
 
   const handleRefresh = (event) => {
     event.preventDefault();
-    props.handleRefresh(props.tickerId);
+    props.handleRefresh(props.id);
   }
 
 
   const handleBuyClick = (event) => {
     event.preventDefault();
-    props.handleBuy(props.tickerId, props.buyInputValue);
+    props.handleBuy(props.id, props.buyInputValue);
   }
 
   const handleSellClick = (event) => {
     event.preventDefault();
-    props.handleSell(props.tickerId, props.buyInputValue);
+    props.handleSell(props.id, props.buyInputValue);
   }
 
 
@@ -106,37 +162,40 @@ function Coin(props) {
         </TdControls>
       </tr>
 
+      
       {/* ---------POP UP: FOR INFO ABOU THE COIN------------ */ }
-      <PopUp trigger={buttonPopup} setTrigger={setButtonPopup}>   
+      <PopUp trigger={buttonPopup} setTrigger={setButtonPopup}>
+
+         
       
         <ul className="list-group">
           <li className="list-group-item d-flex justify-content-between align-items-center">
           Token:
-            <span className="badge bg-primary rounded-pill">{props.tickerId}</span>
+            <span>{props.id}</span>
           </li>
           <li className="list-group-item d-flex justify-content-between align-items-center">
-            Rank:
-            <span className="badge bg-primary rounded-pill">{props.rank}</span>
+          Market Cap:
+            <span>{props.marketCap}</span>
+          </li>
+          <li className="list-group-item d-flex justify-content-between align-items-center">
+          Total Supply:
+            <span>{props.totalSupply}</span>
+          </li>
+          <li className="list-group-item d-flex justify-content-between align-items-center">
+          Vol 24h:
+            <span>{props.volume24h}</span>
+          </li>
+          <li className="list-group-item d-flex justify-content-between align-items-center">
+          High 24h:
+            <span>{props.high24h}</span>
+          </li>
+          <li className="list-group-item d-flex justify-content-between align-items-center">
+          Low 24h:
+            <span>{props.low24h}</span>
           </li>
           <li className="list-group-item d-flex justify-content-between align-items-center">
           Circulating Supply:
-            <span className="badge bg-primary rounded-pill">{props.circulating_supply}</span>
-          </li>
-          <li className="list-group-item d-flex justify-content-between align-items-center">
-          Total_supply:
-            <span className="badge bg-primary rounded-pill">{props.total_supply}</span>
-          </li>
-          <li className="list-group-item d-flex justify-content-between align-items-center">
-          Max_supply:
-            <span className="badge bg-primary rounded-pill">{props.max_supply}</span>
-          </li>
-          <li className="list-group-item d-flex justify-content-between align-items-center">
-          First_data_at:
-            <span className="badge bg-primary rounded-pill">{props.first_data_at}</span>
-          </li>
-          <li className="list-group-item d-flex justify-content-between align-items-center">
-          Last_updated:
-            <span className="badge bg-primary rounded-pill">{props.last_updated}</span>
+            <span>{props.circulatingSupply}</span>
           </li>
         </ul>
 
@@ -215,9 +274,8 @@ function Coin(props) {
 
 Coin.propTypes = {
   name: PropTypes.string.isRequired,
-  ticker: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
-  rank: PropTypes.number,
   circulating_supply: PropTypes.number
 }
 

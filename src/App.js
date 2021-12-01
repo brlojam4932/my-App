@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react';
-// imp tab
 import "bootswatch/dist/darkly/bootstrap.min.css";
 import CoinList from "./components/CoinList/CoinList";
 import AccountBalance from './components/AccountBalance/AccountBalance';
 import ExchangeHeader from './components/ExchangeHeader/ExchangeHeader';
 import styled from 'styled-components';
+import coinGecko from './components/Utility/coinGecko';
 import axios from 'axios';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import "fontawesome-free/js/all.js"; // icons
 import Navbar from './components/ExchangeHeader/Navbar';
 import CoinInfo from './components/Coin/CoinInfo';
+import News from './components/News/News';
+import useFetch from "./components/Utility/useFetch";
 //import Pagination from './components/CoinList/Pagination';
 
 import Footer from './components/Coin/Footer';
+
 
 //instructor: zsolt-nagy
 // bkg area for table
@@ -22,10 +25,8 @@ background-color: #3E434F;
 color: #ccc;`;
 
 
-
 // UTILITY FUNCTIONS 
-// total count 12 / post per page 4 = 3 pages
-const COIN_COUNT = 10; // look up sort method in JS to lsit by rank
+const COIN_COUNT = 10;
 const formatPrice = price => parseFloat(Number(price).toFixed(4));
 
 
@@ -41,6 +42,8 @@ function App() {
 
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+
+  const [searchNews, setSearchNews] = useState('cryptocurrency')
 
 
   const [items, setItems] = useState(
@@ -113,13 +116,13 @@ function App() {
   // read about Temporal Deadzone
   const componentDidMount = async () => {
     setLoading(true);
-    let response = await axios.get('https://api.coingecko.com/api/v3/coins/markets', {
+    let response = await coinGecko.get('/coins/markets', {
       params: {
         vs_currency: 'usd',
         ids: ''
       }
     });
-    let coinData = response.data.slice(0, COIN_COUNT).map(function (token) {
+    let coinData = response.data.slice(0, COIN_COUNT).map((token) => {
       return {
         key: token.id,
         id: token.id,
@@ -128,6 +131,12 @@ function App() {
         ticker: token.symbol,
         balance: 0,
         price: formatPrice(token.current_price),
+        marketCap: token.market_cap,
+        totalSupply: token.total_supply,
+        volume24h: token.total_volume,
+        high24h: token.high_24h,
+        low24h: token.low_24h,
+        circulatingSupply: token.circulating_supply,
         priceChange24h: parseFloat(Number(token.price_change_percentage_24h).toFixed(2)),
       };
     });
@@ -150,106 +159,144 @@ function App() {
   }, []);
 
 
-  const handleBrrr = () => {
-    setAccountBalance(prevBalance => prevBalance + 1200);
+//-------news----------------
+const newsCatergory = searchNews;
+
+const options = {
+  method: 'GET',
+  url: 'https://bing-news-search1.p.rapidapi.com/news/search',
+  params: {
+    q: newsCatergory,
+    count: '20',
+    freshness: 'Week',
+    textFormat: 'Raw',
+    safeSearch: 'Off'
+  },
+  headers: {
+    'user-agent': 'cryptonews',
+    'x-bingapis-sdk': 'true',
+    'x-rapidapi-host': 'bing-news-search1.p.rapidapi.com',
+    'x-rapidapi-key': '9271cb1bffmsh3bfde2fc26f9dd1p125f3cjsn6324533a44df'
   }
 
+};
 
-  // there are no longer global variables, instead they are now local constants
-  const handleToggleChange = () => {
-    setShowBalance(prevValue => !prevValue);
-  }
+const { data: getNews, newsLoading, error, refetch, datePublished } = useFetch(options);
 
+if (newsLoading) return <h1>Loading...</h1>
 
-  // create isBuy and valueChangId args
-  const handleBuy = async (valueChangeId, amountValue) => {
-    const ticketUrl = `https://api.coingecko.com/api/v3/coins/markets/${valueChangeId}`;
-    const response = await axios.get(ticketUrl);
-    const newPrice = formatPrice(response.data.current_price);
-    const newCoinData = coinData.map(function (values) {
-      let newValues = { ...values };
+if (error) return <h1>Error...</h1>
 
-      if (valueChangeId === values.key) {
-        let amountOfCoin = parseFloat(amountValue);
-        let newAccountBalance = accountBalance - (newPrice * amountOfCoin);
+//------news--end-----------------
 
-        if (newAccountBalance > 0 && amountValue > 0) {
-          setAccountBalance(newAccountBalance);
-          newValues.balance += amountOfCoin;
-          setInsufficientUsdBalMessage(false);
-          setIsBuy(true);
+const handleBrrr = () => {
+  setAccountBalance(prevBalance => prevBalance + 1200);
+}
 
 
-        }
-        else {
-          setInsufficientUsdBalMessage(true)
-          setIsBuy(false);
-        }
-
-      };
-      return newValues;
-
-    });
-    setCoinData(newCoinData);
-  }
+// there are no longer global variables, instead they are now local constants
+const handleToggleChange = () => {
+  setShowBalance(prevValue => !prevValue);
+}
 
 
-  const handleSell = async (valueChangeId, amountValue) => {
-    const ticketUrl = `https://api.coingecko.com/api/v3/coins/markets/${valueChangeId}`;
-    const response = await axios.get(ticketUrl);
-    const newPrice = formatPrice(response.data.current_price);
-    const newCoinData = coinData.map(function (values) {
-      let newValues = { ...values };
+// create isBuy and valueChangId args
+const handleBuy = async (valueChangeId, amountValue) => {
+  const ticketUrl = await axios.get("https://api.coingecko.com/api/v3/coins/markets/", {
+    params: {
+      vs_currency: "usd",
+      ids: ''
+    }
 
-      if (valueChangeId === values.key) {
-        let amountOfCoin = parseFloat(amountValue);
-        let newAccountBalance = accountBalance + (newPrice * amountOfCoin);
+  });
+  const response = await axios.get(ticketUrl);
+  const newPrice = formatPrice(response.data.current_price);
+  const newCoinData = coinData.map((values) => {
+    let newValues = { ...values };
 
-        if (amountOfCoin <= newValues.balance && amountValue > 0) {
-          setAccountBalance(newAccountBalance);
-          newValues.balance -= amountOfCoin;
-          setInsufficientTokenBalMessage(false);
-          setIsSold(true)
-        }
-        else {
-          setInsufficientTokenBalMessage(true);
-          setIsSold(false);
-        }
+    if (valueChangeId === values.key) {
+      let amountOfCoin = parseFloat(amountValue);
+      let newAccountBalance = accountBalance - (newPrice * amountOfCoin);
 
-      };
-      return newValues;
-
-    });
-    setCoinData(newCoinData);
-  }
-
-  const handleRefresh = async (valueChangeId) => {
-    const response = await axios.get('https://api.coingecko.com/api/v3/coins/markets', {
-      params: {
-        vs_currency: "usd",
-        ids: ''
+      if (newAccountBalance > 0 && amountValue > 0) {
+        setAccountBalance(newAccountBalance);
+        newValues.balance += amountOfCoin;
+        setInsufficientUsdBalMessage(false);
+        setIsBuy(true);
       }
-    });
-    let i = 0;
-    let newCoinData = response.data.slice(0, COIN_COUNT).map(function (token) {
-      const index = i;
-      i++;
-      return {
-        key: token.id,
-        id: token.id,
-        image: token.image,
-        name: token.name,
-        ticker: token.symbol,
-        balance: coinData[index].balance,
-        price: formatPrice(token.current_price),
-        priceChange24h: parseFloat(Number(token.price_change_percentage_24h).toFixed(2)),
-      };
-      
-    });
-    setCoinData(newCoinData);
-    console.log(newCoinData);
-  }
+      else {
+        setInsufficientUsdBalMessage(true)
+        setIsBuy(false);
+      }
 
+    };
+    return newValues;
+
+  });
+  setCoinData(newCoinData);
+}
+
+
+const handleSell = async (valueChangeId, amountValue) => {
+  const ticketUrl = await axios.get(`https://api.coingecko.com/api/v3/coins/markets/${valueChangeId}`, {
+    params: {
+      vs_currency: "usd",
+      ids: ''
+    }
+  });
+  const response = await axios.get(ticketUrl);
+  const newPrice = formatPrice(response.data.current_price);
+  const newCoinData = coinData.map(function (values) {
+    let newValues = { ...values };
+
+    if (valueChangeId === values.key) {
+      let amountOfCoin = parseFloat(amountValue);
+      let newAccountBalance = accountBalance + (newPrice * amountOfCoin);
+
+      if (amountOfCoin <= newValues.balance && amountValue > 0) {
+        setAccountBalance(newAccountBalance);
+        newValues.balance -= amountOfCoin;
+        setInsufficientTokenBalMessage(false);
+        setIsSold(true)
+      }
+      else {
+        setInsufficientTokenBalMessage(true);
+        setIsSold(false);
+      }
+
+    };
+    return newValues;
+
+  });
+  setCoinData(newCoinData);
+}
+
+const handleRefresh = async () => {
+  const response = await axios.get('https://api.coingecko.com/api/v3/coins/markets', {
+    params: {
+      vs_currency: "usd",
+      ids: ''
+    }
+  });
+  let i = 0;
+  let newCoinData = response.data.slice(0, COIN_COUNT).map(function (token) {
+    const index = i;
+    i++;
+    return {
+      key: token.id,
+      id: token.id,
+      image: token.image,
+      name: token.name,
+      ticker: token.symbol,
+      balance: coinData[index].balance,
+      price: formatPrice(token.current_price),
+      priceChange24h: parseFloat(Number(token.price_change_percentage_24h).toFixed(2)),
+    };
+
+  });
+  setCoinData(newCoinData);
+  console.log(newCoinData);
+}
 
 
   return (
@@ -291,10 +338,21 @@ function App() {
                   setCurrentPage={setCurrentPage}
                 />
 
+                {getNews && getNews.value.map(news => {
+                  return (
+                    <News
+                    key={news.index}
+                    name={news.name}
+                    description={news.description}
+                    url={news.url}
+                    image={news.image}
+                    datePublished={datePublished}
+                     />
+                  )
+                })
+
+                }
               </Div>
-
-
-
 
             </Route>
             <Route path="/coinInfo">
@@ -304,6 +362,7 @@ function App() {
                 handleCheck={handleCheck}
                 handleDelete={handleDelete}
               />
+
               <Footer length={items.length} />
 
             </Route>

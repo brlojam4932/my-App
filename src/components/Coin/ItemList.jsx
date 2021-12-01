@@ -9,7 +9,7 @@ export default function ItemList({ items, handleCheck, handleDelete }) {
         <LineItem
         key={item.id}
         item={item}
-        intems={items}
+        items={items}
         handleCheck={handleCheck}
         handleDelete={handleDelete}
         />
