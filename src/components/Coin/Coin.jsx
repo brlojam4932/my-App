@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from "react-router-dom";
 import styled from 'styled-components';
 // imp tab
 import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
 import PopUp from './PopUp';
-//import HistoryChart from '../chart/HistoryChart';
-//import coinGecko from '../Utility/coinGecko';
+import HistoryChart from '../chart/HistoryChart';
+import coinGecko from '../Utility/coinGecko';
 //import BlogList from './BlogList';
 
 
@@ -60,8 +60,9 @@ function Coin(props) {
   //console.log("id: " + id);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [buttonPopup, setButtonPopup] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
- 
+  //const [coinsData, setCoinsData] = useState({});
+  //const [isLoading, setIsLoading] = useState(false);
+
 
   // take data from arrays into an object
   const formatData = (data) => {
@@ -73,10 +74,10 @@ function Coin(props) {
     });
   };
 
-  /*
+/*
   useEffect(() => {
     const fetchData = async () => {
-      isLoading(true);
+      //isLoading(true);
       //deconstruct values
       const [day, week, year, detail] = await Promise.all([await coinGecko.get(`/coins/${id}/market_chart`, {
         params: {
@@ -103,16 +104,21 @@ function Coin(props) {
           ids: id,
         },
       }),
-    ]);
+      ]);
 
-    //setCoinData
-    }
-    return () => {
-      cleanup
-    }
-  }, [input])
+      setCoinsData({
+        day: formatData(day.data.prices),
+        week: formatData(week.data.prices),
+        year: formatData(year.data.prices),
+        detail: detail.data[0],
+      });
+
+      //setIsLoading(false);
+    };
+
+    fetchData();
+  }, []);
   */
-  
 
   const handleRefresh = (event) => {
     event.preventDefault();
@@ -143,12 +149,12 @@ function Coin(props) {
   return (
     <>
       <tr>
-        {/* ---------TABLE: NAME, PRICE, TICKER, BALANCE------------ */ }
-        <Td><Img src={props.image}/></Td>
+        {/* ---------TABLE: NAME, PRICE, TICKER, BALANCE------------ */}
+        <Td><Img src={props.image} /></Td>
         <TdName>{props.name}</TdName>
         <Td>{props.ticker}</Td>
         <Td>$&nbsp;{props.price}</Td>
-        <Td>{props.showBalance? props.balance : "-"}</Td>
+        <Td>{props.showBalance ? props.balance : "-"}</Td>
 
         <TdControls>
           <form action="#">
@@ -162,44 +168,48 @@ function Coin(props) {
         </TdControls>
       </tr>
 
-      
-      {/* ---------POP UP: FOR INFO ABOU THE COIN------------ */ }
+
+      {/* ---------POP UP: FOR INFO ABOU THE COIN------------ */}
       <PopUp trigger={buttonPopup} setTrigger={setButtonPopup}>
+        {/*  <div>
+          <HistoryChart data={coinsData} />
+        </div> */}
+      
 
         <ul className="list-group">
           <li className="list-group-item d-flex justify-content-between align-items-center">
-          Token:
+            Token:
             <span>{props.id}</span>
           </li>
           <li className="list-group-item d-flex justify-content-between align-items-center">
-          Market Cap:
+            Market Cap:
             <span>{props.marketCap}</span>
           </li>
           <li className="list-group-item d-flex justify-content-between align-items-center">
-          Total Supply:
+            Total Supply:
             <span>{props.totalSupply}</span>
           </li>
           <li className="list-group-item d-flex justify-content-between align-items-center">
-          Vol 24h:
+            Vol 24h:
             <span>{props.volume24h}</span>
           </li>
           <li className="list-group-item d-flex justify-content-between align-items-center">
-          High 24h:
+            High 24h:
             <span>{props.high24h}</span>
           </li>
           <li className="list-group-item d-flex justify-content-between align-items-center">
-          Low 24h:
+            Low 24h:
             <span>{props.low24h}</span>
           </li>
           <li className="list-group-item d-flex justify-content-between align-items-center">
-          Circulating Supply:
+            Circulating Supply:
             <span>{props.circulatingSupply}</span>
           </li>
         </ul>
 
       </PopUp>
 
-      {/* ---------MODAL: FOR BUY/SELL----------- */ }
+      {/* ---------MODAL: FOR BUY/SELL----------- */}
       <ReactModal
         isOpen={modalIsOpen}
         ariaHideApp={false}

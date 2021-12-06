@@ -2,7 +2,7 @@ import React from 'react';
 import "./News.css";
 import moment from 'moment';
 
-function News({ name, description, loading, url, image, datePublished }) {
+function News({ name, description, loading, url, image, provider, datePublished }) {
 
   if (loading) {
     return <h2>Loading...</h2>
@@ -22,9 +22,14 @@ function News({ name, description, loading, url, image, datePublished }) {
             ? `${description.substring(0, 100)}...`
             : <p><small>{description}</small></p>
           }
-
           <a href={url}>Link to news article</a>
-          <p><small className="text-muted">{moment(datePublished).startOf("ss").fromNow()}</small></p>
+
+          <div className='container'>
+            <img src={provider[0]?.image?.thumbnail?.contentUrl || demoImage} alt="" />
+            <h4>{provider[0]?.name}</h4>
+            <p><small className="text-muted">{moment(datePublished).startOf("ss").fromNow()}</small></p>
+          </div>
+
         </div>
       </div>
     </div>

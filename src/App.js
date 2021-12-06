@@ -108,8 +108,6 @@ function App() {
     const listItems = items.filter((item) => item.id !== id);
     setItems(listItems);
     localStorage.setItem('coininfo', JSON.stringify(listItems));
-
-
   }
 
 
@@ -316,7 +314,7 @@ const handleRefresh = async () => {
                   length={items.length}
                 />
 
-                <CoinList
+                <CoinList 
                   coinData={coinData}
                   showBalance={showBalance}
                   handleBuy={handleBuy}
@@ -346,6 +344,7 @@ const handleRefresh = async () => {
                     description={news.description}
                     url={news.url}
                     image={news.image}
+                    provider={news.provider}
                     datePublished={datePublished}
                      />
                   )

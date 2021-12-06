@@ -41,8 +41,11 @@ function HistoryChart({ data }) {
         options: {
           ...historyOptions,
         },
+        
       });
+      
     }
+    
   });
 
 
