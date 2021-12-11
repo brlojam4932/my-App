@@ -1,13 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from "react-router-dom";
+import React, { useState } from 'react';
 import styled from 'styled-components';
 // imp tab
 import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
 import PopUp from './PopUp';
-import HistoryChart from '../chart/HistoryChart';
-import coinGecko from '../Utility/coinGecko';
-//import BlogList from './BlogList';
 
 
 // table
@@ -28,7 +24,7 @@ const TdName = styled(Td)`
 // buy / sell refresh button size
 const Button = styled.button`
   font-size: 11px;
-  with: 100px;
+  with: 64px;
   margin: 3px 5px 0;
 `;
 
@@ -45,95 +41,31 @@ background-color: #35393f;
 color: white;
 `
 
-const Img = styled.img`
-max-width: 33px
-`;
-
 // LIFT THE STATE UP
 
 //rcc tab for class-based component
 // here we rewrite a component into a functional component
 
 function Coin(props) {
-  const { id } = useParams()
-  // with use Params, we get back the id
-  //console.log("id: " + id);
+
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [buttonPopup, setButtonPopup] = useState(false);
-  //const [coinsData, setCoinsData] = useState({});
-  //const [isLoading, setIsLoading] = useState(false);
-
-
-  // take data from arrays into an object
-  const formatData = (data) => {
-    return data.map((el) => {
-      return {
-        t: el[0],
-        y: el[1].toFixed(2)
-      };
-    });
-  };
-
-/*
-  useEffect(() => {
-    const fetchData = async () => {
-      //isLoading(true);
-      //deconstruct values
-      const [day, week, year, detail] = await Promise.all([await coinGecko.get(`/coins/${id}/market_chart`, {
-        params: {
-          vs_currency: "usd",
-          days: "1",
-        },
-      }),
-      coinGecko.get(`/coins/${id}/market_chart`, {
-        params: {
-          vs_currency: "usd",
-          days: "7d",
-        },
-      }),
-      coinGecko.get(`/coins/${id}/market_chart`, {
-        params: {
-          vs_currency: "usd",
-          days: "365",
-        },
-      }),
-      // we get back the info for that coin
-      coinGecko.get("/coins/markets/", {
-        params: {
-          vs_currency: "usd",
-          ids: id,
-        },
-      }),
-      ]);
-
-      setCoinsData({
-        day: formatData(day.data.prices),
-        week: formatData(week.data.prices),
-        year: formatData(year.data.prices),
-        detail: detail.data[0],
-      });
-
-      //setIsLoading(false);
-    };
-
-    fetchData();
-  }, []);
-  */
 
   const handleRefresh = (event) => {
     event.preventDefault();
-    props.handleRefresh(props.id);
+    props.handleRefresh(props.tickerId);
   }
 
 
   const handleBuyClick = (event) => {
     event.preventDefault();
-    props.handleBuy(props.id, props.buyInputValue);
+    props.handleBuy(props.tickerId, props.buyInputValue);
+
   }
 
   const handleSellClick = (event) => {
     event.preventDefault();
-    props.handleSell(props.id, props.buyInputValue);
+    props.handleSell(props.tickerId, props.buyInputValue);
   }
 
 
@@ -145,71 +77,46 @@ function Coin(props) {
     props.setIsSold(false);
   }
 
-
   return (
     <>
       <tr>
-        {/* ---------TABLE: NAME, PRICE, TICKER, BALANCE------------ */}
-        <Td><Img src={props.image} /></Td>
         <TdName>{props.name}</TdName>
         <Td>{props.ticker}</Td>
-        <Td>$&nbsp;{props.price}</Td>
+        <Td>${props.price}</Td>
         <Td>{props.showBalance ? props.balance : "-"}</Td>
 
         <TdControls>
           <form action="#">
 
-            <Button className="btn btn-success" onClick={() => setModalIsOpen(true)}>Trade</Button>
+            <Button className="btn btn-success" onClick={() => setModalIsOpen(true)} >Trade</Button>
 
             <Button className="btn btn-info" onClick={handleRefresh}>Refresh</Button>
 
             <Button className='btn btn-outline-info' onClick={() => setButtonPopup(true)}>Info</Button>
+
           </form>
         </TdControls>
+
       </tr>
 
-
-      {/* ---------POP UP: FOR INFO ABOU THE COIN------------ */}
-      <PopUp trigger={buttonPopup} setTrigger={setButtonPopup}>
-        {/*  <div>
-          <HistoryChart data={coinsData} />
-        </div> */}
-      
-
-        <ul className="list-group">
-          <li className="list-group-item d-flex justify-content-between align-items-center">
-            Token:
-            <span>{props.id}</span>
-          </li>
-          <li className="list-group-item d-flex justify-content-between align-items-center">
-            Market Cap:
-            <span>{props.marketCap}</span>
-          </li>
-          <li className="list-group-item d-flex justify-content-between align-items-center">
-            Total Supply:
-            <span>{props.totalSupply}</span>
-          </li>
-          <li className="list-group-item d-flex justify-content-between align-items-center">
-            Vol 24h:
-            <span>{props.volume24h}</span>
-          </li>
-          <li className="list-group-item d-flex justify-content-between align-items-center">
-            High 24h:
-            <span>{props.high24h}</span>
-          </li>
-          <li className="list-group-item d-flex justify-content-between align-items-center">
-            Low 24h:
-            <span>{props.low24h}</span>
-          </li>
-          <li className="list-group-item d-flex justify-content-between align-items-center">
-            Circulating Supply:
-            <span>{props.circulatingSupply}</span>
-          </li>
-        </ul>
-
+      <PopUp trigger={buttonPopup} setTrigger={setButtonPopup} >
+        <div className="alert alert-dismissible alert-primary">
+          <strong>
+            Token:&nbsp;
+          </strong>
+          <small class="text-muted">{props.tickerId}&nbsp; &nbsp; </small>
+          <strong>
+            Rank:&nbsp;
+          </strong>
+          <small class="text-muted">{props.rank}&nbsp; &nbsp;</small>
+          <strong>
+            Circulating Supply:&nbsp;
+          </strong>
+          <small class="text-muted">{props.circulating_supply}&nbsp;</small>
+        </div>
       </PopUp>
 
-      {/* ---------MODAL: FOR BUY/SELL----------- */}
+
       <ReactModal
         isOpen={modalIsOpen}
         ariaHideApp={false}
@@ -217,9 +124,9 @@ function Coin(props) {
         className="Modal"
         overlayClassName="Overlay"
       >
-        <h1>Trade {props.tickerId}</h1>
+        <h1> Trade {props.tickerId} </h1>
 
-        <label className="text-muted">Amount of Coins to Buy/Sell</label>
+        <label> Amount of Coins to Buy/Sell</label>
         {props.insufficientUsdBalMessage &&
           <div className="alert alert-dismissible alert-danger">
             <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
@@ -233,37 +140,29 @@ function Coin(props) {
           </div>
         }
 
-        {/* Info for buy/sell etc*/}
-
         {
-          <div className="alert alert-dismissible alert-secondary" >
+          <div className="alert alert-dismissible alert-secondary">
             <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
-            <div className="text-muted">
-              Amount:<strong>&nbsp;{props.buyInputValue}&nbsp;</strong>Token:&nbsp;
-              <strong>{props.tickerId}</strong>&nbsp; Price:&nbsp;<strong>$&nbsp;{props.price}.</strong>&nbsp;
-              Trade total:&nbsp;<strong>$&nbsp;{props.price * props.buyInputValue}</strong>
-            </div>
-
-          </div>
+            <strong>Amount of coins to trade: {props.buyInputValue} </strong> Token/s of &nbsp; <strong>{props.tickerId}</strong> &nbsp; at $ {props.price}. &nbsp; <strong>Trade total:&nbsp; $</strong>{props.price * props.buyInputValue}</div>
         }
 
         {props.isBuy &&
           <div className="alert alert-dismissible alert-success">
             <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
-            <strong>Success!</strong>Your purchase of&nbsp;<strong>{props.tickerId}</strong>is complete</div>
+            <strong>Success!</strong>Your purchase of &nbsp;<strong>{props.tickerId}</strong>is complete</div>
         }
 
-        {props.isSold &&
+        {(props.isSold) &&
           <div className="alert alert-dismissible alert-info">
             <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
-            <strong>Success!</strong>Your sale of&nbsp;<strong>{props.tickerId}</strong>is complete</div>
+            <strong>Success!</strong>Your sale of &nbsp;<strong>{props.tickerId}</strong> is complete</div>
         }
+
 
 
         <TradeInput id="buyInput"
           type="number"
           required
-          placeholder='Enter an amount'
           onChange={(e) => props.setBuyInputValue(+e.target.value)} >
         </TradeInput>
 
@@ -282,9 +181,10 @@ function Coin(props) {
 
 Coin.propTypes = {
   name: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired,
+  ticker: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
-  circulating_supply: PropTypes.number
+  rank: PropTypes.number.isRequired,
+  circulating_supply: PropTypes.number.isRequired
 }
 
 export default Coin;
