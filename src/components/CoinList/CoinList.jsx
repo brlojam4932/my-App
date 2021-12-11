@@ -13,9 +13,9 @@ font-size: 1rem;
 function CoinList(props) {
   return (
 
-    <Table className="table table-primary table border">
+    <Table className="table table-hover">
       <thead>
-        <tr>
+        <tr class="table-active">
           <th>Name</th>
           <th>Ticker</th>
           <th>Price</th>

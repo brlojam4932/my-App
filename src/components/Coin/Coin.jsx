@@ -8,12 +8,11 @@ import PopUp from './PopUp';
 
 // table
 const Td = styled.td`
-  border: 1px solid #ccc;
-  width: 14vw;
+  background-color: #222324;
 `;
 // actions
 const TdControls = styled(Td)`
-  width: 34vw;
+
 `;
 
 // space for coin names
@@ -82,17 +81,17 @@ function Coin(props) {
       <tr>
         <TdName>{props.name}</TdName>
         <Td>{props.ticker}</Td>
-        <Td>${props.price}</Td>
-        <Td>{props.showBalance ? props.balance : "-"}</Td>
+        <Td>$&nbsp;{props.price}</Td>
+        <Td>{props.showBalance ? props.balance : "****"}</Td>
 
         <TdControls>
           <form action="#">
 
             <Button className="btn btn-success" onClick={() => setModalIsOpen(true)} >Trade</Button>
 
-            <Button className="btn btn-info" onClick={handleRefresh}>Refresh</Button>
+            <Button className="btn btn-outline-primary" onClick={handleRefresh}>Refresh</Button>
 
-            <Button className='btn btn-outline-info' onClick={() => setButtonPopup(true)}>Info</Button>
+            <Button className='btn btn-outline-dark' onClick={() => setButtonPopup(true)}>Info</Button>
 
           </form>
         </TdControls>
@@ -104,7 +103,7 @@ function Coin(props) {
           <strong>
             Token:&nbsp;
           </strong>
-          <small class="text-muted">{props.tickerId}&nbsp; &nbsp; </small>
+          <small class="text-muted">{props.tickerId}&nbsp;&nbsp;</small>
           <strong>
             Rank:&nbsp;
           </strong>
@@ -155,7 +154,7 @@ function Coin(props) {
         {(props.isSold) &&
           <div className="alert alert-dismissible alert-info">
             <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
-            <strong>Success!</strong>Your sale of &nbsp;<strong>{props.tickerId}</strong> is complete</div>
+            <strong>Success!</strong>Your sale of&nbsp;<strong>{props.tickerId}</strong>is complete</div>
         }
 
 

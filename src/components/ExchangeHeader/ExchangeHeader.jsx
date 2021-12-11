@@ -9,8 +9,10 @@ const Img = styled.img`
 `;
 // TO MOVE FILES USE GIT MV
 // we create a const variable and import the values from the CSS sytling file
+
+//  background-color: #1d2124;
 const Header = styled.header`
-  background-color: #1d2124;;
+  background-color: #000000;
   min-height: 10vh;
   width: 100%;
   display: flex;
@@ -37,7 +39,7 @@ export default class ExchangeHeader extends Component {
         <Header>
           <Img src={logo} alt='React Logo' />
           <H1>
-            Falkoin Exchange
+            Falcon Trades Exchange
           </H1>
     
    

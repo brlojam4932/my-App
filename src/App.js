@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 // imp tab
-import "bootswatch/dist/flatly/bootstrap.min.css";
+
 import CoinList from "./components/CoinList/CoinList";
 import AccountBalance from './components/AccountBalance/AccountBalance';
 import ExchangeHeader from './components/ExchangeHeader/ExchangeHeader';
