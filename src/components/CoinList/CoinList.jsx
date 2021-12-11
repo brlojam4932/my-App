@@ -12,49 +12,50 @@ font-size: 1rem;
 
 function CoinList(props) {
   return (
+    
+      <Table className="table table-hover">
+        <thead>
+          <tr class="table-active">
+            <th>Name</th>
+            <th>Ticker</th>
+            <th>Price</th>
+            {props.showBalance ? <th>Balance</th> : null}
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            //distructured version - recommended; more explicit
+            props.coinData.map(({ key, name, ticker, price, balance, rank, circulating_supply }) =>
+              <Coin key={key}
+                handleRefresh={props.handleRefresh}
+                handleBuy={props.handleBuy}
+                handleSell={props.handleSell}
+                buyInputValue={props.buyInputValue}
+                setBuyInputValue={props.setBuyInputValue}
+                name={name}
+                ticker={ticker}
+                showBalance={props.showBalance}
+                balance={balance}
+                price={price}
+                tickerId={key}
+                rank={rank}
+                circulating_supply={circulating_supply}
+                insufficientUsdBalMessage={props.insufficientUsdBalMessage}
+                setInsufficientUsdBalMessage={props.setInsufficientUsdBalMessage}
+                insufficientTokenBalMessage={props.insufficientTokenBalMessage}
+                setInsufficientTokenBalMessage={props.setInsufficientTokenBalMessage}
+                isBuy={props.isBuy}
+                setIsBuy={props.setIsBuy}
+                isSold={props.isSold}
+                setIsSold={props.setIsSold}
+              />
 
-    <Table className="table table-hover">
-      <thead>
-        <tr class="table-active">
-          <th>Name</th>
-          <th>Ticker</th>
-          <th>Price</th>
-          {props.showBalance ? <th>Balance</th> : null}
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {
-          //distructured version - recommended; more explicit
-          props.coinData.map(({ key, name, ticker, price, balance, rank, circulating_supply }) =>
-            <Coin key={key}
-              handleRefresh={props.handleRefresh}
-              handleBuy={props.handleBuy}
-              handleSell={props.handleSell}
-              buyInputValue={props.buyInputValue}
-              setBuyInputValue={props.setBuyInputValue}
-              name={name}
-              ticker={ticker}
-              showBalance={props.showBalance}
-              balance={balance}
-              price={price}
-              tickerId={key}
-              rank={rank}
-              circulating_supply={circulating_supply}
-              insufficientUsdBalMessage={props.insufficientUsdBalMessage}
-              setInsufficientUsdBalMessage={props.setInsufficientUsdBalMessage}
-              insufficientTokenBalMessage={props.insufficientTokenBalMessage}
-              setInsufficientTokenBalMessage={props.setInsufficientTokenBalMessage}
-              isBuy={props.isBuy}
-              setIsBuy={props.setIsBuy}
-              isSold={props.isSold}
-              setIsSold={props.setIsSold}
-            />
+            )
+          }
+        </tbody>
+      </Table>
 
-          )
-        }
-      </tbody>
-    </Table>
 
   )
 

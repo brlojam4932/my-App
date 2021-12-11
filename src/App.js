@@ -7,6 +7,9 @@ import ExchangeHeader from './components/ExchangeHeader/ExchangeHeader';
 import styled from 'styled-components';
 import axios from 'axios';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import "fontawesome-free/js/all.js"; // icons
+import News from './components/News/News';
+import useFetch from "./components/Utility/useFetch";
 
 
 //instructor: zsolt-nagy
@@ -39,8 +42,13 @@ function App() {
   const [insufficientTokenBalMessage, setInsufficientTokenBalMessage] = useState(false);
   const [isBuy, setIsBuy] = useState(false);
   const [isSold, setIsSold] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
-    // read about Temporal Deadzone
+  const [searchNews, setSearchNews] = useState('cryptocurrency')
+
+
+  // read about Temporal Deadzone
   const componentDidMount = async () => {
     //console.log("MOUNT");
     const response = await axios.get('https://api.coinpaprika.com/v1/coins');
@@ -78,6 +86,36 @@ function App() {
       componentDidMount();
     }
   });
+
+  //-------news----------------
+  const newsCatergory = searchNews;
+
+  const options = {
+    method: 'GET',
+    url: 'https://bing-news-search1.p.rapidapi.com/news/search',
+    params: {
+      q: newsCatergory,
+      count: '20',
+      freshness: 'Week',
+      textFormat: 'Raw',
+      safeSearch: 'Off'
+    },
+    headers: {
+      'user-agent': 'cryptonews',
+      'x-bingapis-sdk': 'true',
+      'x-rapidapi-host': 'bing-news-search1.p.rapidapi.com',
+      'x-rapidapi-key': '9271cb1bffmsh3bfde2fc26f9dd1p125f3cjsn6324533a44df'
+    }
+
+  };
+
+  const { data: getNews, newsLoading, error, refetch, datePublished } = useFetch(options);
+
+  if (newsLoading) return <h1>Loading...</h1>
+
+  if (error) return <h1>Error...</h1>
+
+  //------news--end-----------------
 
 
 
@@ -174,51 +212,65 @@ function App() {
   return (
     <>
       <Router>
-      <Navbar />
-          <div className='content'>
-            <Switch>
-              <Route exact path="/">
-                <Div className="App">
-                  <ExchangeHeader />
-                  <AccountBalance
-                    amount={accountBalance}
-                    showBalance={showBalance}
-                    handleBrrr={handleBrrr}
-                    handleToggleChange={handleToggleChange} />
+        <Navbar />
+        <div className='content'>
+          <Switch>
+            <Route exact path="/">
+              <Div className="App">
+                <ExchangeHeader />
+                <AccountBalance
+                  amount={accountBalance}
+                  showBalance={showBalance}
+                  handleBrrr={handleBrrr}
+                  handleToggleChange={handleToggleChange} />
 
-                  <CoinList
-                    coinData={coinData}
-                    showBalance={showBalance}
-                    handleBuy={handleBuy}
-                    handleSell={handleSell}
-                    handleRefresh={handleRefresh}
-                    buyInputValue={buyInputValue}
-                    setBuyInputValue={setBuyInputValue}
-                    insufficientUsdBalMessage={insufficientUsdBalMessage}
-                    setInsufficientUsdBalMessage={setInsufficientUsdBalMessage}
-                    insufficientTokenBalMessage={insufficientTokenBalMessage}
-                    setInsufficientTokenBalMessage={setInsufficientTokenBalMessage}
-                    isBuy={isBuy}
-                    setIsBuy={setIsBuy}
-                    isSold={isSold}
-                    setIsSold={setIsSold} />
-                </Div>
-              </Route>
-              <Route path="/coinInfo">
-                <CoinInfo
-                handleRefresh={handleRefresh}
-                
+                <CoinList
+                  coinData={coinData}
+                  showBalance={showBalance}
+                  handleBuy={handleBuy}
+                  handleSell={handleSell}
+                  handleRefresh={handleRefresh}
+                  buyInputValue={buyInputValue}
+                  setBuyInputValue={setBuyInputValue}
+                  insufficientUsdBalMessage={insufficientUsdBalMessage}
+                  setInsufficientUsdBalMessage={setInsufficientUsdBalMessage}
+                  insufficientTokenBalMessage={insufficientTokenBalMessage}
+                  setInsufficientTokenBalMessage={setInsufficientTokenBalMessage}
+                  isBuy={isBuy}
+                  setIsBuy={setIsBuy}
+                  isSold={isSold}
+                  setIsSold={setIsSold}
                 />
-              
-              </Route>
-          
-            </Switch>
+                <div className='container'>
+                  <div className='row'>
+                    {getNews && getNews.value.map(news => {
+                      return (
+                        <News
+                          key={news.index}
+                          name={news.name}
+                          description={news.description}
+                          url={news.url}
+                          image={news.image}
+                          provider={news.provider}
+                          datePublished={datePublished}
+                        />
+                      )
+                    })}
 
-          </div>
+                  </div>
 
+                </div>
+
+              </Div>
+            </Route>
+            <Route path="/coinInfo">
+              <CoinInfo
+                handleRefresh={handleRefresh}
+              />
+            </Route>
+          </Switch>
+        </div>
       </Router>
-
-
     </>
 
   );

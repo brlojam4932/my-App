@@ -78,97 +78,100 @@ function Coin(props) {
 
   return (
     <>
-      <tr>
-        <TdName>{props.name}</TdName>
-        <Td>{props.ticker}</Td>
-        <Td>$&nbsp;{props.price}</Td>
-        <Td>{props.showBalance ? props.balance : "****"}</Td>
+  
+        <tr>
+          <TdName>{props.name}</TdName>
+          <Td>{props.ticker}</Td>
+          <Td>$&nbsp;{props.price}</Td>
+          <Td>{props.showBalance ? props.balance : "****"}</Td>
 
-        <TdControls>
-          <form action="#">
+          <TdControls>
+            <form action="#">
 
-            <Button className="btn btn-success" onClick={() => setModalIsOpen(true)} >Trade</Button>
+              <Button className="btn btn-success" onClick={() => setModalIsOpen(true)} >Trade</Button>
 
-            <Button className="btn btn-outline-primary" onClick={handleRefresh}>Refresh</Button>
+              <Button className="btn btn-outline-primary" onClick={handleRefresh}>Refresh</Button>
 
-            <Button className='btn btn-outline-dark' onClick={() => setButtonPopup(true)}>Info</Button>
+              <Button className='btn btn-outline-dark' onClick={() => setButtonPopup(true)}>Info</Button>
 
-          </form>
-        </TdControls>
+            </form>
+          </TdControls>
 
-      </tr>
+        </tr>
 
-      <PopUp trigger={buttonPopup} setTrigger={setButtonPopup} >
-        <div className="alert alert-dismissible alert-primary">
-          <strong>
-            Token:&nbsp;
-          </strong>
-          <small class="text-muted">{props.tickerId}&nbsp;&nbsp;</small>
-          <strong>
-            Rank:&nbsp;
-          </strong>
-          <small class="text-muted">{props.rank}&nbsp; &nbsp;</small>
-          <strong>
-            Circulating Supply:&nbsp;
-          </strong>
-          <small class="text-muted">{props.circulating_supply}&nbsp;</small>
-        </div>
-      </PopUp>
-
-
-      <ReactModal
-        isOpen={modalIsOpen}
-        ariaHideApp={false}
-        onRequestClose={handleClose}
-        className="Modal"
-        overlayClassName="Overlay"
-      >
-        <h1> Trade {props.tickerId} </h1>
-
-        <label> Amount of Coins to Buy/Sell</label>
-        {props.insufficientUsdBalMessage &&
-          <div className="alert alert-dismissible alert-danger">
-            <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
-            <strong>Insufficient USD Balance!</strong> Transaction not Completed.
+        <PopUp trigger={buttonPopup} setTrigger={setButtonPopup} >
+          <div className="alert alert-dismissible alert-primary">
+            <strong>
+              Token:&nbsp;
+            </strong>
+            <small class="text-muted">{props.tickerId}&nbsp;&nbsp;</small>
+            <strong>
+              Rank:&nbsp;
+            </strong>
+            <small class="text-muted">{props.rank}&nbsp; &nbsp;</small>
+            <strong>
+              Circulating Supply:&nbsp;
+            </strong>
+            <small class="text-muted">{props.circulating_supply}&nbsp;</small>
           </div>
-        }
-        {props.insufficientTokenBalMessage &&
-          <div className="alert alert-dismissible alert-danger">
-            <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
-            <strong>Insufficient Token Balance!</strong> Transaction not Completed.
-          </div>
-        }
-
-        {
-          <div className="alert alert-dismissible alert-secondary">
-            <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
-            <strong>Amount of coins to trade: {props.buyInputValue} </strong> Token/s of &nbsp; <strong>{props.tickerId}</strong> &nbsp; at $ {props.price}. &nbsp; <strong>Trade total:&nbsp; $</strong>{props.price * props.buyInputValue}</div>
-        }
-
-        {props.isBuy &&
-          <div className="alert alert-dismissible alert-success">
-            <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
-            <strong>Success!</strong>Your purchase of &nbsp;<strong>{props.tickerId}</strong>is complete</div>
-        }
-
-        {(props.isSold) &&
-          <div className="alert alert-dismissible alert-info">
-            <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
-            <strong>Success!</strong>Your sale of&nbsp;<strong>{props.tickerId}</strong>is complete</div>
-        }
+        </PopUp>
 
 
+        <ReactModal
+          isOpen={modalIsOpen}
+          ariaHideApp={false}
+          onRequestClose={handleClose}
+          className="Modal"
+          overlayClassName="Overlay"
+        >
+          <h1> Trade {props.tickerId} </h1>
 
-        <TradeInput id="buyInput"
-          type="number"
-          required
-          onChange={(e) => props.setBuyInputValue(+e.target.value)} >
-        </TradeInput>
+          <label> Amount of Coins to Buy/Sell</label>
+          {props.insufficientUsdBalMessage &&
+            <div className="alert alert-dismissible alert-danger">
+              <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
+              <strong>Insufficient USD Balance!</strong> Transaction not Completed.
+            </div>
+          }
+          {props.insufficientTokenBalMessage &&
+            <div className="alert alert-dismissible alert-danger">
+              <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
+              <strong>Insufficient Token Balance!</strong> Transaction not Completed.
+            </div>
+          }
 
-        <Button className="btn btn-success" onClick={handleBuyClick}>Buy</Button>
-        <Button className="btn btn-warning" onClick={handleSellClick}>Sell</Button>
-        <Button className="btn btn-outline-secondary" onClick={handleClose}>Cancel/Close</Button>
-      </ReactModal>
+          {
+            <div className="alert alert-dismissible alert-secondary">
+              <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
+              <strong>Amount of coins to trade: {props.buyInputValue} </strong> Token/s of &nbsp; <strong>{props.tickerId}</strong> &nbsp; at $ {props.price}. &nbsp; <strong>Trade total:&nbsp; $</strong>{props.price * props.buyInputValue}</div>
+          }
+
+          {props.isBuy &&
+            <div className="alert alert-dismissible alert-success">
+              <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
+              <strong>Success!</strong>Your purchase of &nbsp;<strong>{props.tickerId}</strong>is complete</div>
+          }
+
+          {(props.isSold) &&
+            <div className="alert alert-dismissible alert-info">
+              <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
+              <strong>Success!</strong>Your sale of&nbsp;<strong>{props.tickerId}</strong>is complete</div>
+          }
+
+
+
+          <TradeInput id="buyInput"
+            type="number"
+            required
+            onChange={(e) => props.setBuyInputValue(+e.target.value)} >
+          </TradeInput>
+
+          <Button className="btn btn-success" onClick={handleBuyClick}>Buy</Button>
+          <Button className="btn btn-warning" onClick={handleSellClick}>Sell</Button>
+          <Button className="btn btn-outline-secondary" onClick={handleClose}>Cancel/Close</Button>
+        </ReactModal>
+
+
 
     </>
 

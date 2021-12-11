@@ -11,28 +11,32 @@ function News({ name, description, loading, url, image, provider, datePublished 
   const demoImage = 'http://coinrevolution.com/wp-content/uploads/2020/06/cryptonews.jpg';
 
   return (
-    <div className='news-container'>
-      <div className='row row-cols-12'>
-        <div className='col-sm-4'>
-          <img src={image?.thumbnail?.contentUrl || demoImage}
-            alt='news' className='img-fluid' />
-          <h4>{name}</h4>
-
-          {description > 20
-            ? `${description.substring(0, 100)}...`
-            : <p><small>{description}</small></p>
-          }
-          <a href={url}>Link to news article</a>
-
-          <div className='container'>
-            <img src={provider[0]?.image?.thumbnail?.contentUrl || demoImage} alt="" />
-            <h4>{provider[0]?.name}</h4>
-            <p><small className="text-muted">{moment(datePublished).startOf("ss").fromNow()}</small></p>
+      <div className="col-6 col-sm-4">
+          <div className="card border-secondary mb-3" style={{ maxwidth: + '20rem' }}>
+            <a href={url}>Link to news article</a>
+            <div className="card-body">
+              <h5 className="card-title">{name}</h5>
+              <img src={image?.thumbnail?.contentUrl || demoImage}
+                alt='news' className='img-fluid' />
+              <p className="card-text">
+                {description > 100
+                  ? `${description.substring(0, 100)}...`
+                  : <p><small>{description}</small></p>
+                }
+              </p>
+              <div className='container'>
+                <img src={provider[0]?.image?.thumbnail?.contentUrl || demoImage} alt=""/>
+                <h6>{provider[0]?.name}</h6>
+                <p><small className="text-muted">{moment(datePublished).startOf("ss").fromNow()}</small></p>
+              </div>
+            </div>
           </div>
-
         </div>
-      </div>
-    </div>
+
+    
+      
+  
+
   )
 }
 
