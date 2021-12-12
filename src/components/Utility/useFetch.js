@@ -4,13 +4,15 @@ import axios from 'axios';
 
 // custom hook
 
-function useFetch(url) {
-  const [data, setData] = useState(null);
-  const [newsLoading, newsSetLoading] = useState(false);
+// https://youtu.be/Vspeudp-M9k?t=499
+
+function useFetch(url) { // any url
+  const [data, setData] = useState(null); // this can be any type of data
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-   newsSetLoading(true);
+   setLoading(true);
    axios.request(url).then((response) => {
      setData(response.data);
      //console.log(data);
@@ -18,12 +20,12 @@ function useFetch(url) {
    .catch((err) => {
      setError(err);
    }).finally(() => {
-     newsSetLoading(false);
+     setLoading(false);
    });
-  }, []);
+  }, []); // Pedro adds url here as a dependancy but it loops!
 
-  const refetch = () => {
-    newsSetLoading(true);
+  const refetch = () => { // trigger the api call with refetch (re-fresh)
+    setLoading(true);
     axios.request(url).then((response) => {
       setData(response.data);
       console.log(data);
@@ -31,11 +33,11 @@ function useFetch(url) {
     .catch((err) => {
       setError(err);
     }).finally(() => {
-      newsSetLoading(false);
+      setLoading(false);
     });
   };
 
-  return { data, newsLoading, error, refetch };
+  return { data, loading, error, refetch };
 
 }
 

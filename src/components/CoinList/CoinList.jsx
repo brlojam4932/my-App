@@ -5,12 +5,22 @@ import styled from 'styled-components';
 
 const Table = styled.table`
 font-size: 1rem;
+background-color: #000000;
 `;
 
 
 // rewrite coinlist component into functional component
 
 function CoinList(props) {
+
+  /*
+   circulatingSupply: coin.circulating_supply,
+        totalSupply: coin.total_supply,
+        maxSupply: max_supply,
+        volume: volume_24h,
+        marketCap:market_cap,
+        percentChange1h: percent_change_1h
+        */ 
   return (
     
       <Table className="table table-hover">
@@ -19,6 +29,7 @@ function CoinList(props) {
             <th>Name</th>
             <th>Ticker</th>
             <th>Price</th>
+            <th>Change 24h</th>
             {props.showBalance ? <th>Balance</th> : null}
             <th>Actions</th>
           </tr>
@@ -26,7 +37,8 @@ function CoinList(props) {
         <tbody>
           {
             //distructured version - recommended; more explicit
-            props.coinData.map(({ key, name, ticker, price, balance, rank, circulating_supply }) =>
+            props.coinData.map(({ key, name, ticker, price, balance, rank, circulatingSupply,
+              totalSupply, maxSupply, volume24h, marketCap, percentChange24h, description }) =>
               <Coin key={key}
                 handleRefresh={props.handleRefresh}
                 handleBuy={props.handleBuy}
@@ -40,7 +52,13 @@ function CoinList(props) {
                 price={price}
                 tickerId={key}
                 rank={rank}
-                circulating_supply={circulating_supply}
+                circulatingSupply={circulatingSupply}
+                maxSupply={maxSupply}
+                totalSupply={totalSupply}
+                volume24h={volume24h}
+                marketCap={marketCap}
+                percentChange24h={percentChange24h}
+                description={description}
                 insufficientUsdBalMessage={props.insufficientUsdBalMessage}
                 setInsufficientUsdBalMessage={props.setInsufficientUsdBalMessage}
                 insufficientTokenBalMessage={props.insufficientTokenBalMessage}
@@ -55,8 +73,6 @@ function CoinList(props) {
           }
         </tbody>
       </Table>
-
-
   )
 
 }

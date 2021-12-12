@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
 import PopUp from './PopUp';
+import millify from 'millify';
 
 
 // table
@@ -76,107 +77,143 @@ function Coin(props) {
     props.setIsSold(false);
   }
 
+  /*
+ circulatingSupply: coin.circulating_supply,
+      totalSupply: coin.total_supply,
+      maxSupply: max_supply,
+      volume: volume_24h,
+      marketCap:market_cap,
+      percentChange1h: percent_change_1h
+      */
+
   return (
     <>
-  
-        <tr>
-          <TdName>{props.name}</TdName>
-          <Td>{props.ticker}</Td>
-          <Td>$&nbsp;{props.price}</Td>
-          <Td>{props.showBalance ? props.balance : "****"}</Td>
 
-          <TdControls>
-            <form action="#">
+      <tr>
+        <TdName>{props.name}</TdName>
+        <Td>{props.ticker}</Td>
+        <Td>$&nbsp;{props.price}</Td>
+        <Td>{props.percentChange24h < 0 ? (
+          <span className="align-middle mr-1 coin-percent red">
+            {props.percentChange24h}
+          </span>
+        ) : (
+          <span className="align-middle mr-1 coin-percent green">
+            {props.percentChange24h}%
+          </span>
+        )}</Td>
+        <Td>{props.showBalance ? props.balance : "****"}</Td>
 
-              <Button className="btn btn-success" onClick={() => setModalIsOpen(true)} >Trade</Button>
+        <TdControls>
+          <form action="#">
 
-              <Button className="btn btn-outline-primary" onClick={handleRefresh}>Refresh</Button>
+            <Button className="btn btn-outline-success" onClick={() => setModalIsOpen(true)} >Trade</Button>
 
-              <Button className='btn btn-outline-dark' onClick={() => setButtonPopup(true)}>Info</Button>
+            <Button className="btn btn-outline-primary" onClick={handleRefresh}>Refresh</Button>
 
-            </form>
-          </TdControls>
+            <Button className='btn btn-outline-dark' onClick={() => setButtonPopup(true)}>Info</Button>
 
-        </tr>
+          </form>
+        </TdControls>
 
-        <PopUp trigger={buttonPopup} setTrigger={setButtonPopup} >
-          <div className="alert alert-dismissible alert-primary">
-            <strong>
-              Token:&nbsp;
-            </strong>
-            <small class="text-muted">{props.tickerId}&nbsp;&nbsp;</small>
-            <strong>
-              Rank:&nbsp;
-            </strong>
-            <small class="text-muted">{props.rank}&nbsp; &nbsp;</small>
-            <strong>
-              Circulating Supply:&nbsp;
-            </strong>
-            <small class="text-muted">{props.circulating_supply}&nbsp;</small>
+      </tr>
+
+
+      <PopUp trigger={buttonPopup} setTrigger={setButtonPopup} >
+        <div className="card border-secondary mb-3">
+          <div className="card-body">
+            <h4 className="card-title">{props.tickerId}&nbsp;info</h4>
+            <p className="card-text text-primary"> An overview showing the stats of {props.tickerId}</p>
+            <ul class="list-group">
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Token:
+                <span>{props.tickerId}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Rank:
+                <span>{props.rank}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Circulating Supply:
+                <span>{millify(props.circulatingSupply)}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Total Supply:
+                <span>{millify(props.totalSupply)}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Max Supply:
+                <span>{millify(props.maxSupply)}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Volume 24h:
+                <span>{millify(props.volume24h)}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Market Cap:
+                <span>{millify(props.marketCap)}</span>
+              </li>
+            </ul>
           </div>
-        </PopUp>
+        </div>
+      </PopUp>
 
 
-        <ReactModal
-          isOpen={modalIsOpen}
-          ariaHideApp={false}
-          onRequestClose={handleClose}
-          className="Modal"
-          overlayClassName="Overlay"
-        >
-          <h1> Trade {props.tickerId} </h1>
+      <ReactModal
+        isOpen={modalIsOpen}
+        ariaHideApp={false}
+        onRequestClose={handleClose}
+        className="Modal"
+        overlayClassName="Overlay"
+      >
+        <h1> Trade {props.tickerId} </h1>
 
-          <label> Amount of Coins to Buy/Sell</label>
-          {props.insufficientUsdBalMessage &&
-            <div className="alert alert-dismissible alert-danger">
-              <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
-              <strong>Insufficient USD Balance!</strong> Transaction not Completed.
-            </div>
-          }
-          {props.insufficientTokenBalMessage &&
-            <div className="alert alert-dismissible alert-danger">
-              <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
-              <strong>Insufficient Token Balance!</strong> Transaction not Completed.
-            </div>
-          }
+        <label> Amount of Coins to Buy/Sell</label>
+        {props.insufficientUsdBalMessage &&
+          <div className="alert alert-dismissible alert-danger">
+            <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
+            <strong>Insufficient USD Balance!</strong> Transaction not Completed.
+          </div>
+        }
+        {props.insufficientTokenBalMessage &&
+          <div className="alert alert-dismissible alert-danger">
+            <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
+            <strong>Insufficient Token Balance!</strong> Transaction not Completed.
+          </div>
+        }
 
-          {
-            <div className="alert alert-dismissible alert-secondary">
-              <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
-              <strong>Amount of coins to trade: {props.buyInputValue} </strong> Token/s of &nbsp; <strong>{props.tickerId}</strong> &nbsp; at $ {props.price}. &nbsp; <strong>Trade total:&nbsp; $</strong>{props.price * props.buyInputValue}</div>
-          }
+        {
+          <div className="alert alert-dismissible alert-secondary">
+            <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
+            <strong>Amount of coins to trade:&nbsp;{props.buyInputValue}</strong>Token/s of &nbsp;<strong>{props.tickerId}</strong>&nbsp;at $&nbsp;{props.price}.&nbsp;<strong>Trade total:&nbsp;$</strong>{props.price * props.buyInputValue}</div>
+        }
 
-          {props.isBuy &&
-            <div className="alert alert-dismissible alert-success">
-              <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
-              <strong>Success!</strong>Your purchase of &nbsp;<strong>{props.tickerId}</strong>is complete</div>
-          }
+        {props.isBuy &&
+          <div className="alert alert-dismissible alert-success">
+            <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
+            <strong>Success!</strong>Your purchase of &nbsp;<strong>{props.tickerId}</strong>is complete</div>
+        }
 
-          {(props.isSold) &&
-            <div className="alert alert-dismissible alert-info">
-              <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
-              <strong>Success!</strong>Your sale of&nbsp;<strong>{props.tickerId}</strong>is complete</div>
-          }
-
-
-
-          <TradeInput id="buyInput"
-            type="number"
-            required
-            onChange={(e) => props.setBuyInputValue(+e.target.value)} >
-          </TradeInput>
-
-          <Button className="btn btn-success" onClick={handleBuyClick}>Buy</Button>
-          <Button className="btn btn-warning" onClick={handleSellClick}>Sell</Button>
-          <Button className="btn btn-outline-secondary" onClick={handleClose}>Cancel/Close</Button>
-        </ReactModal>
+        {(props.isSold) &&
+          <div className="alert alert-dismissible alert-info">
+            <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
+            <strong>Success!</strong>Your sale of&nbsp;<strong>{props.tickerId}</strong>is complete</div>
+        }
 
 
+        <TradeInput id="buyInput"
+          type="number"
+          required
+          onChange={(e) => props.setBuyInputValue(+e.target.value)} >
+        </TradeInput>
 
+        <Button className="btn btn-success" onClick={handleBuyClick}>Buy</Button>
+        <Button className="btn btn-warning" onClick={handleSellClick}>Sell</Button>
+        <Button className="btn btn-outline-secondary" onClick={handleClose}>Cancel/Close</Button>
+      </ReactModal>
     </>
 
   );
-
 
 }
 
@@ -185,8 +222,6 @@ Coin.propTypes = {
   name: PropTypes.string.isRequired,
   ticker: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
-  rank: PropTypes.number.isRequired,
-  circulating_supply: PropTypes.number.isRequired
 }
 
 export default Coin;

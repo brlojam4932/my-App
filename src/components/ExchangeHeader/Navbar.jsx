@@ -22,27 +22,7 @@ const Navbar = () => {
         <li className="nav-item">
           <Link className="nav-link" to={link}>Coin Info</Link>
         </li>
-        <li className="nav-item">
-          <Link className="nav-link "to="/">Pricing</Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link" to="/">About</Link>
-        </li>
-        <li className="nav-item dropdown">
-          <Link className="nav-link dropdown-toggle" data-bs-toggle="dropdown" to="/" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</Link>
-          <div className="dropdown-menu">
-            <Link className="dropdown-item"to="/">Action</Link>
-            <Link className="dropdown-item" to="/">Another action</Link>
-            <Link className="dropdown-item" to="/">Something else here</Link>
-            <div className="dropdown-divider"></div>
-            <Link className="dropdown-item" to="/">Separated link</Link>
-          </div>
-        </li>
       </ul>
-      <form className="d-flex">
-        <input className="form-control me-sm-2" type="text" placeholder="Search"/>
-        <button className="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-      </form>
     </div>
   </div>
 </nav>

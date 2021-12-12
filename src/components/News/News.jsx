@@ -32,11 +32,6 @@ function News({ name, description, loading, url, image, provider, datePublished 
             </div>
           </div>
         </div>
-
-    
-      
-  
-
   )
 }
 

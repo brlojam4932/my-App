@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 // imp tab
-
 import CoinList from "./components/CoinList/CoinList";
 import AccountBalance from './components/AccountBalance/AccountBalance';
 import ExchangeHeader from './components/ExchangeHeader/ExchangeHeader';
@@ -10,8 +9,6 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import "fontawesome-free/js/all.js"; // icons
 import News from './components/News/News';
 import useFetch from "./components/Utility/useFetch";
-
-
 //instructor: zsolt-nagy
 
 import "fontawesome-free/js/all.js"; // icons
@@ -22,7 +19,7 @@ import CoinInfo from './components/Coin/CoinInfo';
 // bkg area for table
 const Div = styled.div`
 text-align: center;
-background-color: #3E434F;
+background-color: #000000;
 color: #ccc;`;
 
 
@@ -30,7 +27,6 @@ color: #ccc;`;
 // UTILITY FUNCTIONS 
 const COIN_COUNT = 5; // look up sort method in JS to lsit by rank
 const formatPrice = price => parseFloat(Number(price).toFixed(4));
-
 
 function App() {
 
@@ -42,12 +38,10 @@ function App() {
   const [insufficientTokenBalMessage, setInsufficientTokenBalMessage] = useState(false);
   const [isBuy, setIsBuy] = useState(false);
   const [isSold, setIsSold] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
 
   const [searchNews, setSearchNews] = useState('cryptocurrency')
 
-
+//https://api.coinpaprika.com/v1/coins/{coin_id}/twitter
   // read about Temporal Deadzone
   const componentDidMount = async () => {
     //console.log("MOUNT");
@@ -69,10 +63,15 @@ function App() {
         balance: 0,
         price: formatPrice(coin.quotes["USD"].price),
         rank: coin.rank,
-        circulating_supply: coin.circulating_supply
+        circulatingSupply: coin.circulating_supply,
+        totalSupply: coin.total_supply,
+        maxSupply: coin.max_supply,
+        volume24h: coin.quotes.USD.volume_24h,
+        marketCap: coin.quotes.USD.market_cap,
+        percentChange24h: coin.quotes.USD.percent_change_24h,
+        //description: coin.description
       };
     });
-
     // Retrieve the prices
     setCoinData(coinPriceData);
     //console.log(response); 
@@ -109,14 +108,18 @@ function App() {
 
   };
 
-  const { data: getNews, newsLoading, error, refetch, datePublished } = useFetch(options);
+  // destructured data - useFetch("https://...any_address")
+  // in the case of Pedro's api...
+  // <h1>{data?.setup} : {data?.delivery}</h1>
+  // change the data variable...
+  // <h1>{joke?.setup} : {joke?.delivery}</h1>
+  const { data: getNews, loading, error, datePublished, getCryptoDetails } = useFetch(options);
 
-  if (newsLoading) return <h1>Loading...</h1>
+  if (loading) return <h1>Loading...</h1>
 
   if (error) return <h1>Error...</h1>
 
   //------news--end-----------------
-
 
 
   const handleBrrr = () => {
@@ -213,7 +216,7 @@ function App() {
     <>
       <Router>
         <Navbar />
-        <div className='content'>
+        <div className='container'>
           <Switch>
             <Route exact path="/">
               <Div className="App">
@@ -222,7 +225,8 @@ function App() {
                   amount={accountBalance}
                   showBalance={showBalance}
                   handleBrrr={handleBrrr}
-                  handleToggleChange={handleToggleChange} />
+                  handleToggleChange={handleToggleChange} 
+                  />
 
                 <CoinList
                   coinData={coinData}

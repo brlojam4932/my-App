@@ -14,12 +14,6 @@ body {
   color: rgb(155, 168, 177);
 }
 
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
 #root {
   min-width: 500px;
 }
@@ -53,10 +47,10 @@ code {
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.2);
   font-family: "Fira Sans", sans-serif;
-
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
 
 }
 
@@ -78,3 +72,11 @@ code {
   font-family: "Fira Sans", sans-serif;
 }
 
+/* change */
+.red {
+  color: #f00606;
+}
+
+.green {
+  color: #11d811;
+}
