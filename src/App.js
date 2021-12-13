@@ -60,6 +60,7 @@ function App() {
         key: coin.id, // here we have our key
         name: coin.name,
         ticker: coin.symbol,
+        image: coin.image,
         balance: 0,
         price: formatPrice(coin.quotes["USD"].price),
         rank: coin.rank,
@@ -74,7 +75,7 @@ function App() {
     });
     // Retrieve the prices
     setCoinData(coinPriceData);
-    //console.log(response); 
+    console.log(coinPriceData); 
   }
 
   // we don't want to call the same function over and over again. we only want to load it if we need it
@@ -84,7 +85,7 @@ function App() {
       // component did mount
       componentDidMount();
     }
-  });
+  }, []);
 
   //-------news----------------
   const newsCatergory = searchNews;

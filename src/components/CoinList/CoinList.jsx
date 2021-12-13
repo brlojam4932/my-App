@@ -37,7 +37,7 @@ function CoinList(props) {
         <tbody>
           {
             //distructured version - recommended; more explicit
-            props.coinData.map(({ key, name, ticker, price, balance, rank, circulatingSupply,
+            props.coinData.map(({ key, name, ticker, image, price, balance, rank, circulatingSupply,
               totalSupply, maxSupply, volume24h, marketCap, percentChange24h, description }) =>
               <Coin key={key}
                 handleRefresh={props.handleRefresh}
@@ -47,6 +47,7 @@ function CoinList(props) {
                 setBuyInputValue={props.setBuyInputValue}
                 name={name}
                 ticker={ticker}
+                image={image}
                 showBalance={props.showBalance}
                 balance={balance}
                 price={price}
