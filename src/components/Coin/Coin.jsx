@@ -34,7 +34,7 @@ width: 100%;
 padding: 12px 20px;
 margin: 8px 0;
 display: inline-block;
-border: 1px solid #ccc;
+border: 2px solid #ccc;
 border-radius: 4px;
 box-sizing: border-box;
 background-color: #35393f;
@@ -81,14 +81,7 @@ function Coin(props) {
     props.setIsSold(false);
   }
 
-  /*
- circulatingSupply: coin.circulating_supply,
-      totalSupply: coin.total_supply,
-      maxSupply: max_supply,
-      volume: volume_24h,
-      marketCap:market_cap,
-      percentChange1h: percent_change_1h
-      */
+
 
   return (
     <>
@@ -111,7 +104,6 @@ function Coin(props) {
 
         <TdControls>
           <form action="#">
-
             <Button className="btn btn-outline-success" onClick={() => setModalIsOpen(true)} >Trade</Button>
 
             <Button className="btn btn-outline-primary" onClick={handleRefresh}>Refresh</Button>
@@ -215,7 +207,7 @@ function Coin(props) {
           type="number"
           required
           placeholder='Amount'
-          onChange={(e) => props.setBuyInputValue(+e.target.value)} >
+          onChange={(e) => props.setBuyInputValue(+e.target.value)}>
         </TradeInput>
 
         <Button className="btn btn-success" onClick={handleBuyClick}>Buy</Button>

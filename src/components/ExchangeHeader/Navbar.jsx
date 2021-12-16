@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
-  const link = "/coinInfo";
+  const link = "/exchanges";
 /* select + ctrl D x; selects all */
   return (
     <nav className="navbar navbar-expand-sm navbar-dark bg-dark">
@@ -20,7 +20,7 @@ const Navbar = () => {
           </Link>
         </li>
         <li className="nav-item">
-          <Link className="nav-link" to={link}>Coin Info</Link>
+          <Link className="nav-link" to={link}>Exchanges</Link>
         </li>
       </ul>
     </div>

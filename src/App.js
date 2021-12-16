@@ -9,19 +9,15 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import "fontawesome-free/js/all.js"; // icons
 import News from './components/News/News';
 import useFetch from "./components/Utility/useFetch";
-//instructor: zsolt-nagy
-
-import "fontawesome-free/js/all.js"; // icons
 import Navbar from './components/ExchangeHeader/Navbar';
-import CoinInfo from './components/Coin/CoinInfo';
-
+import Exchanges from './components/Exchanges/Exchanges';
+//instructor: zsolt-nagy
 
 // bkg area for table
 const Div = styled.div`
 text-align: center;
 background-color: #000000;
 color: #ccc;`;
-
 
 
 // UTILITY FUNCTIONS 
@@ -255,18 +251,13 @@ function App() {
                           datePublished={datePublished}
                         />
                       )
-                    })}
-
+                    })};
                   </div>
-
                 </div>
-
               </Div>
             </Route>
-            <Route path="/coinInfo">
-              <CoinInfo
-                handleRefresh={handleRefresh}
-              />
+            <Route path="/exchanges">
+              <Exchanges />
             </Route>
           </Switch>
         </div>
