@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
 import PopUp from './PopUp';
-import millify from 'millify';
+//import millify from 'millify';
 
 
 // table
@@ -39,6 +39,10 @@ border-radius: 4px;
 box-sizing: border-box;
 background-color: #35393f;
 color: white;
+`
+
+const Img = styled.img`
+  max-width: 33px
 `
 
 // LIFT THE STATE UP
@@ -90,6 +94,7 @@ function Coin(props) {
     <>
 
       <tr>
+        <Td> <Img src={props.image} alt="logo-art" /></Td>
         <TdName>{props.name}</TdName>
         <Td>{props.ticker}</Td>
         <Td>$&nbsp;{props.price}</Td>
@@ -135,23 +140,23 @@ function Coin(props) {
               </li>
               <li class="list-group-item d-flex justify-content-between align-items-center">
                 Circulating Supply:
-                <span>{millify(props.circulatingSupply)}</span>
+                <span>{props.circulatingSupply}</span>
               </li>
               <li class="list-group-item d-flex justify-content-between align-items-center">
                 Total Supply:
-                <span>{millify(props.totalSupply)}</span>
+                <span>{props.totalSupply}</span>
               </li>
               <li class="list-group-item d-flex justify-content-between align-items-center">
                 Max Supply:
-                <span>{millify(props.maxSupply)}</span>
+                <span>{props.maxSupply}</span>
               </li>
               <li class="list-group-item d-flex justify-content-between align-items-center">
                 Volume 24h:
-                <span>{millify(props.volume24h)}</span>
+                <span>{props.volume}</span>
               </li>
               <li class="list-group-item d-flex justify-content-between align-items-center">
                 Market Cap:
-                <span>{millify(props.marketCap)}</span>
+                <span>{props.marketCap}</span>
               </li>
             </ul>
           </div>
@@ -185,7 +190,7 @@ function Coin(props) {
         {
           <div className="alert alert-dismissible alert-secondary">
             <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
-            <strong>Amount of coins to trade:&nbsp;{props.buyInputValue}</strong>Token/s of &nbsp;<strong>{props.tickerId}</strong>&nbsp;at $&nbsp;{props.price}.&nbsp;<strong>Trade total:&nbsp;$</strong>{props.price * props.buyInputValue}</div>
+            <strong>Amount of coins to trade:&nbsp;{props.buyInputValue}</strong>Token/s of &nbsp;<strong>{props.tickerId}</strong>&nbsp;at$&nbsp;{props.price}.&nbsp;<strong>Trade total:&nbsp;$</strong>{props.price * props.buyInputValue}</div>
         }
 
         {props.isBuy &&
@@ -195,7 +200,7 @@ function Coin(props) {
         }
 
         {(props.isSold) &&
-          <div className="alert alert-dismissible alert-info">
+          <div className="alert alert-dismissible alert-warning">
             <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
             <strong>Success!</strong>Your sale of&nbsp;<strong>{props.tickerId}</strong>is complete</div>
         }

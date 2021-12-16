@@ -41,51 +41,47 @@ function App() {
 
   const [searchNews, setSearchNews] = useState('cryptocurrency')
 
-//https://api.coinpaprika.com/v1/coins/{coin_id}/twitter
+  //https://api.coinpaprika.com/v1/coins/{coin_id}/twitter
   // read about Temporal Deadzone
   const componentDidMount = async () => {
-    //console.log("MOUNT");
-    const response = await axios.get('https://api.coinpaprika.com/v1/coins');
-    // we are now receiving strings as data so we don't need an object anymore
-    // we also use const instead of let as we are not changing the data
-    const coinIds = response.data.slice(0, COIN_COUNT).map(coin => coin.id);
-    const ticketUrl = 'https://api.coinpaprika.com/v1/tickers/';
-    // we get a promise that our data will be sent to us sometime in the future
-    const promises = coinIds.map(id => axios.get(ticketUrl + id));
-    // we use the await operator to wait for our promise
-    const coinData = await Promise.all(promises);
-    const coinPriceData = coinData.map(function (response) {
-      const coin = response.data;
-      return {
-        key: coin.id, // here we have our key
-        name: coin.name,
-        ticker: coin.symbol,
-        image: coin.image,
-        balance: 0,
-        price: formatPrice(coin.quotes["USD"].price),
-        rank: coin.rank,
-        circulatingSupply: coin.circulating_supply,
-        totalSupply: coin.total_supply,
-        maxSupply: coin.max_supply,
-        volume24h: coin.quotes.USD.volume_24h,
-        marketCap: coin.quotes.USD.market_cap,
-        percentChange24h: coin.quotes.USD.percent_change_24h,
-        //description: coin.description
-      };
-    });
-    // Retrieve the prices
-    setCoinData(coinPriceData);
-    console.log(coinPriceData); 
+    try {
+      const response = await axios.get('https://api.coingecko.com/api/v3/coins/markets', {
+        params: {
+          vs_currency: 'usd',
+          ids: ''
+        }
+      })
+      const coinData = response.data.slice(0, 10).map((coin) => {
+        return {
+          key: coin.id,
+          image: coin.image,
+          name: coin.name,
+          ticker: coin.symbol,
+          balance: 0,
+          price: formatPrice(coin.current_price),
+          circulatingSupply: coin.circulating_supply,
+          totalSupply: coin.total_supply,
+          maxSupply: coin.max_supply,
+          volume: coin.total_volume,
+          marketCap: coin.market_cap,
+          percentChange24h: parseFloat(Number(coin.price_change_percentage_24h).toFixed(2)),
+        }
+      });
+      setCoinData(coinData);
+
+    } catch (error) {
+      console.log(error);
+    }
+
+
   }
 
-  // we don't want to call the same function over and over again. we only want to load it if we need it
-  // a synchronous function
+
   useEffect(() => {
     if (coinData.length === 0) {
-      // component did mount
       componentDidMount();
     }
-  }, []);
+  });
 
   //-------news----------------
   const newsCatergory = searchNews;
@@ -136,71 +132,68 @@ function App() {
 
   // create isBuy and valueChangId args
   const handleBuy = async (valueChangeId, amountValue) => {
-    const ticketUrl = `https://api.coinpaprika.com/v1/tickers/${valueChangeId}`;
-    const response = await axios.get(ticketUrl);
-    const newPrice = formatPrice(response.data.quotes["USD"].price);
-    const newCoinData = coinData.map(function (values) {
+    const response = await axios.get(`https://api.coingecko.com/api/v3/coins/markets/?vs_currency=usd&ids=${valueChangeId}`);
+    //console.log("Response: ", response);
+    const newPrice = response?.data?.[0]?.current_price;
+    //console.log("New Price: ", newPrice);
+    const newCoinData = coinData.map((values) => { // copy coinData values into newCoinData, newValues
       let newValues = { ...values };
-
       if (valueChangeId === values.key) {
         let amountOfCoin = parseFloat(amountValue);
         let newAccountBalance = accountBalance - (newPrice * amountOfCoin);
-
         if (newAccountBalance > 0 && amountValue > 0) {
           setAccountBalance(newAccountBalance);
-          newValues.balance += amountOfCoin;
+          newValues.balance += amountOfCoin; // if account bal conditions are met, newValues.balance = newValues.balance + amountOfCoin
           setInsufficientUsdBalMessage(false);
           setIsBuy(true);
         }
         else {
-          setInsufficientUsdBalMessage(true)
+          setInsufficientUsdBalMessage(true);
           setIsBuy(false);
         }
-
       };
       return newValues;
-
     });
     setCoinData(newCoinData);
   }
 
 
   const handleSell = async (valueChangeId, amountValue) => {
-    const ticketUrl = `https://api.coinpaprika.com/v1/tickers/${valueChangeId}`;
-    const response = await axios.get(ticketUrl);
-    const newPrice = formatPrice(response.data.quotes["USD"].price);
-    const newCoinData = coinData.map(function (values) {
-      let newValues = { ...values };
-
+    const response = await axios.get(`https://api.coingecko.com/api/v3/coins/markets/?vs_currency=usd&ids=${valueChangeId}`);
+    const newPrice = response?.data?.[0].current_price; // get current price from api
+    const newCoinData = coinData.map((values) => { // newCoinData will equal coinData copied as new values into an Object
+      //copy values into newValues using spread operator
+      let newValues = { ...values }; // we have our Object: newValues = {id: name, price: current_price}
+      // if clicked "id" - matches the values.key, then let amountOfCoin equal; amountValue (amount of coins to sell), parseFloat...converterd from JSON string to integers
       if (valueChangeId === values.key) {
-        let amountOfCoin = parseFloat(amountValue);
+        let amountOfCoin = parseFloat(amountValue); //ex. {id: bitcoin, price: 44000}
+        // update newAccountBalance: we are selling so we mult the newPrice * the amount of coins and add that to our newAccountBalance. Then return newValues
         let newAccountBalance = accountBalance + (newPrice * amountOfCoin);
-
-        if (amountOfCoin <= newValues.balance && amountValue > 0) {
+        // but also add a condition: newAccountBalance > 0 and amount to buy cannot be 0; must be also > 0.
+        if (newAccountBalance > 0 && amountOfCoin > 0) {
+          // update the state: setNewAccountBalance -> to newAccountBalance
           setAccountBalance(newAccountBalance);
-          newValues.balance -= amountOfCoin;
-          setInsufficientTokenBalMessage(false);
-          setIsSold(true)
-        }
-        else {
-          setInsufficientTokenBalMessage(true);
+          // set the newValues.balance equal newValues.balance - the amount Of Coin sold.
+          newValues.balance -= amountOfCoin; // if these conditions met, make the sell: setIsBuy = true and amount of coins will be deducted while value will be added to newAccountBalance
+          // also set insufficient amount of usd to true false
+          setInsufficientUsdBalMessage(false);
+          setIsSold(true);
+        } else {
+          // if not true: set to false and setInsuffientUsd to true
+          setInsufficientUsdBalMessage(true);
           setIsSold(false);
         }
-
       };
-      return newValues;
-
-    });
+      return newValues; // newValues returned
+    }); // finally, setCoinData to newCoinData. (newCoinData is the current price from the api)
     setCoinData(newCoinData);
   }
 
 
-  //https://api.coinpaprika.com/v1/tickers/{coin_id}/historical
+
   const handleRefresh = async (valueChangeId) => {
-    const ticketUrl = `https://api.coinpaprika.com/v1/tickers/${valueChangeId}`;
-    const response = await axios.get(ticketUrl);
-    //debugger;
-    const newPrice = formatPrice(response.data.quotes["USD"].price);
+    const response = await axios.get(`https://api.coingecko.com/api/v3/coins/markets/?vs_currency=usd&ids=${valueChangeId}`);
+    const newPrice = response?.data?.[0].current_price; // get current price from api
     const newCoinData = coinData.map((values) => {
       let newValues = { ...values }; // shallow cloning / deep copy
       if (valueChangeId === values.key) {
@@ -212,6 +205,7 @@ function App() {
     // this.setState(prevState => {}) one way to write the new state
     setCoinData(newCoinData);
   }
+
 
   return (
     <>
@@ -226,8 +220,8 @@ function App() {
                   amount={accountBalance}
                   showBalance={showBalance}
                   handleBrrr={handleBrrr}
-                  handleToggleChange={handleToggleChange} 
-                  />
+                  handleToggleChange={handleToggleChange}
+                />
 
                 <CoinList
                   coinData={coinData}
