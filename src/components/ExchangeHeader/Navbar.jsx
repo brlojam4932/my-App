@@ -15,7 +15,7 @@ const Navbar = () => {
     <div className="collapse navbar-collapse" id="navbarColor01">
       <ul className="navbar-nav me-auto">
         <li className="nav-item">
-          <Link className="nav-link active" to="/">Home
+          <Link className="nav-link active" to="/">Crypto
             <span className="visually-hidden">(current)</span>
           </Link>
         </li>

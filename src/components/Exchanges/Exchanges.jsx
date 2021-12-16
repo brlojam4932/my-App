@@ -3,17 +3,46 @@ import axios from 'axios';
 import styled from 'styled-components';
 import millify from 'millify';
 import HTMLReactParser from 'html-react-parser';
+import { FiPlus, FiMinus } from 'react-icons/fi';
 
 const Img = styled.img`
 max-width: 33px
 `;
 
+const Dropdown = styled.div`
+  background: #1c1c1c;
+  color: #00ffb9;
+  width: 100%;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  aligh-items: center;
+  border-botton: 1px solid #00ffb9;
+  border-top: 1px solid #00ffb9;
+
+  p {
+    font-size: 2rem;
+  }
+  
+`;
+
+const ExchHeader = styled.div`
+bacground: black;
+color: white;
+width: 100%;
+height: 100px;
+display: flex;
+flex-direction: column;
+justify-constent: center;
+alight-items: center;
+`
+
 function Exchanges() {
-  const [exchangeData, setExchangeData] = useState([]); // this can be any type of data
+  const [exchangeData, setExchangeData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [clicked, setClicked] = useState(false);
-  const [show, setShow] = useState(false);
 
   const options = {
     method: 'GET',
@@ -37,6 +66,7 @@ function Exchanges() {
       });
   }, []);
 
+
   const exchangeList = exchangeData?.data?.exchanges;
 
 
@@ -44,10 +74,20 @@ function Exchanges() {
 
   if (error) return <h1>Error...</h1>
 
+  const toggle = (index) => {
+    if (clicked === index) {
+      return setClicked(null);
+    }
+    setClicked(index);
+  }
+
 
   return (
     <div className="container-lg">
-      <div className="row row-cols-4">
+      <ExchHeader>
+        <h2>Cryptocurrency Exchanges Stats</h2>
+      </ExchHeader>
+      <div className="row row-cols-5">
         <div className="col"></div>
         <div className='col text-primary'>22h Vol</div>
         <div className='col text-primary'>Markets</div>
@@ -55,10 +95,10 @@ function Exchanges() {
       </div>
       <br />
       <br />
-      {exchangeList && exchangeList.map((exchange) => (
-        <div className='col'>
+      {exchangeList && exchangeList.map((exchange, index) => (
+        <div className='col table table-hover'>
           <span>
-            <div className="row row-cols-4">
+            <div className="row row-cols-5">
               <div className='col'>
                 <h6><strong>{exchange.rank}</strong></h6>
                 <Img className='exchange-image' src={exchange.iconUrl} />
@@ -73,10 +113,13 @@ function Exchanges() {
               <div className='col'>
                 <p>$&nbsp;{millify(exchange.marketShare)}</p>
               </div>
+              <div className="Col" onClick={() => toggle(index)} key={index}>
+                <span>{clicked === index ? (<FiMinus />) : (<FiPlus />)}</span>
+              </div>
             </div>
-            {show ? HTMLReactParser(exchange.description || '') : null}
-            <button className="btn btn-outline-light" onClick={() => setShow(true)}>Show</button>
-            <button className="btn btn-outline-light" onClick={() => setShow(false)}>Hide</button>
+            {clicked === index ? (
+              HTMLReactParser(exchange.description || '')
+            ) : (null)}
           </span>
         </div>
       ))};
