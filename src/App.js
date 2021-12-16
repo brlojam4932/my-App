@@ -58,13 +58,14 @@ function App() {
           name: coin.name,
           ticker: coin.symbol,
           balance: 0,
-          price: formatPrice(coin.current_price),
+          price: coin.current_price,
+          rank: coin.market_cap_rank,
           circulatingSupply: coin.circulating_supply,
           totalSupply: coin.total_supply,
           maxSupply: coin.max_supply,
           volume: coin.total_volume,
           marketCap: coin.market_cap,
-          percentChange24h: parseFloat(Number(coin.price_change_percentage_24h).toFixed(2)),
+          percentChange24h: coin.price_change_percentage_24h
         }
       });
       setCoinData(coinData);

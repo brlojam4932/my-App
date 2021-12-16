@@ -172,8 +172,6 @@ function Coin(props) {
         overlayClassName="Overlay"
       >
         <h1> Trade {props.tickerId} </h1>
-
-        <label> Amount of Coins to Buy/Sell</label>
         {props.insufficientUsdBalMessage &&
           <div className="alert alert-dismissible alert-danger">
             <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
@@ -190,17 +188,24 @@ function Coin(props) {
         {
           <div className="alert alert-dismissible alert-secondary">
             <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
-            <strong>Amount of coins to trade:&nbsp;{props.buyInputValue}</strong>Token/s of &nbsp;<strong>{props.tickerId}</strong>&nbsp;at$&nbsp;{props.price}.&nbsp;<strong>Trade total:&nbsp;$</strong>{props.price * props.buyInputValue}</div>
+            <strong>{props.buyInputValue}</strong>&nbsp;Token/s of&nbsp;<strong>{props.tickerId}</strong>&nbsp;at$&nbsp;{props.price}.&nbsp;<strong>Trade total:&nbsp;$</strong>{props.price * props.buyInputValue}</div>
         }
 
         {props.isBuy &&
           <div className="alert alert-dismissible alert-success">
+            <div class="progress">
+              <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style={{width: "75%"}}></div>
+            </div>
             <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
             <strong>Success!</strong>Your purchase of &nbsp;<strong>{props.tickerId}</strong>is complete</div>
+
         }
 
         {(props.isSold) &&
           <div className="alert alert-dismissible alert-warning">
+            <div class="progress">
+              <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style={{width: "75%"}}></div>
+            </div>
             <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
             <strong>Success!</strong>Your sale of&nbsp;<strong>{props.tickerId}</strong>is complete</div>
         }
@@ -209,6 +214,7 @@ function Coin(props) {
         <TradeInput id="buyInput"
           type="number"
           required
+          placeholder='Amount'
           onChange={(e) => props.setBuyInputValue(+e.target.value)} >
         </TradeInput>
 
