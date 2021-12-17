@@ -8,7 +8,7 @@ function HistoryChart({ data }) {
   const [day, week, year, detail] = data;
   const [timeFormat, setTimeFormat] = useState("24h");
 
-  const determinTimeFormat = () => {
+  const determineTimeFormat = () => {
     switch (timeFormat) {
       case "24":
         return day;
@@ -29,7 +29,7 @@ function HistoryChart({ data }) {
           datasets: [
             {
               label: `${detail.name} price`,
-              data: determinTimeFormat(),
+              data: determineTimeFormat(),
               backgroundColor: "rgba(51, 102, 204, 0.5)",
               borderColor: "rgba(204, 255, 255, 0.4)",
               pointRadius: 0,
@@ -37,28 +37,45 @@ function HistoryChart({ data }) {
             },
           ],
         },
-
         options: {
           ...historyOptions,
         },
-        
       });
-      
     }
-    
   });
+
+  const renderPrice = () => {
+    if (detail) {
+      return (
+        <>
+          <p className='my-0'>{detail.current_price.toFixed(2)}</p>
+          <p
+            className={
+              detail.price_change_24h < 0
+                ? ("text-danger my-0")
+                : ("text-success my-0")
+            }
+          >
+            {detail.price_change_percentage_24h.toFixed(2)}%
+          </p>
+        </>
+      );
+    }
+  };
 
 
   return (
-    <div className='chart-button mt-1'>
-      <button onClick={() => setTimeFormat("24")} className="btn btn-outline-secondary btn-sm">24hr</button>
+    <div className='bg-white border mt-2 rounded p-3'>
+      <div>{renderPrice()}</div>
+      <div className='chart-button mt-1'>
+        <button onClick={() => setTimeFormat("24")} className="btn btn-outline-secondary btn-sm">24hr</button>
 
-      <button onClick={() => setTimeFormat("7d")} className="btn btn-outline-secondary btn-sm mx-1">7d</button>
+        <button onClick={() => setTimeFormat("7d")} className="btn btn-outline-secondary btn-sm mx-1">7d</button>
 
-      <button onClick={() => setTimeFormat("1y")} className="btn btn-outline-secondary btn-sm">1y</button>
-
+        <button onClick={() => setTimeFormat("1y")} className="btn btn-outline-secondary btn-sm">1y</button>
+      </div>
     </div>
-  )
-}
+  );
+};
 
 export default HistoryChart;

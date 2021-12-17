@@ -11,6 +11,7 @@ import News from './components/News/News';
 import useFetch from "./components/Utility/useFetch";
 import Navbar from './components/ExchangeHeader/Navbar';
 import Exchanges from './components/Exchanges/Exchanges';
+import ChartTest from './components/chart/ChartTest';
 //instructor: zsolt-nagy
 
 // bkg area for table
@@ -258,6 +259,9 @@ function App() {
             </Route>
             <Route path="/exchanges">
               <Exchanges />
+            </Route>
+            <Route path="/chartTest">
+              <ChartTest />
             </Route>
           </Switch>
         </div>
