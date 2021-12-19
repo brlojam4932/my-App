@@ -11,7 +11,11 @@ import News from './components/News/News';
 import useFetch from "./components/Utility/useFetch";
 import Navbar from './components/ExchangeHeader/Navbar';
 import Exchanges from './components/Exchanges/Exchanges';
-import ChartTest from './components/chart/ChartTest';
+import CoinDetails from './components/chart/CoinDetailsPage';
+
+
+
+//import ChartTest from './components/chart/ChartTest';
 //instructor: zsolt-nagy
 
 // bkg area for table
@@ -260,8 +264,8 @@ function App() {
             <Route path="/exchanges">
               <Exchanges />
             </Route>
-            <Route path="/chartTest">
-              <ChartTest />
+            <Route path="/coinDetails/:id">
+              <CoinDetails />
             </Route>
           </Switch>
         </div>
