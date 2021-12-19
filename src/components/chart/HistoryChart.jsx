@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import Chart from 'chart.js/auto'
+import Chartjs from "chart.js";
 import { historyOptions } from "../chartConfigs/chartConfigs";
 
 function HistoryChart({ data }) {
@@ -26,7 +26,7 @@ function HistoryChart({ data }) {
 
   useEffect(() => { //we create a new chart
     if (ChartRef && ChartRef.current) {
-      new Chart(ChartRef.current, {
+      new Chartjs(ChartRef.current, {
         type: 'line',
         data: {
           datasets: [
@@ -45,7 +45,7 @@ function HistoryChart({ data }) {
         },
       });
     }
-  }, []);
+  }, [day]);
 
 
   const renderPrice = () => {
@@ -70,7 +70,7 @@ function HistoryChart({ data }) {
       <div className='bg-white border mt-2 rounded p-3'>
         <h1>{renderPrice()}</h1>
         <div>
-          <canvas ref={ChartRef} id="benChart" width="400" height="400"></canvas>
+          <canvas ref={ChartRef} id="myChart" width="400" height="400"></canvas>
         </div>
       </div>
 
