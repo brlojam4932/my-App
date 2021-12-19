@@ -21,7 +21,7 @@ function HistoryChart({ data }) {
         return year;
       default:
         return day;
-    };  
+    };
   };
   console.log("timeFormat: ", timeFormat);
 
@@ -34,8 +34,8 @@ function HistoryChart({ data }) {
             {
               label: detail.name,
               data: determineTimeFormat(),
-              backgroundColor: "rgb(50, 61, 89)",
-              borderColor: "rgb(71, 117, 232)",
+              backgroundColor: "rgb(24, 32, 27)",
+              borderColor: "rgb(72, 232, 135)",
               pointRadius: 0,
               borderWidth: 1
             },
@@ -68,17 +68,16 @@ function HistoryChart({ data }) {
 
   return (
     <>
-      <div className='bg-black border mt-2 rounded p-3'>
+      <div className='bg-black rounded p-3'>
         <h1>{renderPrice()}</h1>
         <div>
           <canvas ref={ChartRef} id="myChart" width="400" height="400"></canvas>
         </div>
-      </div>
-
-      <div className="chart-button mt-1">
-        <button onClick={() => setTimeFormat("24h")} className="btn btn-outline-secondary btn-sm">24hr</button>
-        <button onClick={() => setTimeFormat("7d")} className="btn btn-outline-secondary btn-sm mx-1">7d</button>
-        <button onClick={() => setTimeFormat("1y")} className="btn btn-outline-secondary btn-sm">1y</button>
+        <div className="chart-button mt-1">
+          <button onClick={() => setTimeFormat("24h")} className="btn btn-outline-secondary btn-sm">24hr</button>
+          <button onClick={() => setTimeFormat("7d")} className="btn btn-outline-secondary btn-sm mx-1">7d</button>
+          <button onClick={() => setTimeFormat("1y")} className="btn btn-outline-secondary btn-sm">1y</button>
+        </div>
       </div>
     </>
 

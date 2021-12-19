@@ -121,7 +121,7 @@ function Coin(props) {
 
 
       <PopUp trigger={buttonPopup} setTrigger={setButtonPopup}>
-        <div>
+        <div className='bg-black rounded p-3'>
           <CoinDetailsPage
             key={props.key}
             name={props.name}
