@@ -70,7 +70,7 @@ function CoinList(props) {
           {
             //distructured version - recommended; more explicit
             filteredCoins.map(({ key, name, ticker, image, price, balance, rank, circulatingSupply,
-              totalSupply, maxSupply, volume, marketCap, percentChange24h, description }) =>
+              totalSupply, maxSupply, volume, marketCap, priceChange24h, percentChange24h, description }) =>
               <Coin key={key}
                 handleRefresh={props.handleRefresh}
                 handleBuy={props.handleBuy}
@@ -90,6 +90,7 @@ function CoinList(props) {
                 totalSupply={totalSupply}
                 volume={volume}
                 marketCap={marketCap}
+                priceChange24h={priceChange24h}
                 percentChange24h={percentChange24h}
                 description={description}
                 insufficientUsdBalMessage={props.insufficientUsdBalMessage}

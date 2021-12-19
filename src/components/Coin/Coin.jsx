@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
 import PopUp from './PopUp';
+import CoinDetailsPage from '../chart/CoinDetailsPage';
 //import millify from 'millify';
 
 
@@ -108,7 +109,10 @@ function Coin(props) {
 
             <Button className="btn btn-outline-primary" onClick={handleRefresh}>Refresh</Button>
 
-            <Button className='btn btn-outline-dark' onClick={() => setButtonPopup(true)}>Info</Button>
+            <Button
+              className='btn btn-outline-dark'
+              type='button'
+              onClick={() => setButtonPopup(true)}>Info</Button>
 
           </form>
         </TdControls>
@@ -116,42 +120,14 @@ function Coin(props) {
       </tr>
 
 
-      <PopUp trigger={buttonPopup} setTrigger={setButtonPopup} >
-        <div className="card border-secondary mb-3">
-          <div className="card-body">
-            <h4 className="card-title">{props.tickerId}&nbsp;info</h4>
-            <p className="card-text text-primary"> An overview showing the stats of {props.tickerId}</p>
-            <ul class="list-group">
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                Token:
-                <span>{props.tickerId}</span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                Rank:
-                <span>{props.rank}</span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                Circulating Supply:
-                <span>{props.circulatingSupply}</span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                Total Supply:
-                <span>{props.totalSupply}</span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                Max Supply:
-                <span>{props.maxSupply}</span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                Volume 24h:
-                <span>{props.volume}</span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                Market Cap:
-                <span>{props.marketCap}</span>
-              </li>
-            </ul>
-          </div>
+      <PopUp trigger={buttonPopup} setTrigger={setButtonPopup}>
+        <div>
+          <CoinDetailsPage
+            key={props.key}
+            name={props.name}
+            id={props.tickerId}
+            priceChange24h={props.priceChange24h}
+          />
         </div>
       </PopUp>
 
@@ -185,8 +161,8 @@ function Coin(props) {
 
         {props.isBuy &&
           <div className="alert alert-dismissible alert-success">
-            <div class="progress">
-              <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style={{width: "75%"}}></div>
+            <div className="progress">
+              <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style={{ width: "75%" }}></div>
             </div>
             <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
             <strong>Success!</strong>Your purchase of &nbsp;<strong>{props.tickerId}</strong>is complete</div>
@@ -195,8 +171,8 @@ function Coin(props) {
 
         {(props.isSold) &&
           <div className="alert alert-dismissible alert-warning">
-            <div class="progress">
-              <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style={{width: "75%"}}></div>
+            <div className="progress">
+              <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style={{ width: "75%" }}></div>
             </div>
             <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
             <strong>Success!</strong>Your sale of&nbsp;<strong>{props.tickerId}</strong>is complete</div>

@@ -2,12 +2,12 @@ import React, { useRef, useEffect, useState } from 'react';
 import Chart from 'chart.js/auto'
 import { historyOptions } from "../chartConfigs/chartConfigs";
 
-function HistoryChart(props) {
+function HistoryChart({ data }) {
   const ChartRef = useRef();
   // we need to create a new chart...we use useEffect
   // we must pass ctx and configs
 
-  const { day, week, year, detail } = props.data;
+  const { day, week, year, detail } = data;
   const [timeFormat, setTimeFormat] = useState("24h");
 
 
@@ -26,14 +26,14 @@ function HistoryChart(props) {
 
   useEffect(() => { //we create a new chart
     if (ChartRef && ChartRef.current) {
-      const chartInstance = new Chart(ChartRef.current, {
+      new Chart(ChartRef.current, {
         type: 'line',
         data: {
           datasets: [
             {
-              label: `${detail.name} price`,
+              label: "name",
               data: determineTimeFormat(),
-              backgroundColor: "rgba(51, 102, 204, 0.5)",
+              backgroundColor: "rgba(59, 65, 67, 0.8)",
               borderColor: "rgba(204, 255, 255, 0.4)",
               pointRadius: 0,
               borderWidth: 1
@@ -45,7 +45,7 @@ function HistoryChart(props) {
         },
       });
     }
-  });
+  }, []);
 
 
   const renderPrice = () => {

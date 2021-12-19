@@ -1,11 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import { useParams } from 'react-router-dom';
+//import { useParams } from 'react-router-dom';
 import CoinData from './CoinData';
 import coinGecko from '../Utility/coinGecko';
 import HistoryChart from './HistoryChart';
 
-function CoinDetailsPage() {
-  const {id} = useParams();
+function CoinDetailsPage(props) {
 
   const [coinData, setCoinData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -24,19 +23,19 @@ function CoinDetailsPage() {
     const fetchData = async () => {
       setIsLoading(true);
       const [day, week, year, detail] = await Promise.all([
-        coinGecko.get(`/coins/${id}/market_chart/`, {
+        coinGecko.get(`/coins/${props.id}/market_chart/`, {
           params: {
             vs_currency: "usd",
             days: "1"
           },
         }),
-        coinGecko.get(`/coins/${id}/market_chart/`, {
+        coinGecko.get(`/coins/${props.id}/market_chart/`, {
           params: {
             vs_currency: "usd",
             days: "7"
           },
         }),
-        coinGecko.get(`/coins/${id}/market_chart/`, {
+        coinGecko.get(`/coins/${props.id}/market_chart/`, {
           params: {
             vs_currency: "usd",
             days: "365"
@@ -45,7 +44,7 @@ function CoinDetailsPage() {
         coinGecko.get("coins/markets/", {
           params: {
             vs_currency: "usd",
-            ids: id
+            ids: props.id
           }
         })
       ]);
@@ -67,7 +66,7 @@ function CoinDetailsPage() {
 
     fetchData();
 
-  }, []);
+  }, [props.id]);
 
 
   const renderData = () => {
@@ -77,7 +76,6 @@ function CoinDetailsPage() {
     }
     return (
       <div className="coinlist">
-        <a href="/">Close</a>
         <HistoryChart data={coinData} />
         <CoinData data={coinData.detail} />
 

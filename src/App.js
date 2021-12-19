@@ -26,8 +26,8 @@ color: #ccc;`;
 
 
 // UTILITY FUNCTIONS 
-const COIN_COUNT = 5; // look up sort method in JS to lsit by rank
-const formatPrice = price => parseFloat(Number(price).toFixed(4));
+const COIN_COUNT = 10; // look up sort method in JS to lsit by rank
+//const formatPrice = price => parseFloat(Number(price).toFixed(4));
 
 function App() {
 
@@ -52,7 +52,7 @@ function App() {
           ids: ''
         }
       })
-      const coinData = response.data.slice(0, 10).map((coin) => {
+      const coinData = response.data.slice(0, COIN_COUNT).map((coin) => {
         return {
           key: coin.id,
           image: coin.image,
@@ -66,6 +66,7 @@ function App() {
           maxSupply: coin.max_supply,
           volume: coin.total_volume,
           marketCap: coin.market_cap,
+          priceChange24h: coin.price_change_24h,
           percentChange24h: coin.price_change_percentage_24h
         }
       });
@@ -112,7 +113,7 @@ function App() {
   // <h1>{data?.setup} : {data?.delivery}</h1>
   // change the data variable...
   // <h1>{joke?.setup} : {joke?.delivery}</h1>
-  const { data: getNews, loading, error, datePublished, getCryptoDetails } = useFetch(options);
+  const { data: getNews, loading, error, datePublished } = useFetch(options);
 
   if (loading) return <h1>Loading...</h1>
 
