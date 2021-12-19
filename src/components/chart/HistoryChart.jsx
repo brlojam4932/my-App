@@ -13,7 +13,7 @@ function HistoryChart({ data }) {
 
   const determineTimeFormat = () => {
     switch (timeFormat) {
-      case "24":
+      case "24h":
         return day;
       case "7d":
         return week;
@@ -21,20 +21,21 @@ function HistoryChart({ data }) {
         return year;
       default:
         return day;
-    };
+    };  
   };
+  console.log("timeFormat: ", timeFormat);
 
   useEffect(() => { //we create a new chart
-    if (ChartRef && ChartRef.current) {
+    if (ChartRef && ChartRef.current && detail) {
       new Chartjs(ChartRef.current, {
         type: 'line',
         data: {
           datasets: [
             {
-              label: "name",
+              label: detail.name,
               data: determineTimeFormat(),
-              backgroundColor: "rgba(59, 65, 67, 0.8)",
-              borderColor: "rgba(204, 255, 255, 0.4)",
+              backgroundColor: "rgb(50, 61, 89)",
+              borderColor: "rgb(71, 117, 232)",
               pointRadius: 0,
               borderWidth: 1
             },
@@ -45,7 +46,7 @@ function HistoryChart({ data }) {
         },
       });
     }
-  }, [day]);
+  }); // no need to add an array []...this will prevent timeFormat to return new values
 
 
   const renderPrice = () => {
@@ -67,7 +68,7 @@ function HistoryChart({ data }) {
 
   return (
     <>
-      <div className='bg-white border mt-2 rounded p-3'>
+      <div className='bg-black border mt-2 rounded p-3'>
         <h1>{renderPrice()}</h1>
         <div>
           <canvas ref={ChartRef} id="myChart" width="400" height="400"></canvas>
