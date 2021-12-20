@@ -48,7 +48,7 @@ function CoinDetailsPage(props) {
         })
       ]);
       //console.log("Results: ", resultsYear);
-      console.log(day);
+      console.log(day, year);
       setCoinData({
         day: formatData(day.data.prices),
         week: formatData(week.data.prices),

@@ -1,10 +1,6 @@
-//rcc tab for class-based component
 import React from 'react';
-import styled from 'styled-components'
-//rccp
 import PropTypes from 'prop-types'
 
-// background-color: #000000;
 
 var formatter = Intl.NumberFormat("en-US", {
   style: "currency",

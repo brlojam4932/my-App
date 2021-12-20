@@ -7,12 +7,10 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import "fontawesome-free/js/all.js"; // icons
-import News from './components/News/News';
-import useFetch from "./components/Utility/useFetch";
 import Navbar from './components/ExchangeHeader/Navbar';
 import Exchanges from './components/Exchanges/Exchanges';
-import CoinDetails from './components/chart/CoinDetailsPage';
-
+import NewsPage from './components/News/NewsPage';
+import Footer from './components/Exchanges/Footer';
 
 
 //import ChartTest from './components/chart/ChartTest';
@@ -26,7 +24,7 @@ color: #ccc;`;
 
 
 // UTILITY FUNCTIONS 
-const COIN_COUNT = 10; // look up sort method in JS to lsit by rank
+const COIN_COUNT = 20; // look up sort method in JS to lsit by rank
 //const formatPrice = price => parseFloat(Number(price).toFixed(4));
 
 function App() {
@@ -39,8 +37,6 @@ function App() {
   const [insufficientTokenBalMessage, setInsufficientTokenBalMessage] = useState(false);
   const [isBuy, setIsBuy] = useState(false);
   const [isSold, setIsSold] = useState(false);
-
-  const [searchNews, setSearchNews] = useState('cryptocurrency')
 
   //https://api.coinpaprika.com/v1/coins/{coin_id}/twitter
   // read about Temporal Deadzone
@@ -57,7 +53,6 @@ function App() {
           key: coin.id,
           image: coin.image,
           name: coin.name,
-          rank: coin.market_cap_rank,
           ticker: coin.symbol,
           balance: 0,
           price: coin.current_price,
@@ -87,40 +82,6 @@ function App() {
     }
   });
 
-  //-------news----------------
-  const newsCatergory = searchNews;
-
-  const options = {
-    method: 'GET',
-    url: 'https://bing-news-search1.p.rapidapi.com/news/search',
-    params: {
-      q: newsCatergory,
-      count: '20',
-      freshness: 'Week',
-      textFormat: 'Raw',
-      safeSearch: 'Off'
-    },
-    headers: {
-      'user-agent': 'cryptonews',
-      'x-bingapis-sdk': 'true',
-      'x-rapidapi-host': 'bing-news-search1.p.rapidapi.com',
-      'x-rapidapi-key': '9271cb1bffmsh3bfde2fc26f9dd1p125f3cjsn6324533a44df'
-    }
-
-  };
-
-  // destructured data - useFetch("https://...any_address")
-  // in the case of Pedro's api...
-  // <h1>{data?.setup} : {data?.delivery}</h1>
-  // change the data variable...
-  // <h1>{joke?.setup} : {joke?.delivery}</h1>
-  const { data: getNews, loading, error, datePublished } = useFetch(options);
-
-  if (loading) return <h1>Loading...</h1>
-
-  if (error) return <h1>Error...</h1>
-
-  //------news--end-----------------
 
 
   const handleBrrr = () => {
@@ -148,12 +109,14 @@ function App() {
         if (newAccountBalance > 0 && amountValue > 0) {
           setAccountBalance(newAccountBalance);
           newValues.balance += amountOfCoin; // if account bal conditions are met, newValues.balance = newValues.balance + amountOfCoin
-          setInsufficientUsdBalMessage(false);
           setIsBuy(true);
+          setInsufficientUsdBalMessage(false);
+         
         }
         else {
-          setInsufficientUsdBalMessage(true);
           setIsBuy(false);
+          setInsufficientUsdBalMessage(true);
+         
         }
       };
       return newValues;
@@ -173,26 +136,25 @@ function App() {
         let amountOfCoin = parseFloat(amountValue); //ex. {id: bitcoin, price: 44000}
         // update newAccountBalance: we are selling so we mult the newPrice * the amount of coins and add that to our newAccountBalance. Then return newValues
         let newAccountBalance = accountBalance + (newPrice * amountOfCoin);
-        // but also add a condition: newAccountBalance > 0 and amount to buy cannot be 0; must be also > 0.
-        if (newAccountBalance > 0 && amountOfCoin > 0) {
+        // but also add a condition: amount of coin must be less than the newValues.balance...cannot sell what you don't have
+        if (amountOfCoin <= newValues.balance) {
           // update the state: setNewAccountBalance -> to newAccountBalance
           setAccountBalance(newAccountBalance);
           // set the newValues.balance equal newValues.balance - the amount Of Coin sold.
-          newValues.balance -= amountOfCoin; // if these conditions met, make the sell: setIsBuy = true and amount of coins will be deducted while value will be added to newAccountBalance
-          // also set insufficient amount of usd to true false
-          setInsufficientUsdBalMessage(false);
+          newValues.balance -= amountOfCoin; // if these conditions met, make the sell: setIsSold = true and amount of coins will be deducted while value will be added to newAccountBalance
+          // also set insufficient token bal to false if newValues.balance is positive
           setIsSold(true);
+          setInsufficientTokenBalMessage(false);
         } else {
-          // if not true: set to false and setInsuffientUsd to true
-          setInsufficientUsdBalMessage(true);
+          // ...set sold to false and setInsuffient token bal to true
           setIsSold(false);
+          setInsufficientTokenBalMessage(true);
         }
       };
       return newValues; // newValues returned
     }); // finally, setCoinData to newCoinData. (newCoinData is the current price from the api)
     setCoinData(newCoinData);
   }
-
 
 
   const handleRefresh = async (valueChangeId) => {
@@ -244,30 +206,15 @@ function App() {
                   isSold={isSold}
                   setIsSold={setIsSold}
                 />
-                <div className='container'>
-                  <div className='row'>
-                    {getNews && getNews.value.map(news => {
-                      return (
-                        <News
-                          key={news.index}
-                          name={news.name}
-                          description={news.description}
-                          url={news.url}
-                          image={news.image}
-                          provider={news.provider}
-                          datePublished={datePublished}
-                        />
-                      )
-                    })};
-                  </div>
-                </div>
+                <Footer />
+               
               </Div>
+            </Route>
+            <Route path="/newsPage">
+             <NewsPage />
             </Route>
             <Route path="/exchanges">
               <Exchanges />
-            </Route>
-            <Route path="/coinDetails/:id">
-              <CoinDetails />
             </Route>
           </Switch>
         </div>

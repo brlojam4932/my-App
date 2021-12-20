@@ -110,9 +110,9 @@ function Coin(props) {
             <Button className="btn btn-outline-primary" onClick={handleRefresh}>Refresh</Button>
 
             <Button
-              className='btn btn-outline-dark'
+              className='btn btn-outline-info'
               type='button'
-              onClick={() => setButtonPopup(true)}>Info</Button>
+              onClick={() => setButtonPopup(true)}>Chart</Button>
 
           </form>
         </TdControls>
@@ -124,10 +124,8 @@ function Coin(props) {
         <div className='bg-black rounded p-3'>
           <CoinDetailsPage
             key={props.key}
-            rank={props.rank}
             name={props.name}
             id={props.tickerId}
-            priceChange24h={props.priceChange24h}
           />
         </div>
       </PopUp>
@@ -171,7 +169,7 @@ function Coin(props) {
         }
 
         {(props.isSold) &&
-          <div className="alert alert-dismissible alert-warning">
+          <div className="alert alert-dismissible alert-primary">
             <div className="progress">
               <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style={{ width: "75%" }}></div>
             </div>
@@ -188,7 +186,7 @@ function Coin(props) {
         </TradeInput>
 
         <Button className="btn btn-success" onClick={handleBuyClick}>Buy</Button>
-        <Button className="btn btn-warning" onClick={handleSellClick}>Sell</Button>
+        <Button className="btn btn-primary" onClick={handleSellClick}>Sell</Button>
         <Button className="btn btn-outline-secondary" onClick={handleClose}>Cancel/Close</Button>
       </ReactModal>
     </>

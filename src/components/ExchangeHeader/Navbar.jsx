@@ -2,9 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
-  const link = "/exchanges";
-  const chartLink = "/chartTest";
-  const historyChartLink = '/chartHistory';
+  const linkExchanges = "/exchanges";
+  const linkNewsPage = "/newsPage";
   //const coinDetailLink = "/coinDetails";
   /* select + ctrl D x; selects all */
   return (
@@ -22,7 +21,10 @@ const Navbar = () => {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to={link}>Exchanges</Link>
+              <Link className="nav-link" to={linkNewsPage}>News</Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to={linkExchanges}>Exchanges</Link>
             </li>
           </ul>
         </div>

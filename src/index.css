@@ -80,3 +80,9 @@ body {
 .green {
   color: #11bf48;
 }
+
+.Footer {
+  padding: 0.75rem;
+  display: grid;
+  place-content: center;
+}

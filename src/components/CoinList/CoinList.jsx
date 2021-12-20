@@ -8,18 +8,6 @@ font-size: 1rem;
 background-color: #000000;
 `;
 
-const TradeInput = styled.input`
-width: 100%;
-padding: 12px 20px;
-margin: 8px 0;
-display: inline-block;
-border: 2px solid #ccc;
-border-radius: 4px;
-box-sizing: border-box;
-background-color: #35393f;
-color: white;
-`
-
 
 // rewrite coinlist component into functional component
 

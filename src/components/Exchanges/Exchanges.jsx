@@ -9,24 +9,6 @@ const Img = styled.img`
 max-width: 33px
 `;
 
-const Dropdown = styled.div`
-  background: #1c1c1c;
-  color: #00ffb9;
-  width: 100%;
-  height: 100px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  aligh-items: center;
-  border-botton: 1px solid #00ffb9;
-  border-top: 1px solid #00ffb9;
-
-  p {
-    font-size: 2rem;
-  }
-  
-`;
-
 const ExchHeader = styled.div`
 bacground: black;
 color: white;
@@ -36,7 +18,7 @@ display: flex;
 flex-direction: column;
 justify-constent: center;
 alight-items: center;
-`
+`;
 
 function Exchanges() {
   const [exchangeData, setExchangeData] = useState([]);

@@ -32,11 +32,11 @@ function HistoryChart({ data }) {
         data: {
           datasets: [
             {
-              label: `${detail.name} price`,
+              label: "Prices",
               data: determineTimeFormat(),
               borderColor: "rgb(4, 98, 199)",
               pointRadius: 0,
-              borderWidth: 1
+              borderWidth: 3
             },
           ],
         },
@@ -52,7 +52,10 @@ function HistoryChart({ data }) {
     if (detail) {
       return (
         <>
-          <p className="my-0">$&nbsp;{detail.current_price.toFixed(2)}</p>
+          <p className="my-0">
+            {detail.market_cap_rank}&nbsp;
+            {detail.name}&nbsp;
+            $&nbsp;{detail.current_price.toFixed(2)}</p>
           <p className={
             detail.price_change_24h < 0
               ? "text-danger my-0"
