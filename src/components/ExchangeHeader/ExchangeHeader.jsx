@@ -41,7 +41,7 @@ export default class ExchangeHeader extends Component {
           <Img src={logo} alt='React Logo' />
           <H1>Falcon Trades Exchange</H1>
         </Header>
-        <h5 class="text-primary">Crypto trading, exchanges and news station.</h5>
+        <h5 className="text-primary">Crypto trading, exchanges and news station.</h5>
       </>
 
     )

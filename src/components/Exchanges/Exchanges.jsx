@@ -68,6 +68,7 @@ function Exchanges() {
     <div className="container-lg">
       <ExchHeader>
         <h2>Cryptocurrency Exchanges Stats</h2>
+        <h5 className="text-primary">Find out more about major exchanges here.</h5>
       </ExchHeader>
       <div className="row row-cols-5">
         <div className="col"></div>

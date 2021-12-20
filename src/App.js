@@ -25,7 +25,10 @@ color: #ccc;`;
 
 // UTILITY FUNCTIONS 
 const COIN_COUNT = 20; // look up sort method in JS to lsit by rank
-//const formatPrice = price => parseFloat(Number(price).toFixed(4));
+const formatPrice = price => parseFloat(Number(price).toFixed(4));
+const formatPercentage24h = percentChange24h => parseFloat(Number(percentChange24h).toFixed(2));
+const formatPercentage7d = percentChange7d => parseFloat(Number(percentChange7d).toFixed(2));
+const formatPercentage1y = percentChange1y => parseFloat(Number(percentChange1y).toFixed(2));
 
 function App() {
 
@@ -42,10 +45,11 @@ function App() {
   // read about Temporal Deadzone
   const componentDidMount = async () => {
     try {
-      const response = await axios.get('https://api.coingecko.com/api/v3/coins/markets', {
+      const response = await axios.get('https://api.coingecko.com/api/v3/coins/markets/', {
         params: {
           vs_currency: 'usd',
-          ids: ''
+          ids: '',
+          price_change_percentage: "24h,7d,1y"
         }
       })
       const coinData = response.data.slice(0, COIN_COUNT).map((coin) => {
@@ -55,7 +59,7 @@ function App() {
           name: coin.name,
           ticker: coin.symbol,
           balance: 0,
-          price: coin.current_price,
+          price: formatPrice(coin.current_price),
           rank: coin.market_cap_rank,
           circulatingSupply: coin.circulating_supply,
           totalSupply: coin.total_supply,
@@ -63,7 +67,9 @@ function App() {
           volume: coin.total_volume,
           marketCap: coin.market_cap,
           priceChange24h: coin.price_change_24h,
-          percentChange24h: coin.price_change_percentage_24h
+          percentChange24h: formatPercentage24h(coin.price_change_percentage_24h),
+          percentChange7d: formatPercentage7d(coin.price_change_percentage_7d_in_currency),
+          percentChange1y: formatPercentage1y(coin.price_change_percentage_1y_in_currency)
         }
       });
       setCoinData(coinData);

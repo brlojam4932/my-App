@@ -1,18 +1,8 @@
 import React, {useState} from 'react';
 import News from './News';
 import useFetch from "../Utility/useFetch";
-import styled from 'styled-components';
+//import styled from 'styled-components';
 
-const NewsHeader = styled.div`
-bacground: black;
-color: white;
-width: 100%;
-height: 100px;
-display: flex;
-flex-direction: column;
-justify-constent: center;
-alight-items: center;
-`
 
 function NewsPage() {
   const [searchNews, setSearchNews] = useState('cryptocurrency');
@@ -53,6 +43,7 @@ function NewsPage() {
   return (
     <div className='container'>
       <h2>Crypto News</h2>
+      <h5 className="text-primary">Crypto news world-wide.</h5>
     <div className='row'>
       {getNews && getNews.value.map(news => {
         return (
