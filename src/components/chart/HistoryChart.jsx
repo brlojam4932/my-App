@@ -32,10 +32,9 @@ function HistoryChart({ data }) {
         data: {
           datasets: [
             {
-              label: detail.name,
+              label: `${detail.name} price`,
               data: determineTimeFormat(),
-              backgroundColor: "rgb(24, 32, 27)",
-              borderColor: "rgb(72, 232, 135)",
+              borderColor: "rgb(4, 98, 199)",
               pointRadius: 0,
               borderWidth: 1
             },

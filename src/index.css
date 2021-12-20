@@ -45,7 +45,7 @@ body {
   left: 0;
   width: 100%;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.8);
   font-family: "Fira Sans", sans-serif;
   display: flex;
   justify-content: center;
@@ -57,12 +57,12 @@ body {
 .popup-inner {
   position: relative;
   width: 100%;
-  max-width: 640px;
+  max-width: 950px;
   font-family: "Fira Sans", sans-serif;
 }
 
 .popup-inner .btn-close {
-  width: 74em;
+  width: 112em;
 
 }
 

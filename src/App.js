@@ -57,6 +57,7 @@ function App() {
           key: coin.id,
           image: coin.image,
           name: coin.name,
+          rank: coin.market_cap_rank,
           ticker: coin.symbol,
           balance: 0,
           price: coin.current_price,

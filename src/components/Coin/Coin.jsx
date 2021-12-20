@@ -124,6 +124,7 @@ function Coin(props) {
         <div className='bg-black rounded p-3'>
           <CoinDetailsPage
             key={props.key}
+            rank={props.rank}
             name={props.name}
             id={props.tickerId}
             priceChange24h={props.priceChange24h}
@@ -156,7 +157,7 @@ function Coin(props) {
         {
           <div className="alert alert-dismissible alert-secondary">
             <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
-            <strong>{props.buyInputValue}</strong>&nbsp;Token/s of&nbsp;<strong>{props.tickerId}</strong>&nbsp;at$&nbsp;{props.price}.&nbsp;<strong>Trade total:&nbsp;$</strong>{props.price * props.buyInputValue}</div>
+            <strong>{props.buyInputValue}</strong>&nbsp;Token/s of&nbsp;<strong>{props.tickerId}</strong>&nbsp;at&nbsp;$&nbsp;{props.price}.&nbsp;<strong>Trade total:&nbsp;$</strong>{props.price * props.buyInputValue}</div>
         }
 
         {props.isBuy &&
