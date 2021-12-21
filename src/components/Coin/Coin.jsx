@@ -123,12 +123,12 @@ function Coin(props) {
         {/* actions */}
         <TdControls>
           <form action="#">
-            <Button className="btn btn-outline-success" onClick={() => setModalIsOpen(true)} >Trade</Button>
-            <Button className="btn btn-outline-primary" onClick={handleRefresh}>Refresh</Button>
-            <Button
-              className='btn btn-outline-info'
-              type='button'
-              onClick={() => setButtonPopup(true)}>Chart</Button>
+            <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+              <Button className="btn btn-outline-success btn-lg" onClick={() => setModalIsOpen(true)} >Trade</Button>
+              <Button className="btn btn-outline-primary btn-lg" onClick={handleRefresh}>Refresh</Button>
+              <Button className='btn btn-outline-info btn-lg' type='button' onClick={() => setButtonPopup(true)}>Chart</Button>
+            </div>
+
           </form>
         </TdControls>
       </tr>
@@ -191,13 +191,14 @@ function Coin(props) {
           placeholder='Amount'
           onChange={(e) => props.setBuyInputValue(+e.target.value)}>
         </TradeInput>
-        <Button className="btn btn-success" onClick={handleBuyClick}>Buy</Button>
-        <Button className="btn btn-primary" onClick={handleSellClick}>Sell</Button>
-        <Button className="btn btn-outline-secondary" onClick={handleClose}>Cancel/Close</Button>
+        <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+          <Button className="btn btn-success btn-lg" onClick={handleBuyClick}>Buy</Button>
+          <Button className="btn btn-primary btn-lg" onClick={handleSellClick}>Sell</Button>
+          <Button className="btn btn-outline-secondary btn-lg" onClick={handleClose}>Cancel/Close</Button>
+        </div>
       </ReactModal>
     </>
   );
-
 }
 
 

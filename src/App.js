@@ -35,7 +35,7 @@ function App() {
   const [accountBalance, setAccountBalance] = useState(10000);
   const [showBalance, setShowBalance] = useState(false);
   const [coinData, setCoinData] = useState([]);
-  const [buyInputValue, setBuyInputValue] = useState('');
+  const [buyInputValue, setBuyInputValue] = useState('1');
   const [insufficientUsdBalMessage, setInsufficientUsdBalMessage] = useState(false);
   const [insufficientTokenBalMessage, setInsufficientTokenBalMessage] = useState(false);
   const [isBuy, setIsBuy] = useState(false);
@@ -117,12 +117,12 @@ function App() {
           newValues.balance += amountOfCoin; // if account bal conditions are met, newValues.balance = newValues.balance + amountOfCoin
           setIsBuy(true);
           setInsufficientUsdBalMessage(false);
-         
+
         }
         else {
           setIsBuy(false);
           setInsufficientUsdBalMessage(true);
-         
+
         }
       };
       return newValues;
@@ -182,8 +182,8 @@ function App() {
   return (
     <>
       <Router>
-        <Navbar />
         <div className='container'>
+          <Navbar />
           <Switch>
             <Route exact path="/">
               <Div className="App">
@@ -213,11 +213,11 @@ function App() {
                   setIsSold={setIsSold}
                 />
                 <Footer />
-               
+
               </Div>
             </Route>
             <Route path="/newsPage">
-             <NewsPage />
+              <NewsPage />
             </Route>
             <Route path="/exchanges">
               <Exchanges />
@@ -226,7 +226,6 @@ function App() {
         </div>
       </Router>
     </>
-
   );
 }
 
