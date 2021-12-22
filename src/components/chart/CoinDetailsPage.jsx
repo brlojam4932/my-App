@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import CoinData from './CoinData';
 import coinGecko from '../Utility/coinGecko';
 import HistoryChart from './HistoryChart';
+import CoinDescription from './CoinDescription';
 
 function CoinDetailsPage(props) {
 
@@ -21,7 +22,7 @@ function CoinDetailsPage(props) {
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      const [day, week, year, detail] = await Promise.all([
+      const [day, week, year, detail, about] = await Promise.all([
         coinGecko.get(`/coins/${props.id}/market_chart/`, {
           params: {
             vs_currency: "usd",
@@ -45,20 +46,28 @@ function CoinDetailsPage(props) {
             vs_currency: "usd",
             ids: props.id
           }
+        }),
+        coinGecko.get(`coins/${props.id}`, {
+          params: {
+            ids: props.id
+          }
         })
       ]);
       //console.log("Results: ", resultsYear);
-      console.log(day, year);
+      //console.log("About: ", about);
       setCoinData({
         day: formatData(day.data.prices),
         week: formatData(week.data.prices),
         year: formatData(year.data.prices),
-        detail: detail.data[0]
+        detail: detail.data[0],
+        about: about.data
         //before reconstruction of values...
         //day: resultsDay.data.prices, 
         //week: resultsWeek.data.prices,
         //year: resultsYear.data.prices
       });
+
+      console.log("About: ", Object.values(about));
 
       setIsLoading(false);
     }
@@ -73,11 +82,11 @@ function CoinDetailsPage(props) {
     if (isLoading) {
       return <div>Loading...</div>;
     }
+
     return (
       <div className="coinlist">
         <HistoryChart data={coinData} />
         <CoinData data={coinData.detail} />
-
       </div>
     )
   }

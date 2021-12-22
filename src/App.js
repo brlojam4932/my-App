@@ -35,7 +35,7 @@ function App() {
   const [accountBalance, setAccountBalance] = useState(10000);
   const [showBalance, setShowBalance] = useState(false);
   const [coinData, setCoinData] = useState([]);
-  const [buyInputValue, setBuyInputValue] = useState('1');
+  const [buyInputValue, setBuyInputValue] = useState(1);
   const [insufficientUsdBalMessage, setInsufficientUsdBalMessage] = useState(false);
   const [insufficientTokenBalMessage, setInsufficientTokenBalMessage] = useState(false);
   const [isBuy, setIsBuy] = useState(false);
@@ -77,11 +77,10 @@ function App() {
     } catch (error) {
       console.log(error);
     }
-
-
   }
 
 
+  
   useEffect(() => {
     if (coinData.length === 0) {
       componentDidMount();
@@ -194,7 +193,6 @@ function App() {
                   handleBrrr={handleBrrr}
                   handleToggleChange={handleToggleChange}
                 />
-
                 <CoinList
                   coinData={coinData}
                   showBalance={showBalance}

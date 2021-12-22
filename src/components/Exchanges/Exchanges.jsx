@@ -9,16 +9,6 @@ const Img = styled.img`
 max-width: 33px
 `;
 
-const ExchHeader = styled.div`
-bacground: black;
-color: white;
-width: 100%;
-height: 100px;
-display: flex;
-flex-direction: column;
-justify-constent: center;
-alight-items: center;
-`;
 
 function Exchanges() {
   const [exchangeData, setExchangeData] = useState([]);
@@ -65,7 +55,7 @@ function Exchanges() {
 
 
   return (
-    <div className="container-lg exchanges">
+    <div className="container-lg">
       <div className='Header'>
         <h2>Cryptocurrency Exchanges Stats</h2>
         <h5 className="text-primary">Find out more about major exchanges here.</h5>
@@ -96,7 +86,7 @@ function Exchanges() {
               <div className='col'>
                 <p>$&nbsp;{millify(exchange.marketShare)}</p>
               </div>
-              <div className="Col" onClick={() => toggle(index)} key={index}>
+              <div className="Col minusPlus" onClick={() => toggle(index)} key={index}>
                 <span>{clicked === index ? (<FiMinus />) : (<FiPlus />)}</span>
               </div>
             </div>

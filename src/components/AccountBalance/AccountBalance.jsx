@@ -18,7 +18,7 @@ export default function AccountBalance(props) {
   return (
     // all is wrapped into component fragments in order to render two seperate components in the same level
     <>
-    <div>
+    <div className="d-grid gap-2 d-md-flex justify-content-md-end">
         <h2>{content}</h2>
         <button type="button" class="btn btn-outline-primary"
           onClick={props.handleToggleChange}

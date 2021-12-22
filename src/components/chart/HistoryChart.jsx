@@ -1,13 +1,14 @@
 import React, { useRef, useEffect, useState } from 'react';
 import Chartjs from "chart.js";
 import { historyOptions } from "../chartConfigs/chartConfigs";
+import HTMLReactParser from 'html-react-parser';
 
 function HistoryChart({ data }) {
   const ChartRef = useRef();
   // we need to create a new chart...we use useEffect
   // we must pass ctx and configs
 
-  const { day, week, year, detail } = data;
+  const { day, week, year, detail, about } = data;
   const [timeFormat, setTimeFormat] = useState("24h");
 
 
@@ -26,7 +27,7 @@ function HistoryChart({ data }) {
   console.log("timeFormat: ", timeFormat);
 
   useEffect(() => { //we create a new chart
-    if (ChartRef && ChartRef.current && detail) {
+    if (ChartRef && ChartRef.current && detail && about) {
       new Chartjs(ChartRef.current, {
         type: 'line',
         data: {
@@ -64,16 +65,25 @@ function HistoryChart({ data }) {
           >{detail.price_change_percentage_24h.toFixed(2)}&nbsp;%</p>
         </>
       )
+    };
+  };
+  
+ 
+  const renderInfo = () => {
+    if(detail) {
+      return (
+        <p className="text-muted">{HTMLReactParser(about.description.en.substring(0,1000))}...</p>
+      )
     }
-
   }
 
+  
   return (
     <>
       <div className='bg-black rounded p-3'>
-        <h1>{renderPrice()}</h1>
+        <h4>{renderPrice()}</h4>
         <div>
-          <canvas ref={ChartRef} id="myChart" width="400" height="400"></canvas>
+          <canvas ref={ChartRef} id="myChart" width="400" height="300"></canvas>
         </div>
         <div className="d-grid gap-2 d-md-flex justify-content-md-end  ">
           <button onClick={() => setTimeFormat("24h")} className="btn btn-outline-secondary">24hr</button>
@@ -81,6 +91,7 @@ function HistoryChart({ data }) {
           <button onClick={() => setTimeFormat("1y")} className="btn btn-outline-secondary">1y</button>
         </div>
       </div>
+      <h10>info{renderInfo()}</h10>
     </>
 
   );
