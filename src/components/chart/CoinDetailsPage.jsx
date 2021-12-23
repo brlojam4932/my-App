@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import CoinData from './CoinData';
 import coinGecko from '../Utility/coinGecko';
 import HistoryChart from './HistoryChart';
-import CoinDescription from './CoinDescription';
 
 function CoinDetailsPage(props) {
 

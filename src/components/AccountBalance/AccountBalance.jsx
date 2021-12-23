@@ -23,7 +23,7 @@ export default function AccountBalance(props) {
         <button type="button" class="btn btn-outline-primary"
           onClick={props.handleToggleChange}
         >
-          {props.showBalance ? "Hide Balance" : "Show Acc Balance"}
+          {props.showBalance ? "Hide Balance" : "Show Account Balance"}
         </button>
 
         <button type="button" class="btn btn-outline-secondary"
