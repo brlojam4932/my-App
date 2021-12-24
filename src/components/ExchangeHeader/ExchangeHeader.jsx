@@ -25,11 +25,12 @@ export default class ExchangeHeader extends Component {
   render() {
     return (
       <>
-        <div className='Header'>
+         <div className='Header'>
           <Img src={logo} alt='React Logo' />
           <H1>Falcon Trades Exchange</H1>
+          <h5 className="text-primary">Crypto trading, exchanges and news station.</h5>
         </div>
-        <h5 className="text-primary">Crypto trading, exchanges and news station.</h5>
+       
       </>
 
     )

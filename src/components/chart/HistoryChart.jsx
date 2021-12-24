@@ -67,17 +67,17 @@ function HistoryChart({ data }) {
       )
     };
   };
-  
- // info about each coin from api
+
+  // info about each coin from api
   const renderInfo = () => {
-    if(detail) {
+    if (detail) {
       return (
-        <p className="text-muted">{HTMLReactParser(about.description.en.substring(0,1000))}...</p>
+        <p className="text-muted">{HTMLReactParser(about.description.en.substring(0, 1000))}...</p>
       )
     }
   }
 
-  
+
   return (
     <>
       <div className='bg-black rounded p-3'>
@@ -91,7 +91,10 @@ function HistoryChart({ data }) {
           <button onClick={() => setTimeFormat("1y")} className="btn btn-outline-secondary btn-small">1y</button>
         </div>
       </div>
-      <h6>More about this coin{renderInfo()}</h6>
+      <div style={{textAlign: "left"}}>
+        <h6>About{renderInfo()}</h6>
+      </div>
+
     </>
 
   );

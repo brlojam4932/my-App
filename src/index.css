@@ -30,7 +30,6 @@ body {
   height: 100vh; /* this will keep it from shrinking or expanding  */
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   align-items: center;
 }
 
@@ -102,7 +101,6 @@ body {
 
 .popup-inner .btn-close {
   width: 112em;
-
 }
 
 .open-btn {
@@ -112,6 +110,7 @@ body {
 }
 
 /* change */
+
 .red {
   color: #f14e60;
 }
@@ -119,3 +118,7 @@ body {
 .green {
   color: #11bf48;
 }
+
+
+
+

@@ -12,8 +12,8 @@ function News({ name, description, loading, url, image, provider, datePublished 
 
   return (
       <div className="col-6 col-sm-4">
-          <div className="card border-secondary mb-3" style={{ maxwidth: + '20rem' }}>
-            <a href={url}>Link to news article</a>
+          <div className="card border-secondary mb-3" style={{ maxwidth: '20rem'}}>
+            <a href={url}>Link to news article </a>
             <div className="card-body">
               <h5 className="card-title">{name}</h5>
               <img src={image?.thumbnail?.contentUrl || demoImage}

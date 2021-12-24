@@ -46,7 +46,7 @@ function CoinDetailsPage(props) {
             ids: props.id
           }
         }),
-        coinGecko.get(`coins/${props.id}`, {
+        coinGecko.get(`coins/${props.id}`, { //about each coin...
           params: {
             ids: props.id
           }
