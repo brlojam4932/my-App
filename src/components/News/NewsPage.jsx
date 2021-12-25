@@ -12,6 +12,13 @@ const StyledHeaderNews = styled.header`
   align-items: center
 `;
 
+const override = styled.div`
+display: block;
+margin: 0 auto;
+border-color: red;
+`;
+
+
 
 function NewsPage() {
   const [searchNews, setSearchNews] = useState('cryptocurrency');
@@ -44,9 +51,9 @@ function NewsPage() {
   // <h1>{joke?.setup} : {joke?.delivery}</h1>
   const { data: getNews, loading, error, datePublished } = useFetch(options);
 
-  if (loading) return <h1>Loading...</h1>
+  if (loading) return <h4 style={{color: 'grey'}}>Loading...</h4>;
 
-  if (error) return <h1>Error...</h1>
+  if (error) return <h4 style={{color: "darkorange"}}>Error...</h4>
 
   //------news--end-----------------
   return (
@@ -58,10 +65,9 @@ function NewsPage() {
       <br />
       <br />
       <div className='row'>
-        {getNews && getNews.value.map(news => {
+        {getNews && getNews.value.map((news, index) => {
           return (
-            <News
-              key={news.index}
+            <News key={index}
               name={news.name}
               description={news.description}
               url={news.url}

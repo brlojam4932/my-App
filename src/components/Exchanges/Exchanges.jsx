@@ -51,9 +51,9 @@ function Exchanges() {
   const exchangeList = exchangeData?.data?.exchanges;
 
 
-  if (loading) return <h1>Loading...</h1>
+  if (loading) return <h4 style={{color: 'grey'}}>Loading...</h4>;
 
-  if (error) return <h1>Error...</h1>
+  if (error) return <h4 style={{color: "darkorange"}}>Error...</h4>
 
   const toggle = (index) => {
     if (clicked === index) {
@@ -78,7 +78,7 @@ function Exchanges() {
         <div className='col text-primary'>Change</div>
       </div>
       {exchangeList && exchangeList.map((exchange, index) => (
-        <div className='col table table-hover'>
+        <div className='col table table-hover' key={index}>
           <span>
             <div className="row row-cols-5">
               <div className='col'>
