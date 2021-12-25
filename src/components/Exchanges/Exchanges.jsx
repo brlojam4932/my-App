@@ -9,6 +9,15 @@ const Img = styled.img`
 max-width: 33px
 `;
 
+const StyledHeader = styled.header`  
+  width: 100%;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center
+`;
+
 
 function Exchanges() {
   const [exchangeData, setExchangeData] = useState([]);
@@ -42,9 +51,9 @@ function Exchanges() {
   const exchangeList = exchangeData?.data?.exchanges;
 
 
-  if (loading) return <h1>Loading...</h1>
+  if (loading) return <h4 style={{color: 'grey'}}>Loading...</h4>;
 
-  if (error) return <h1>Error...</h1>
+  if (error) return <h4 style={{color: "darkorange"}}>Error...</h4>
 
   const toggle = (index) => {
     if (clicked === index) {
@@ -55,21 +64,21 @@ function Exchanges() {
 
 
   return (
-    <div className="container-lg">
-      <div className='Header'>
-        <h2>Cryptocurrency Exchanges Stats</h2>
-        <h5 className="text-primary">Find out more about major exchanges here.</h5>
-      </div>
+    <div className="container">
+      <StyledHeader>
+          <h2>Cryptocurrency Exchanges Stats</h2>
+          <h5 className="text-primary">Find out more about major exchanges here.</h5>
+      </StyledHeader>
+      <br />
+      <br />
       <div className="row row-cols-5">
         <div className="col"></div>
         <div className='col text-primary'>22h Vol</div>
         <div className='col text-primary'>Markets</div>
         <div className='col text-primary'>Change</div>
       </div>
-      <br />
-      <br />
       {exchangeList && exchangeList.map((exchange, index) => (
-        <div className='col table table-hover'>
+        <div className='col table table-hover' key={index}>
           <span>
             <div className="row row-cols-5">
               <div className='col'>
