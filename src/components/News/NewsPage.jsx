@@ -56,6 +56,7 @@ function NewsPage() {
         <h5 className="text-primary">News about crypto currencies world-wide.</h5>
       </StyledHeaderNews>
       <br />
+      <br />
       <div className='row'>
         {getNews && getNews.value.map(news => {
           return (

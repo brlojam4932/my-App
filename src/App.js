@@ -24,14 +24,14 @@ color: #ccc;`;
 
 
 // UTILITY FUNCTIONS 
-const COIN_COUNT = 20; // look up sort method in JS to lsit by rank
+
 const formatPrice = price => parseFloat(Number(price).toFixed(4));
 const formatPercentage24h = percentChange24h => parseFloat(Number(percentChange24h).toFixed(2));
 const formatPercentage7d = percentChange7d => parseFloat(Number(percentChange7d).toFixed(2));
 const formatPercentage1y = percentChange1y => parseFloat(Number(percentChange1y).toFixed(2));
 
 function App() {
-
+ 
   const [accountBalance, setAccountBalance] = useState(10000);
   const [showBalance, setShowBalance] = useState(false);
   const [coinData, setCoinData] = useState([]);
@@ -40,6 +40,14 @@ function App() {
   const [insufficientTokenBalMessage, setInsufficientTokenBalMessage] = useState(false);
   const [isBuy, setIsBuy] = useState(false);
   const [isSold, setIsSold] = useState(false);
+
+  const [limit, setLimit] = useState(true);
+  const COIN_COUNT = limit ? 10 : 100;
+
+  console.log(COIN_COUNT);
+
+  
+
 
   //https://api.coinpaprika.com/v1/coins/{coin_id}/twitter
   // read about Temporal Deadzone
@@ -80,12 +88,12 @@ function App() {
   }
 
 
-  
   useEffect(() => {
     if (coinData.length === 0) {
       componentDidMount();
     }
-  });
+  }, [COIN_COUNT]);
+  
 
 
 
@@ -98,6 +106,7 @@ function App() {
   const handleToggleChange = () => {
     setShowBalance(prevValue => !prevValue);
   }
+
 
 
   // create isBuy and valueChangId args
@@ -209,6 +218,8 @@ function App() {
                   setIsBuy={setIsBuy}
                   isSold={isSold}
                   setIsSold={setIsSold}
+                  limit={limit}
+                  setLimit={setLimit}
                 />
                 <Footer />
 

@@ -24,21 +24,22 @@ const TdName = styled(Td)`
 
 // buy / sell refresh button size
 const Button = styled.button`
-  font-size: 11px;
-  with: 64px;
+  font-size: 13px;
+  width: 75px;
   margin: 3px 5px 0;
 `;
 
 
 const TradeInput = styled.input`
 width: 100%;
+height: 13%;
 padding: 12px 20px;
 margin: 8px 0;
 display: inline-block;
-border: 2px solid #ccc;
+border: 2px solid #464646;
 border-radius: 4px;
 box-sizing: border-box;
-background-color: #35393f;
+background-color: #222;
 color: white;
 `
 
@@ -149,52 +150,57 @@ function Coin(props) {
         className="Modal"
         overlayClassName="Overlay"
       >
-        {/* messages for buy/sell */}
-        <h1> Trade {props.tickerId} </h1>
-        {props.insufficientUsdBalMessage &&
-          <div className="alert alert-dismissible alert-danger">
-            <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
-            <strong>Insufficient USD Balance!</strong> Transaction not Completed.
+        <div className='modal-box'>
+          {/* messages for buy/sell */}
+          <div>
+            <h1> trade {props.tickerId} </h1>
+            {props.insufficientUsdBalMessage &&
+              <div className="alert alert-dismissible alert-danger">
+                <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
+                <strong>Insufficient USD Balance!</strong> Transaction not Completed.
+              </div>
+            }
+            {props.insufficientTokenBalMessage &&
+              <div className="alert alert-dismissible alert-danger">
+                <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
+                <strong>Insufficient Token Balance!</strong>Transaction not Completed.
+              </div>
+            }
+            {props.isBuy &&
+              <div className="alert alert-dismissible alert-success">
+                <div className="progress">
+                  <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style={{ width: "75%" }}></div>
+                </div>
+                <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
+                <strong>Success!</strong>Your purchase of &nbsp;<strong>{props.tickerId}</strong>is complete</div> 
+            }
+            {(props.isSold) &&
+              <div className="alert alert-dismissible alert-primary">
+                <div className="progress">
+                  <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style={{ width: "75%" }}></div>
+                </div>
+                <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
+                <strong>Success!</strong>&nbsp;Your sale of&nbsp;<strong>{props.tickerId}</strong>is complete</div>
+            }
           </div>
-        }
-        {props.insufficientTokenBalMessage &&
-          <div className="alert alert-dismissible alert-danger">
-            <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
-            <strong>Insufficient Token Balance!</strong>Transaction not Completed.
+          {/* buy/sell */}
+          {
+            <div className="alert alert-dismissible alert-light">
+              <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
+              <strong>{props.tickerId}</strong>&nbsp;<strong>{props.buyInputValue}</strong>&nbsp;<strong>USD:&nbsp;$</strong>{props.price * props.buyInputValue}
+            </div>
+          }
+          <TradeInput id="buyInput"
+            type="number"
+            required
+            placeholder='Amount'
+            onChange={(e) => props.setBuyInputValue(+e.target.value)}>
+          </TradeInput>
+          <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+            <Button className="btn btn-success btn-lg" onClick={handleBuyClick}>Buy</Button>
+            <Button className="btn btn-primary btn-lg" onClick={handleSellClick}>Sell</Button>
+            <Button className="btn btn-outline-secondary btn-lg" onClick={handleClose}>Cancel</Button>
           </div>
-        }
-        {/* buy/sell */}
-        {
-          <div className="alert alert-dismissible alert-light">
-            <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
-            <strong>{props.tickerId}</strong>&nbsp;<strong>{props.buyInputValue}</strong>&nbsp;<strong>USD:&nbsp;$</strong>{props.price * props.buyInputValue}</div>
-        }
-        {props.isBuy &&
-          <div className="alert alert-dismissible alert-success">
-            <div className="progress">
-              <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style={{ width: "75%" }}></div>
-            </div>
-            <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
-            <strong>Success!</strong>Your purchase of &nbsp;<strong>{props.tickerId}</strong>is complete</div>
-        }
-        {(props.isSold) &&
-          <div className="alert alert-dismissible alert-primary">
-            <div className="progress">
-              <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style={{ width: "75%" }}></div>
-            </div>
-            <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
-            <strong>Success!</strong>&nbsp;Your sale of&nbsp;<strong>{props.tickerId}</strong>is complete</div>
-        }
-        <TradeInput id="buyInput"
-          type="number"
-          required
-          placeholder='Amount'
-          onChange={(e) => props.setBuyInputValue(+e.target.value)}>
-        </TradeInput>
-        <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-          <Button className="btn btn-success btn-lg" onClick={handleBuyClick}>Buy</Button>
-          <Button className="btn btn-primary btn-lg" onClick={handleSellClick}>Sell</Button>
-          <Button className="btn btn-outline-secondary btn-lg" onClick={handleClose}>Cancel/Close</Button>
         </div>
       </ReactModal>
     </>

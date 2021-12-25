@@ -70,6 +70,7 @@ function Exchanges() {
           <h5 className="text-primary">Find out more about major exchanges here.</h5>
       </StyledHeader>
       <br />
+      <br />
       <div className="row row-cols-5">
         <div className="col"></div>
         <div className='col text-primary'>22h Vol</div>
