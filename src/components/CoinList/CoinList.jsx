@@ -38,9 +38,13 @@ function CoinList(props) {
             onChange={handleCoinsChange}
           />
         </form>
+        {/*
         <div>
           <button type="button" className="btn btn-outline-warning" onClick={() => props.setLimit(!props.limit)}>Show more cypto</button>
         </div>
+         */}
+        
+        
         <br />
         <br />
         <Table className="table table-hover">
@@ -94,10 +98,6 @@ function CoinList(props) {
                   isBuy={props.isBuy}
                   setIsBuy={props.setIsBuy}
                   isSold={props.isSold}
-                  setIsSold={props.setIsSold}
-                  limit={props.limit}
-                  setLimit={props.setLimit}
-                  handleSetLimit={props.handleSetLimit}
                 />
               )
             }
