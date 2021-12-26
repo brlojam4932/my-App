@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
 import PopUp from './PopUp';
 import CoinDetailsPage from '../chart/CoinDetailsPage';
+import Progress from './Progress';
 //import millify from 'millify';
 
 
@@ -56,6 +57,7 @@ function Coin(props) {
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [buttonPopup, setButtonPopup] = useState(false);
+ 
 
   const handleRefresh = (event) => {
     event.preventDefault();
@@ -166,24 +168,20 @@ function Coin(props) {
                 <strong>Insufficient Token Balance!</strong>Transaction not Completed.
               </div>
             }
+            {/* buy/sell */}
             {props.isBuy &&
               <div className="alert alert-dismissible alert-success">
-                <div className="progress">
-                  <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style={{ width: "75%" }}></div>
-                </div>
+                <Progress done="100"/>
                 <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
-                <strong>Success!</strong>Your purchase of &nbsp;<strong>{props.tickerId}</strong>is complete</div> 
+                <strong>Success!&nbsp;</strong>Your purchase of&nbsp;<strong>{props.tickerId}</strong>&nbsp;is being processed</div> 
             }
             {(props.isSold) &&
               <div className="alert alert-dismissible alert-primary">
-                <div className="progress">
-                  <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style={{ width: "75%" }}></div>
-                </div>
+                 <Progress done="100"/>
                 <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
-                <strong>Success!</strong>&nbsp;Your sale of&nbsp;<strong>{props.tickerId}</strong>is complete</div>
+                <strong>Success!&nbsp;</strong>&nbsp;Your sale of&nbsp;<strong>{props.tickerId}</strong>&nbsp;is being processed</div>
             }
           </div>
-          {/* buy/sell */}
           {
             <div className="alert alert-dismissible alert-light">
               <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>

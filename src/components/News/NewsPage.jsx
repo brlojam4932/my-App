@@ -12,13 +12,6 @@ const StyledHeaderNews = styled.header`
   align-items: center
 `;
 
-const override = styled.div`
-display: block;
-margin: 0 auto;
-border-color: red;
-`;
-
-
 
 function NewsPage() {
   const [searchNews, setSearchNews] = useState('cryptocurrency');

@@ -28,7 +28,7 @@ function CoinList(props) {
 
   return (
     <>
-      <div class="container-fluid">
+      <div className="container-fluid">
         <br />
         <br />
         <form className="d-flex">
@@ -39,13 +39,13 @@ function CoinList(props) {
           />
         </form>
         <div>
-          <button type="button" class="btn btn-outline-warning" onClick={() => props.setLimit(!props.limit)}>Show more cypto</button>
+          <button type="button" className="btn btn-outline-warning" onClick={() => props.setLimit(!props.limit)}>Show more cypto</button>
         </div>
         <br />
         <br />
         <Table className="table table-hover">
           <thead>
-            <tr class="table-active">
+            <tr className="table-active">
               <th></th>
               <th>Name</th>
               <th>Ticker</th>
