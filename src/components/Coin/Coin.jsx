@@ -173,13 +173,13 @@ function Coin(props) {
               <div className="alert alert-dismissible alert-success">
                 <Progress done="100"/>
                 <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
-                <strong>Success!&nbsp;</strong>Your purchase of&nbsp;<strong>{props.tickerId}</strong>&nbsp;is being processed</div> 
+                <strong>Success!&nbsp;</strong>Your transaction of&nbsp;<strong>{props.tickerId}</strong>&nbsp;is now completed</div> 
             }
             {(props.isSold) &&
               <div className="alert alert-dismissible alert-primary">
                  <Progress done="100"/>
                 <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
-                <strong>Success!&nbsp;</strong>&nbsp;Your sale of&nbsp;<strong>{props.tickerId}</strong>&nbsp;is being processed</div>
+                <strong>Success!&nbsp;</strong>&nbsp;Your transaction of&nbsp;<strong>{props.tickerId}</strong>&nbsp;is now completed</div>
             }
           </div>
           {

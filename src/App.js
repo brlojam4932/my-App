@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-// imp tab
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import CoinList from "./components/CoinList/CoinList";
 import AccountBalance from './components/AccountBalance/AccountBalance';
 import ExchangeHeader from './components/ExchangeHeader/ExchangeHeader';
@@ -11,9 +10,6 @@ import Navbar from './components/ExchangeHeader/Navbar';
 import Exchanges from './components/Exchanges/Exchanges';
 import NewsPage from './components/News/NewsPage';
 import Footer from './components/Exchanges/Footer';
-
-
-//import ChartTest from './components/chart/ChartTest';
 //instructor: zsolt-nagy
 
 // bkg area for table
@@ -31,7 +27,6 @@ const formatPercentage7d = percentChange7d => parseFloat(Number(percentChange7d)
 const formatPercentage1y = percentChange1y => parseFloat(Number(percentChange1y).toFixed(2));
 
 function App() {
- 
   const [accountBalance, setAccountBalance] = useState(10000);
   const [showBalance, setShowBalance] = useState(false);
   const [coinData, setCoinData] = useState([]);
@@ -40,16 +35,8 @@ function App() {
   const [insufficientTokenBalMessage, setInsufficientTokenBalMessage] = useState(false);
   const [isBuy, setIsBuy] = useState(false);
   const [isSold, setIsSold] = useState(false);
+  const [visible, setVisible] = useState(10);
 
-  const [limit, setLimit] = useState(true);
-  const COIN_COUNT = limit ? 10 : 100;
-
-  console.log(COIN_COUNT);
-
-  
-
-
-  //https://api.coinpaprika.com/v1/coins/{coin_id}/twitter
   // read about Temporal Deadzone
   const componentDidMount = async () => {
     try {
@@ -60,7 +47,7 @@ function App() {
           price_change_percentage: "24h,7d,1y"
         }
       })
-      const coinData = response.data.slice(0, COIN_COUNT).map((coin) => {
+      const coinData = response.data.slice(0, visible).map((coin) => {
         return {
           key: coin.id,
           image: coin.image,
@@ -87,13 +74,17 @@ function App() {
     }
   }
 
-
-  useEffect(() => {
-    if (coinData.length === 0) {
+  useLayoutEffect(() => {
       componentDidMount();
-    }
-  }, [COIN_COUNT]);
-  
+  }, [visible]);
+
+
+  const showMoreItems = () => {
+    setVisible((prevValue) => prevValue + 10);
+    //console.log(visible);
+  }
+
+   console.log(visible);
 
 
 
@@ -187,6 +178,7 @@ function App() {
   }
 
 
+
   return (
     <>
       <Router>
@@ -202,6 +194,12 @@ function App() {
                   handleBrrr={handleBrrr}
                   handleToggleChange={handleToggleChange}
                 />
+                <div>
+                  <button type="button" className="btn btn-outline-warning" onClick={showMoreItems}>
+                    Show more
+                  </button>
+                  <h6>Number of coins:&nbsp;{coinData.length}</h6>
+                </div>
                 <CoinList
                   coinData={coinData}
                   showBalance={showBalance}
@@ -217,9 +215,7 @@ function App() {
                   isBuy={isBuy}
                   setIsBuy={setIsBuy}
                   isSold={isSold}
-                  setIsSold={setIsSold}
-                  limit={limit}
-                  setLimit={setLimit}
+                  setIsSold={setIsSold}       
                 />
                 <Footer />
 
