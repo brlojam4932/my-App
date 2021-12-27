@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import CoinList from "./components/CoinList/CoinList";
 import AccountBalance from './components/AccountBalance/AccountBalance';
 import ExchangeHeader from './components/ExchangeHeader/ExchangeHeader';
@@ -17,7 +17,6 @@ const Div = styled.div`
 text-align: center;
 background-color: #000000;
 color: #ccc;`;
-
 
 // UTILITY FUNCTIONS 
 
@@ -74,17 +73,22 @@ function App() {
     }
   }
 
-  useLayoutEffect(() => {
-      componentDidMount();
+
+  // with clean-up code from https://youtu.be/0ZJgIjIuY7U
+  useEffect(() => {
+    console.log("coinData changed");
+    componentDidMount();
+    return () => {
+      console.log("return from coinData change");
+    }
   }, [visible]);
 
 
   const showMoreItems = () => {
     setVisible((prevValue) => prevValue + 10);
-    //console.log(visible);
   }
 
-   console.log(visible);
+  console.log(visible);
 
 
 
@@ -194,11 +198,11 @@ function App() {
                   handleBrrr={handleBrrr}
                   handleToggleChange={handleToggleChange}
                 />
-                <div>
+                <div className='show-more'>
                   <button type="button" className="btn btn-outline-warning" onClick={showMoreItems}>
                     Show more
                   </button>
-                  <h6>Number of coins:&nbsp;{coinData.length}</h6>
+                  <small className="text-warning" >Number of coins:&nbsp;{coinData.length}</small>
                 </div>
                 <CoinList
                   coinData={coinData}
@@ -215,7 +219,7 @@ function App() {
                   isBuy={isBuy}
                   setIsBuy={setIsBuy}
                   isSold={isSold}
-                  setIsSold={setIsSold}       
+                  setIsSold={setIsSold}
                 />
                 <Footer />
 
@@ -234,6 +238,5 @@ function App() {
   );
 }
 
-//console.log(Response);
 
 export default App;
