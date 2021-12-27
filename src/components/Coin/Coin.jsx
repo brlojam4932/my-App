@@ -91,7 +91,7 @@ function Coin(props) {
     <>
       <tr>
         {/* table name, price, percentage change, actions */}
-        <Td> <Img src={props.image} alt="logo-art" /></Td>
+        <Td><Img src={props.image} alt="logo-art" /></Td>
         <TdName>{props.name}</TdName>
         <Td>{props.ticker}</Td>
         <Td>$&nbsp;{props.price}</Td>

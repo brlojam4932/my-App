@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+// PROGRESS BAR
 function Progress({ done }) {
  
  const [style, setStyle] = useState({});

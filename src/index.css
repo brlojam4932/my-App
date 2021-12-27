@@ -41,8 +41,18 @@ body {
   height: 100px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center
+}
+
+.logo-name {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  margin: 3px;
+  padding: 7px;
 }
 
 /* search input */
@@ -122,7 +132,7 @@ body {
   font-family: "Fira Sans", sans-serif;
 }
 
-/* change */
+/* chart percentage change */
 
 .red {
   color: #f14e60;
@@ -154,6 +164,17 @@ body {
 	width: 0;
 	opacity: 0;
 	transition: 3s ease 0.1s;
+}
+
+/* Show more crypto */
+
+.show-more {
+  display: flex;
+  align-items: center;
+  column-gap: 20px;
+  justify-content: space-between;
+  margin: 10px;
+  padding: 5px;
 }
 
 

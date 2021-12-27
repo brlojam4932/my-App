@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import News from './News';
 import useFetch from "../Utility/useFetch";
 import styled from 'styled-components';
@@ -14,9 +14,8 @@ const StyledHeaderNews = styled.header`
 
 
 function NewsPage() {
-  const [searchNews, setSearchNews] = useState('cryptocurrency');
   //-------news----------------
-  const newsCatergory = searchNews;
+  const newsCatergory = 'cryptocurrency';
 
   const options = {
     method: 'GET',
@@ -34,7 +33,6 @@ function NewsPage() {
       'x-rapidapi-host': 'bing-news-search1.p.rapidapi.com',
       'x-rapidapi-key': '9271cb1bffmsh3bfde2fc26f9dd1p125f3cjsn6324533a44df'
     }
-
   };
 
   // destructured data - useFetch("https://...any_address")
@@ -49,8 +47,9 @@ function NewsPage() {
   if (error) return <h4 style={{color: "darkorange"}}>Error...</h4>
 
   //------news--end-----------------
+
   return (
-    <div className='container'>
+    <div className='container-fluid'>
       <StyledHeaderNews>
         <h2>Crypto News</h2>
         <h5 className="text-primary">News about crypto currencies world-wide.</h5>

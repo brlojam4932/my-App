@@ -1,12 +1,15 @@
 import React from 'react';
+import styled from 'styled-components';
 import "./News.css";
 import moment from 'moment';
 
+const Img = styled.img`
+  max-width: 33px
+`
 
 function News({ name, description, loading, url, image, provider, datePublished }) {
 
   if (loading) return <h4 style={{color: 'grey'}}>Loading...</h4>;
-
 
 
   const demoImage = 'http://coinrevolution.com/wp-content/uploads/2020/06/cryptonews.jpg';
@@ -26,7 +29,7 @@ function News({ name, description, loading, url, image, provider, datePublished 
                 }
               </p>
               <div className='container'>
-                <img src={provider[0]?.image?.thumbnail?.contentUrl || demoImage} alt=""/>
+                <Img src={provider[0]?.image?.thumbnail?.contentUrl || demoImage} alt=""/>
                 <h6>{provider[0]?.name}</h6>
                 <p><small className="text-muted">{moment(datePublished).startOf("ss").fromNow()}</small></p>
               </div>

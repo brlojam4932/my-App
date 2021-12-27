@@ -38,13 +38,6 @@ function CoinList(props) {
             onChange={handleCoinsChange}
           />
         </form>
-        {/*
-        <div>
-          <button type="button" className="btn btn-outline-warning" onClick={() => props.setLimit(!props.limit)}>Show more cypto</button>
-        </div>
-         */}
-        
-        
         <br />
         <br />
         <Table className="table table-hover">
@@ -62,55 +55,47 @@ function CoinList(props) {
             </tr>
           </thead>
           <tbody>
-            {
-              //distructured version - recommended; more explicit
-              filteredCoins.map(({ key, name, ticker, image, price, balance, rank, circulatingSupply,
-                totalSupply, maxSupply, volume, marketCap, priceChange24h, percentChange24h,
-                percentChange7d, percentChange1y, description }) =>
-                <Coin key={key}
-                  handleRefresh={props.handleRefresh}
-                  handleBuy={props.handleBuy}
-                  handleSell={props.handleSell}
-                  buyInputValue={props.buyInputValue}
-                  setBuyInputValue={props.setBuyInputValue}
-                  name={name}
-                  ticker={ticker}
-                  image={image}
-                  showBalance={props.showBalance}
-                  balance={balance}
-                  price={price}
-                  tickerId={key}
-                  rank={rank}
-                  circulatingSupply={circulatingSupply}
-                  maxSupply={maxSupply}
-                  totalSupply={totalSupply}
-                  volume={volume}
-                  marketCap={marketCap}
-                  priceChange24h={priceChange24h}
-                  percentChange24h={percentChange24h}
-                  percentChange7d={percentChange7d}
-                  percentChange1y={percentChange1y}
-                  description={description}
-                  insufficientUsdBalMessage={props.insufficientUsdBalMessage}
-                  setInsufficientUsdBalMessage={props.setInsufficientUsdBalMessage}
-                  insufficientTokenBalMessage={props.insufficientTokenBalMessage}
-                  setInsufficientTokenBalMessage={props.setInsufficientTokenBalMessage}
-                  isBuy={props.isBuy}
-                  setIsBuy={props.setIsBuy}
-                  isSold={props.isSold}
-                />
-              )
-            }
+            {filteredCoins.map(({key, name, ticker, image, price, balance, rank, circulatingSupply,
+              totalSupply, maxSupply, volume, marketCap, priceChange24h, percentChange24h,
+              percentChange7d, percentChange1y, description}) =>
+              <Coin key={key}
+                handleRefresh={props.handleRefresh}
+                handleBuy={props.handleBuy}
+                handleSell={props.handleSell}
+                buyInputValue={props.buyInputValue}
+                setBuyInputValue={props.setBuyInputValue}
+                name={name}
+                ticker={ticker}
+                image={image}
+                showBalance={props.showBalance}
+                balance={balance}
+                price={price}
+                tickerId={key}
+                rank={rank}
+                circulatingSupply={circulatingSupply}
+                maxSupply={maxSupply}
+                totalSupply={totalSupply}
+                volume={volume}
+                marketCap={marketCap}
+                priceChange24h={priceChange24h}
+                percentChange24h={percentChange24h}
+                percentChange7d={percentChange7d}
+                percentChange1y={percentChange1y}
+                description={description}
+                insufficientUsdBalMessage={props.insufficientUsdBalMessage}
+                setInsufficientUsdBalMessage={props.setInsufficientUsdBalMessage}
+                insufficientTokenBalMessage={props.insufficientTokenBalMessage}
+                setInsufficientTokenBalMessage={props.setInsufficientTokenBalMessage}
+                isBuy={props.isBuy}
+                setIsBuy={props.setIsBuy}
+                isSold={props.isSold}
+              />
+            )}
           </tbody>
         </Table>
-
       </div>
-
     </>
-
-
-  )
-
-}
+  );
+};
 
 export default CoinList;
