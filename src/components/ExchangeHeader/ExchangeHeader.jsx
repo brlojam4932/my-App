@@ -1,12 +1,12 @@
 import React from 'react';
-import falconLogo from './falconLogo.png';
+import falconLogo from './falconLogoCol.png';
 import styled from 'styled-components';
 
 
 const LogoImg = styled.img`
   height: 8rem;
   pointer-events: none;
-  filter: invert(100%);
+ 
   padding: 8px;
   margin: 5px;
 
