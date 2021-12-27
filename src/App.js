@@ -75,6 +75,7 @@ function App() {
 
 
   // with clean-up code from https://youtu.be/0ZJgIjIuY7U
+  // show more crypto
   useEffect(() => {
     console.log("coinData changed");
     componentDidMount();
@@ -97,7 +98,7 @@ function App() {
   }
 
 
-  // there are no longer global variables, instead they are now local constants
+
   const handleToggleChange = () => {
     setShowBalance(prevValue => !prevValue);
   }
