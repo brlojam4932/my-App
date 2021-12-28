@@ -82,7 +82,7 @@ function App() {
     return () => {
       console.log("return from coinData change");
     }
-  }, [visible]);
+  }, [visible]); //component did mount
 
 
   const showMoreItems = () => {
