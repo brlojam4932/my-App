@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import News from './News';
 import useFetch from "../Utility/useFetch";
 import styled from 'styled-components';
@@ -38,13 +38,11 @@ function NewsPage() {
     }
   };
 
-  // destructured data - useFetch("https://...any_address")
-  // in the case of Pedro's api...
-  // <h1>{data?.setup} : {data?.delivery}</h1>
-  // change the data variable...
-  // <h1>{joke?.setup} : {joke?.delivery}</h1>
-  const { data: getNews, loading, error, datePublished } = useFetch(options);
+  // get news from news api
+  const { data: getNews, loading, error, refetch, datePublished } = useFetch(options);
+  //-------------get news end -------------------
 
+  // get coin list from coin api
   async function getCoinList() {
     try {
       const res = await coinGecko.get('coins');
@@ -61,7 +59,16 @@ function NewsPage() {
     return () => {
       console.log("cleanup")
     }
-  }, []) // component did mount
+  }, []) // component did mount for coin list
+
+
+  // filter coins ---------------------------
+  const inputRef = useRef(null);
+
+  const handleOnClick = () => {
+    setNewsCategory(inputRef.current.value);
+    console.log(inputRef.current.value);
+  }
 
   const filterOption = coinListData.filter((option) => {
     return option.name === coinListData;
@@ -69,10 +76,11 @@ function NewsPage() {
 
 
   useEffect(() => {
-    console.log("filter: ", filterOption);
+
+    console.log("filter option");
+
   }, [filterOption]);
 
-  console.log("getCoinList: ", coinListData);
 
 
   if (loading) return <h4 style={{ color: 'grey' }}>News Loading...</h4>;
@@ -92,18 +100,25 @@ function NewsPage() {
       <br />
       <div className='row'>
         {coinListData && (
-          <div className="form-group">
-            <label for="exampleSelect1" className="form-label mt-4"><h2>Select a Crypto</h2></label>
-            <select
-              className="form-select" style={{ width: "50%" }}
-              id="exampleSelect1"
-              ofilterOption
-              value={newsCategory}
-              onChange={(e) => setNewsCategory(e.target.value)}
-            >
-              {coinListData.map((currency) => <option value={currency.name}>{currency.name}</option>)}
-            </select>
-
+          <div className='select-crypto'>
+            <div className='select-crypto-btn'>
+              <button type="button" className="btn btn-outline-warning" onClick={refetch}>Select and Submit Crypto News</button>
+            </div>
+            <div>
+              <div className="form-group">
+                <label for="exampleSelect1" className="form-label mt-4"></label>
+                <select
+                  className="form-select" style={{ width: "25%" }}
+                  id="exampleSelect1"
+                  value={newsCategory}
+                  onChange={handleOnClick}
+                  ref={inputRef}
+                >
+                  {coinListData.map((currency) => <option value={currency.name}>{currency.name}</option>)}
+                </select>
+              </div>
+            </div>
+            <br />
           </div>
         )}
         {getNews && getNews.value.map((news, index) => {
