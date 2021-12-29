@@ -57,7 +57,7 @@ function Coin(props) {
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [buttonPopup, setButtonPopup] = useState(false);
- 
+
 
   const handleRefresh = (event) => {
     event.preventDefault();
@@ -155,7 +155,8 @@ function Coin(props) {
         <div className='modal-box'>
           {/* messages for buy/sell */}
           <div>
-            <h1> trade {props.tickerId} </h1>
+            <h4 className="text-muted">trade&nbsp;{props.tickerId}</h4>
+
             {props.insufficientUsdBalMessage &&
               <div className="alert alert-dismissible alert-danger">
                 <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
@@ -171,21 +172,25 @@ function Coin(props) {
             {/* buy/sell */}
             {props.isBuy &&
               <div className="alert alert-dismissible alert-success">
-                <Progress done="100"/>
+                <Progress done="100" />
                 <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
-                <strong>Success!&nbsp;</strong>Your transaction of&nbsp;<strong>{props.tickerId}</strong>&nbsp;is now completed</div> 
+                <strong>Success!&nbsp;</strong>Your transaction of&nbsp;<strong>{props.tickerId}</strong>&nbsp;is now completed</div>
             }
             {(props.isSold) &&
               <div className="alert alert-dismissible alert-primary">
-                 <Progress done="100"/>
+                <Progress done="100" />
                 <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
                 <strong>Success!&nbsp;</strong>&nbsp;Your transaction of&nbsp;<strong>{props.tickerId}</strong>&nbsp;is now completed</div>
             }
           </div>
+          {/* buy/sell input result */}
           {
             <div className="alert alert-dismissible alert-light">
               <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
-              <strong>{props.tickerId}</strong>&nbsp;<strong>{props.buyInputValue}</strong>&nbsp;<strong>USD:&nbsp;$</strong>{props.price * props.buyInputValue}
+              <h6>
+                <strong>{props.tickerId}</strong>&nbsp;<strong>{props.buyInputValue}</strong>&nbsp;<strong>USD:&nbsp;$</strong>{props.price * props.buyInputValue}
+              </h6>
+
             </div>
           }
           <TradeInput id="buyInput"
