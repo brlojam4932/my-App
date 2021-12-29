@@ -5,7 +5,7 @@ import ExchangeHeader from './components/ExchangeHeader/ExchangeHeader';
 import styled from 'styled-components';
 import axios from 'axios';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import "fontawesome-free/js/all.js"; // icons
+import "fontawesome-free/js/all.js";
 import Navbar from './components/ExchangeHeader/Navbar';
 import Exchanges from './components/Exchanges/Exchanges';
 import NewsPage from './components/News/NewsPage';
@@ -19,7 +19,7 @@ background-color: #000000;
 color: #ccc;`;
 
 // UTILITY FUNCTIONS 
-
+const TOTAL_COINS = 100;
 const formatPrice = price => parseFloat(Number(price).toFixed(4));
 const formatPercentage24h = percentChange24h => parseFloat(Number(percentChange24h).toFixed(2));
 const formatPercentage7d = percentChange7d => parseFloat(Number(percentChange7d).toFixed(2));
@@ -34,7 +34,7 @@ function App() {
   const [insufficientTokenBalMessage, setInsufficientTokenBalMessage] = useState(false);
   const [isBuy, setIsBuy] = useState(false);
   const [isSold, setIsSold] = useState(false);
-  const [visible, setVisible] = useState(10);
+  //const [visible, setVisible] = useState(10);
 
   // read about Temporal Deadzone
   const componentDidMount = async () => {
@@ -46,7 +46,7 @@ function App() {
           price_change_percentage: "24h,7d,1y"
         }
       })
-      const coinData = response.data.slice(0, visible).map((coin) => {
+      const coinData = response.data.slice(0, TOTAL_COINS).map((coin) => {
         return {
           key: coin.id,
           image: coin.image,
@@ -75,23 +75,22 @@ function App() {
 
 
   // with clean-up code from https://youtu.be/0ZJgIjIuY7U
-  // show more crypto
   useEffect(() => {
     console.log("coinData changed");
     componentDidMount();
     return () => {
       console.log("return from coinData change");
     }
-  }, [visible]); //component did mount
+  }, []); //component did mount
 
 
+/*
   const showMoreItems = () => {
     setVisible((prevValue) => prevValue + 10);
   }
+  */
 
-  console.log(visible);
-
-
+  
 
   const handleBrrr = () => {
     setAccountBalance(prevBalance => prevBalance + 1200);
@@ -200,10 +199,10 @@ function App() {
                   handleToggleChange={handleToggleChange}
                 />
                 <div className='show-more'>
-                  <button type="button" className="btn btn-outline-warning" onClick={showMoreItems}>
+                  {/*   <button type="button" className="btn btn-outline-warning" onClick={showMoreItems}>
                     Show more
-                  </button>
-                  <small className="text-warning" >Number of coins:&nbsp;{coinData.length}</small>
+                  </button> */}
+                  <small className="text-warning" >Top&nbsp;{coinData.length}&nbsp;coins</small>
                 </div>
                 <CoinList
                   coinData={coinData}
