@@ -186,9 +186,8 @@ function Coin(props) {
           {/* buy/sell input result */}
           {
             <div className="alert alert-dismissible alert-light">
-              <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
               <h6>
-                <strong>{props.tickerId}</strong>&nbsp;<strong>{props.buyInputValue}</strong>&nbsp;<strong>USD:&nbsp;$</strong>{props.price * props.buyInputValue}
+                <strong>{props.tickerId}</strong>&nbsp;{props.buyInputValue}&nbsp;&nbsp;<strong>USD:&nbsp;$</strong>{props.price * props.buyInputValue}
               </h6>
 
             </div>
@@ -202,7 +201,7 @@ function Coin(props) {
           <div className="d-grid gap-2 d-md-flex justify-content-md-end">
             <Button className="btn btn-success btn-lg" onClick={handleBuyClick}>Buy</Button>
             <Button className="btn btn-primary btn-lg" onClick={handleSellClick}>Sell</Button>
-            <Button className="btn btn-outline-secondary btn-lg" onClick={handleClose}>Cancel</Button>
+            <Button className="btn btn-outline-secondary btn-lg" onClick={handleClose}>Close</Button>
           </div>
         </div>
       </ReactModal>

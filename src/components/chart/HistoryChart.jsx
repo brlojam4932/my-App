@@ -86,17 +86,15 @@ function HistoryChart({ data }) {
           <canvas ref={ChartRef} id="myChart" width="400" height="300"></canvas>
         </div>
         <div className="d-grid gap-2 d-md-flex justify-content-md-end  ">
-          <button onClick={() => setTimeFormat("24h")} className="btn btn-outline-secondary btn-small">24hr</button>
-          <button onClick={() => setTimeFormat("7d")} className="btn btn-outline-secondary mx-1 btn-small">7d</button>
-          <button onClick={() => setTimeFormat("1y")} className="btn btn-outline-secondary btn-small">1y</button>
+          <button onClick={() => setTimeFormat("24h")} className="btn btn-outline-warning btn-small">24hr</button>
+          <button onClick={() => setTimeFormat("7d")} className="btn btn-outline-warning mx-1 btn-small">7d</button>
+          <button onClick={() => setTimeFormat("1y")} className="btn btn-outline-warning btn-small">1y</button>
         </div>
       </div>
       <div style={{textAlign: "left"}}>
         <h6>About{renderInfo()}</h6>
       </div>
-
     </>
-
   );
 };
 
