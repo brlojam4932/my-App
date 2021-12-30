@@ -73,15 +73,12 @@ function App() {
     }
   }
 
-
-  // with clean-up code from https://youtu.be/0ZJgIjIuY7U
-  useEffect(() => {
-    console.log("coinData changed");
-    componentDidMount();
-    return () => {
-      console.log("return from coinData change");
+   // for clean-up code from https://youtu.be/0ZJgIjIuY7U
+   useEffect(() => {
+    if (coinData.length === 0) {
+      componentDidMount();
     }
-  }, []); //component did mount
+  });
 
   
 
