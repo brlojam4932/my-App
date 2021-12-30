@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-// imp tab
 import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
 import PopUp from './PopUp';
 import CoinDetailsPage from '../chart/CoinDetailsPage';
+import Progress from './Progress';
 //import millify from 'millify';
 
 
@@ -32,7 +32,7 @@ const Button = styled.button`
 
 const TradeInput = styled.input`
 width: 100%;
-height: 13%;
+height: 16%;
 padding: 12px 20px;
 margin: 8px 0;
 display: inline-block;
@@ -171,15 +171,13 @@ function Coin(props) {
             {/* buy/sell */}
             {props.isBuy &&
               <div className="alert alert-dismissible alert-success">
-
+                <Progress done="100"/>
                 <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
                 <strong>Success!&nbsp;</strong>Your transaction of&nbsp;<strong>{props.tickerId}</strong>&nbsp;is now completed</div>
             }
             {(props.isSold) &&
               <div className="alert alert-dismissible alert-primary">
-                <div className="progress">
-                  <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style={{ width: "75%" }}></div>
-                </div>
+                <Progress done="100"/>
                 <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
                 <strong>Success!&nbsp;</strong>&nbsp;Your transaction of&nbsp;<strong>{props.tickerId}</strong>&nbsp;is now completed</div>
             }
@@ -189,7 +187,7 @@ function Coin(props) {
             <div className="alert alert-dismissible alert-light">
               <h6>
                 <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
-                <strong>{props.tickerId}</strong>&nbsp;{props.buyInputValue}&nbsp;&nbsp;<strong>USD:&nbsp;$</strong>{props.price * props.buyInputValue}
+                <strong>{props.tickerId}</strong>&nbsp;{props.buyInputValue}&nbsp;&nbsp;USD:&nbsp;$&nbsp;{props.price * props.buyInputValue}
               </h6>
 
             </div>

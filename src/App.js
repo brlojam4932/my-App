@@ -19,7 +19,7 @@ background-color: #000000;
 color: #ccc;`;
 
 // UTILITY FUNCTIONS 
-const COIN_COUNT = 20;
+const COIN_COUNT = 100;
 const formatPrice = price => parseFloat(Number(price).toFixed(4));
 const formatPercentage24h = percentChange24h => parseFloat(Number(percentChange24h).toFixed(2));
 const formatPercentage7d = percentChange7d => parseFloat(Number(percentChange7d).toFixed(2));
@@ -188,6 +188,9 @@ function App() {
                   handleBrrr={handleBrrr}
                   handleToggleChange={handleToggleChange}
                 />
+                 <div className='show-amount'>
+                  <h4 className="text-warning" >Top&nbsp;{coinData.length}&nbsp;coins</h4>
+                </div>
                 <CoinList
                   coinData={coinData}
                   showBalance={showBalance}

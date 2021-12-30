@@ -168,7 +168,7 @@ body {
 
 /* Show more crypto */
 
-.show-more {
+.show-amount {
   display: flex;
   align-items: center;
   column-gap: 20px;
