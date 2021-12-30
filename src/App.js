@@ -83,13 +83,6 @@ function App() {
     }
   }, []); //component did mount
 
-
-/*
-  const showMoreItems = () => {
-    setVisible((prevValue) => prevValue + 10);
-  }
-  */
-
   
 
   const handleBrrr = () => {
@@ -198,11 +191,8 @@ function App() {
                   handleBrrr={handleBrrr}
                   handleToggleChange={handleToggleChange}
                 />
-                <div className='show-more'>
-                  {/*   <button type="button" className="btn btn-outline-warning" onClick={showMoreItems}>
-                    Show more
-                  </button> */}
-                  <small className="text-warning" >Top&nbsp;{coinData.length}&nbsp;coins</small>
+                 <div className='show-amount'>
+                  <h5 className="text-muted" >Top&nbsp;{coinData.length}&nbsp;coins</h5>
                 </div>
                 <CoinList
                   coinData={coinData}

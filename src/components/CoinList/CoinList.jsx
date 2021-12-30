@@ -89,6 +89,7 @@ function CoinList(props) {
                 isBuy={props.isBuy}
                 setIsBuy={props.setIsBuy}
                 isSold={props.isSold}
+                setIsSold={props.setIsSold}
               />
             )}
           </tbody>
