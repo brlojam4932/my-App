@@ -21,7 +21,7 @@ const StyledHeader = styled.header`
 
 function Exchanges() {
   const [exchangeData, setExchangeData] = useState([]);
-  const [loading, setLoading] = useState(false);
+
   const [error, setError] = useState(null);
   const [clicked, setClicked] = useState(false);
 
@@ -35,25 +35,22 @@ function Exchanges() {
   };
 
   useEffect(() => {
-    setLoading(true);
     axios.request(options).then((response) => {
       setExchangeData(response.data);
       //console.log(response.data);
     })
-      .catch((err) => {
+    .catch((err) => {
         setError(err);
       }).finally(() => {
-        setLoading(false);
       });
-  }, []);
+
+  });
 
 
   const exchangeList = exchangeData?.data?.exchanges;
 
 
-  if (loading) return <h4 style={{color: 'grey'}}>Loading...</h4>;
-
-  if (error) return <h4 style={{color: "darkorange"}}>Error...</h4>
+  if (error) return <h4 style={{ color: "darkorange" }}>Error...</h4>
 
   const toggle = (index) => {
     if (clicked === index) {
@@ -66,8 +63,8 @@ function Exchanges() {
   return (
     <div className="container">
       <StyledHeader>
-          <h2>Cryptocurrency Exchanges Stats</h2>
-          <h5 className="text-primary">Find out more about major exchanges here.</h5>
+        <h2>Cryptocurrency Exchanges Stats</h2>
+        <h5 className="text-primary">Find out more about major exchanges here.</h5>
       </StyledHeader>
       <br />
       <br />

@@ -76,9 +76,7 @@ function NewsPage() {
 
 
   useEffect(() => {
-
     console.log("filter option");
-
   }, [filterOption]);
 
 
