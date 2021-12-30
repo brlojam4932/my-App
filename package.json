@@ -20,8 +20,9 @@
     "react-router-dom": "^5.3.0",
     "react-scripts": "^5.0.0",
     "styled-components": "^5.3.1"
+  
   },
-  "homepage": "https://brlojam4932.github.io/my-App",
+  "homepage": "https://brlojam4932.github.io/my-App/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
