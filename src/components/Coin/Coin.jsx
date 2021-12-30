@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
 import PopUp from './PopUp';
 import CoinDetailsPage from '../chart/CoinDetailsPage';
-import Progress from './Progress';
 //import millify from 'millify';
 
 
@@ -172,13 +171,15 @@ function Coin(props) {
             {/* buy/sell */}
             {props.isBuy &&
               <div className="alert alert-dismissible alert-success">
-                <Progress done="100" />
+
                 <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
                 <strong>Success!&nbsp;</strong>Your transaction of&nbsp;<strong>{props.tickerId}</strong>&nbsp;is now completed</div>
             }
             {(props.isSold) &&
               <div className="alert alert-dismissible alert-primary">
-                <Progress done="100" />
+                <div className="progress">
+                  <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style={{ width: "75%" }}></div>
+                </div>
                 <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
                 <strong>Success!&nbsp;</strong>&nbsp;Your transaction of&nbsp;<strong>{props.tickerId}</strong>&nbsp;is now completed</div>
             }
@@ -187,6 +188,7 @@ function Coin(props) {
           {
             <div className="alert alert-dismissible alert-light">
               <h6>
+                <button type="button" className="btn-close" data-bs-dismiss="alert" onClick={handleClose}></button>
                 <strong>{props.tickerId}</strong>&nbsp;{props.buyInputValue}&nbsp;&nbsp;<strong>USD:&nbsp;$</strong>{props.price * props.buyInputValue}
               </h6>
 
