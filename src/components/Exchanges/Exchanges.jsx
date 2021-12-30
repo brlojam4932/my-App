@@ -41,8 +41,7 @@ function Exchanges() {
     })
     .catch((err) => {
         setError(err);
-      }).finally(() => {
-      });
+      })
 
   });
 

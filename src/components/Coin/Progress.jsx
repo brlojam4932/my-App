@@ -12,7 +12,7 @@ function Progress({ done }) {
    }
 
    setStyle(newStyle);
- }, 100);
+ }, []);
 
   return (
     <div className="progress">

@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
 import News from './News';
-import useFetch from "../Utility/useFetch";
 import styled from 'styled-components';
 import coinGecko from '../Utility/coinGecko';
+
 
 const StyledHeaderNews = styled.header`  
   width: 100%;
@@ -16,6 +17,10 @@ const StyledHeaderNews = styled.header`
 
 function NewsPage() {
   //-------news----------------
+  const [getNews, setNewsData] = useState(null); 
+  //const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
   const [newsCategory, setNewsCategory] = useState("Cryptocurrency");
   const [coinListData, setCoinListData] = useState([]);
 
@@ -38,8 +43,43 @@ function NewsPage() {
     }
   };
 
+  //----------GET NEWS------------------
+
+  async function getNewsList() {
+    //setLoading(true);
+   axios.request(options).then((response) => {
+    setNewsData(response.data);
+     //console.log(data);
+   })
+   .catch((err) => {
+     setError(err);
+   })
+  };
+
+
   // get news from news api
-  const { data: getNews, loading, error, refetch, datePublished } = useFetch(options);
+  useEffect(() => {
+    if(coinListData.length === 0) {
+      getNewsList();
+    };
+    return () => {
+      console.log("cleanup")
+    }
+  });
+
+
+  const refetch = () => { // trigger the api call with refetch (re-fresh)
+    //setLoading(true);
+    axios.request(options).then((response) => {
+      setNewsData(response.data);
+      //console.log(response);
+    })
+    .catch((err) => {
+      setError(err);
+    })
+  };
+
+
   //-------------get news end -------------------
 
   // get coin list from coin api
@@ -48,8 +88,8 @@ function NewsPage() {
       const res = await coinGecko.get('coins');
       //console.log("response:", res);
       setCoinListData(res.data);
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -80,10 +120,8 @@ function NewsPage() {
   }, [filterOption]);
 
 
-
-  if (loading) return <h4 style={{ color: 'grey' }}>News Loading...</h4>;
-
-  if (error) return <h4 style={{ color: "darkorange" }}>News loading: Error...</h4>
+//if (loading) return console.log("...loading");
+if (error) return console.log('...error');
 
 
   //------news--end-----------------
@@ -100,7 +138,7 @@ function NewsPage() {
         {coinListData && (
           <div className='select-crypto'>
             <div className='select-crypto-btn'>
-              <button type="button" className="btn btn-outline-warning" onClick={refetch}>Select and Submit Crypto News</button>
+               <button type="button" className="btn btn-outline-warning" onClick={refetch}>Select and Submit Crypto News</button>
             </div>
             <div>
               <div className="form-group">
@@ -127,7 +165,7 @@ function NewsPage() {
               url={news.url}
               image={news.image}
               provider={news.provider}
-              datePublished={datePublished}
+              datePublished={news.datePublished}
             />
           )
         })};
