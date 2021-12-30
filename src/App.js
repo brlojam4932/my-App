@@ -189,7 +189,7 @@ function App() {
                   handleToggleChange={handleToggleChange}
                 />
                  <div className='show-amount'>
-                  <h4 className="text-warning" >Top&nbsp;{coinData.length}&nbsp;coins</h4>
+                  <h5 className="text-muted" >Top&nbsp;{coinData.length}&nbsp;coins</h5>
                 </div>
                 <CoinList
                   coinData={coinData}
